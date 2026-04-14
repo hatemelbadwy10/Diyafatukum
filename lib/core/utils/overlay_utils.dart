@@ -1,0 +1,126 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../config/extensions/all_extensions.dart';
+import '../config/router/route_manager.dart';
+import '../resources/resources.dart';
+import '../widgets/buttons/custom_button.dart';
+
+class OverlayUtils {
+  /// Shows a custom dialog.
+  ///
+  /// This method is used to display a custom dialog on the screen.
+  /// The [child] widget is the content of the dialog.
+  static void showCustomDialog({required BuildContext context, required Widget child, bool barrierDismissible = true}) {
+    showDialog(
+      context: context,
+      useSafeArea: true,
+      useRootNavigator: true,
+      barrierDismissible: barrierDismissible,
+      builder: (context) => Material(color: Colors.transparent, child: child).center(),
+    );
+  }
+
+  /// Shows a bottom sheet.
+  ///
+  /// This method is used to display a bottom sheet on the screen.
+  /// The [child] widget is the content of the bottom sheet.
+  static Future<T?> showBottomSheet<T>({required BuildContext context, required Widget child}) {
+    return showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      useRootNavigator: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: RoundedRectangleBorder(borderRadius: 8.topBorderRadius),
+      backgroundColor: context.bottomSheetBackground,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: context.bottomSheetBackground,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(0)),
+              ),
+              child: child.setContainerToView(width: context.width),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Shows a scrollable bottom sheet.
+  ///
+  /// This method is used to display a scrollable bottom sheet on the screen.
+  /// The [child] widget is the content of the bottom sheet.
+  static Future<T?> showScrollableBottomSheet<T>({
+    required BuildContext context,
+    required Widget child,
+    Color? barrierColor,
+    Widget? bottom,
+    Widget? title,
+  }) {
+    return showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      useSafeArea: true,
+      barrierColor: barrierColor,
+      shape: RoundedRectangleBorder(borderRadius: 16.topBorderRadius),
+      backgroundColor: context.bottomSheetBackground,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          maxChildSize: 0.85,
+          minChildSize: 0.5,
+          initialChildSize: 0.85,
+          builder: (context, controller) => Column(
+            children: [
+              if (title != null) title.paddingBottom(8),
+              ListView(controller: controller, children: [child]).expand(),
+              if (bottom != null)
+                bottom.withSafeArea(minimum: AppSize.screenPadding.edgeInsetsHorizontal).paddingTop(8),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Opens the setting permission dialog.
+  ///
+  /// This method is used to open a dialog that prompts the user to navigate to the app's settings
+  /// in order to grant a specific permission. The dialog provides a convenient way for the user
+  /// to grant the required permission without manually navigating through the device settings.
+  static Future openSettingPermissionDialog({String? title, String? actionTitle, required String message}) {
+    return showDialog(
+      barrierDismissible: true,
+      context: rootNavigatorKey.currentContext!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: context.scaffoldBackgroundColor,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(title ?? LocaleKeys.permissions_title.tr(), style: context.bodyLarge.s16.medium),
+              16.gap,
+              Text(message, style: context.bodyLarge.s14.regular),
+            ],
+          ).setContainerToView(color: context.scaffoldBackgroundColor),
+          actions: [
+            Material(
+              child: CustomButton(
+                label: actionTitle ?? LocaleKeys.permissions_settings.tr(),
+                onPressed: () async => openAppSettings(),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

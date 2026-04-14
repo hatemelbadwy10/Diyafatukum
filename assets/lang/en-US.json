@@ -1,0 +1,931 @@
+{
+  "app": {
+    "name": "ضيافتكم",
+    "slogan": "Leave the printing to us"
+  },
+  "currency": {
+    "sar": "SAR",
+    "usd": "USD",
+    "egp": "EGP",
+    "free": "Free"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search for events, places, and more",
+    "filter": "Filter search results",
+    "not_found": "No search results found",
+    "not_found_subtitle": "Please try again with a different keyword",
+    "no_results_msg": "\"{}\" not found"
+  },
+  "sort": {
+    "title": "Sort",
+    "by": "Sort by",
+    "relevance": "Relevance",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "price": {
+      "title": "Price",
+      "low_high": "Price: Low to High",
+      "high_low": "Price: High to Low"
+    },
+    "rating": "most rated",
+    "most_sold": "most sold"
+  },
+  "error": {
+    "title": "Error",
+    "message": "An error occurred. Please try again later.",
+    "ops": "Oops! something went wrong",
+    "try_again": "Try again",
+    "not_available": "Not available",
+    "no_results": "No results found",
+    "download": {
+      "title": "Download Error",
+      "message": "An error occurred while downloading the file. Please try again later.",
+      "not_found": "File not found or does not exist",
+      "network": "Network error, please check your internet connection and try again",
+      "permission": {
+        "denied": "Permission Denied, please allow storage access to download the file",
+        "storage": "Could not access storage, please check your storage settings and try again"
+      }
+    },
+    "open_file": {
+      "title": "Failed to Open File",
+      "message": "An error occurred while opening the file. Please try again later."
+    },
+    "invalid": {
+      "title": "Invalid",
+      "message": "Invalid request. Please check your input and try again.",
+      "url": "Invalid URL, cannot open the link",
+      "email": "Invalid email address",
+      "phone": "Invalid phone number"
+    },
+    "location": {
+      "title": "Location Error",
+      "message": "An error occurred while accessing your location. Please check your location settings and try again.",
+      "permission_denied": "Location permission denied, please allow location access to use this feature",
+      "service_disabled": "Location service is disabled, please enable it in your device settings"
+    },
+    "dio": {
+      "success": "Request completed successfully.",
+      "no_content": "No content available.",
+      "bad_request": "Bad request. Please check your input.",
+      "forbidden": "Access denied. You don’t have permission.",
+      "unauthorized": "Unauthorized access. Please log in again.",
+      "not_found": "Resource not found.",
+      "blocked": "Your account has been blocked. Please contact support.",
+      "not_allowed": "This action is not allowed.",
+      "internal_server_error": "Server error. Please try again later.",
+      "connect_timeout": "Connection timeout. Check your internet.",
+      "cancel": "Request was cancelled.",
+      "receive_timeout": "Response timeout. Please try again.",
+      "send_timeout": "Request timeout. Please try again.",
+      "cache_error": "Cache error occurred.",
+      "no_internet_connection": "No internet connection. Please connect and try again.",
+      "default": "Unexpected error occurred. Please try again."
+    },
+    "shared_files": {
+      "title": "Shared Files Error",
+      "initialization_failed": "Failed to initialize file sharing service",
+      "file_not_found": "File '{}' does not exist",
+      "size_limited": "File size exceeds the maximum allowed size of {} MB",
+      "file_too_large": "File '{}' is too large: {} (max: {})",
+      "unsupported_file_type": "File '{}' has unsupported file type: {}",
+      "unsupported_mime_type": "File '{}' has unsupported format: {}",
+      "corrupted_file": "File '{}' appears to be corrupted or invalid",
+      "validation_error": "Error validating file '{}': {}",
+      "navigation_error": "Error during navigation: {}",
+      "copy_failed": "Failed to copy file '{}': {}",
+      "no_files_processed": "No valid files to process",
+      "processing_error": "Error processing shared files: {}"
+    }
+  },
+  "details": {
+    "title": "Details",
+    "name": "Name",
+    "description": "Description",
+    "location": {
+      "title": "Location",
+      "country": "Country",
+      "city": "City",
+      "address": "Address",
+      "latitude": "Latitude",
+      "longitude": "Longitude"
+    },
+    "contact": {
+      "title": "Contact",
+      "follow": "You can follow us on",
+      "phone": "Phone",
+      "email": "Email",
+      "website": "Website",
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "whatsapp": "WhatsApp",
+        "x": "X",
+        "telegram": "Telegram",
+        "snapchat": "Snapchat",
+        "tiktok": "TikTok",
+        "url": {
+          "facebook": "facebook URL",
+          "instagram": "instagram URL",
+          "whatsapp": "whatsapp URL",
+          "x": "x URL",
+          "telegram": "telegram URL",
+          "snapchat": "snapchat URL",
+          "tiktok": "tiktok URL"
+        }
+      }
+    },
+    "date_time": {
+      "date": "Date",
+      "time": "Time",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year",
+      "from": "From",
+      "to": "To",
+      "start": "Start Date",
+      "end": "End Date",
+      "start_time": "Start Time",
+      "end_time": "End Time",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "yesterday": "Yesterday",
+      "created_at": "Created at",
+      "valid_until": "Valid until {}",
+      "expired_at": "Expired at {}"
+    },
+    "status": {
+      "title": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "verified": "Verified",
+      "not_verified": "Not Verified"
+    }
+  },
+  "actions": {
+    "add": "Add",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete",
+    "remove": "Remove",
+    "create": "Create",
+    "submit": "Submit",
+    "send": "Send",
+    "finish": "Finish",
+    "see_all": "see all",
+    "ok": "OK",
+    "done": "Done",
+    "save": "Save",
+    "save_changes": "Save changes",
+    "complete": "Complete",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close": "Close",
+    "skip": "Skip",
+    "continue": "Continue",
+    "next": "Next",
+    "back": "Back",
+    "refresh": "Refresh",
+    "load_more": "Load more",
+    "load": "Load",
+    "retry": "Retry",
+    "try_again": "Try again",
+    "enter": "Enter {}",
+    "select": "Select {}",
+    "apply": "Apply",
+    "read_more": "Read more",
+    "show_less": "Show less",
+    "search": "Search",
+    "filter": {
+      "title": "Filter",
+      "apply": "Apply Filter",
+      "reset": "Reset Filter",
+      "clear": "Clear Filter",
+      "from": "From",
+      "to": "To"
+    },
+    "sort": "Sort",
+    "reset": "Reset",
+    "clear": "Clear",
+    "yes": "Yes",
+    "no": "No",
+    "more": "More",
+    "less": "Less",
+    "paste": "Paste",
+    "upload": "Upload",
+    "download": "Download",
+    "calculate": "Calculate",
+    "calculating": "Calculating...",
+    "copy": {
+      "title": "Copy",
+      "code": "Copy code",
+      "link": "Copy link",
+      "to_clipboard": "Copy to clipboard"
+    }
+  },
+  "action_success": {
+    "title": "Success",
+    "copied": "Copied to clipboard",
+    "applied": "Applied"
+  },
+  "localized": {
+    "ar": "{} (Ar)",
+    "en": "{} (En)",
+    "elapsed_time": {
+      "seconds": {
+        "zero": "Now",
+        "one": "1 second ago",
+        "two": "2 seconds ago",
+        "few": "{} seconds ago",
+        "other": "{} seconds ago"
+      },
+      "minutes": {
+        "zero": "Now",
+        "one": "1 minute ago",
+        "two": "2 minutes ago",
+        "few": "{} minutes ago",
+        "other": "{} minutes ago"
+      },
+      "hours": {
+        "zero": "Now",
+        "one": "1 hour ago",
+        "two": "2 hours ago",
+        "few": "{} hours ago",
+        "other": "{} hours ago"
+      },
+      "days": {
+        "zero": "Now",
+        "one": "Yesterday",
+        "two": "2 days ago",
+        "few": "{} days ago",
+        "other": "{} days ago"
+      },
+      "weeks": {
+        "zero": "Now",
+        "one": "1 week ago",
+        "two": "2 weeks ago",
+        "few": "{} weeks ago",
+        "other": "{} weeks ago"
+      },
+      "months": {
+        "zero": "Now",
+        "one": "1 month ago",
+        "two": "2 months ago",
+        "few": "{} months ago",
+        "other": "{} months ago"
+      },
+      "years": {
+        "zero": "Now",
+        "one": "1 year ago",
+        "two": "2 years ago",
+        "few": "{} years ago",
+        "other": "{} years ago"
+      }
+    }
+  },
+  "image_source": {
+    "upload": "Upload a photo",
+    "click": "Click to upload",
+    "camera": "Open the camera",
+    "gallery": "Choose from gallery",
+    "remove": "Remove photo"
+  },
+  "size": {
+    "kb": "{} KB",
+    "mb": "{} MB"
+  },
+  "validator": {
+    "required": "{} field is required",
+    "min": "{} must be at least {} characters",
+    "max": "{} must be at most {} characters",
+    "length": "{} must be {} characters",
+    "min_digits": "{} must be at least {} digits",
+    "max_digits": "{} must be at most {} digits",
+    "digits": "{} must be {} digits",
+    "filed_required": "This field is required",
+    "url": "Please enter a valid URL",
+    "email": "Please enter a valid email",
+    "phone": "Please enter a valid phone number",
+    "name": "Name must be at least 4 characters",
+    "name_pattern": "Name should not contain numbers or special characters",
+    "birth_date": "Please select a birth date",
+    "password": "Password must be at least 8 characters",
+    "password_pattern": "Password must contain an uppercase, a lowercase, a number and a special character",
+    "confirm_password": "Passwords do not match",
+    "otp": "Please enter the verification code",
+    "file": "Please upload {} file",
+    "file_size": "File size must be less than {} MB",
+    "images_limited_size": "Only files with size less than {} MB are allowed",
+    "location": "Please select your location",
+    "image": "Please upload an image",
+    "date_time": {
+      "past": "Please select a future date",
+      "future": "Please select a past date",
+      "start_end": "End date must be after start date",
+      "end_start": "Start date must be before end date",
+      "start_time": "End time must be after start time",
+      "end_time": "Start time must be before end time"
+    }
+  },
+  "permissions": {
+    "title": "Permission Required",
+    "settings": "Settings",
+    "camera": "Please allow camera access to take photos",
+    "gallery": "Please allow gallery access to select photos",
+    "camera_gallery": "Please allow camera and gallery access to select photos"
+  },
+  "onboarding": {
+    "titles": {
+      "first": "Welcome to \"ضيافتكم\"",
+      "second": "Printing in All Sizes",
+      "third": "Fast Delivery"
+    },
+    "subtitles": {
+      "first": "Print your files easily and quickly!",
+      "second": "Design and Customize",
+      "third": "Choose delivery or pickup method"
+    },
+    "hints": {
+      "first": "No need to waste time, upload your documents and leave the rest to us.",
+      "second": "Add your personal touches to your prints - documents, books, stickers and more.",
+      "third": "Get your order at your doorstep or pick it up from the nearest branch."
+    },
+    "action": "Start Now"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "subtitle": "Sign in to easily manage your printing orders and office supplies.",
+      "welcome": "Welcome back to",
+      "have_account": "Don't have an account?",
+      "guest": "Continue as Guest",
+      "or": "or",
+      "social": {
+        "google": "Sign in with Google",
+        "apple": "Sign in with Apple"
+      }
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Sign up now and enjoy fast printing services and high-quality office supplies at competitive prices.",
+      "welcome": "Welcome to",
+      "account": "Create Account",
+      "accept_terms": {
+        "title": "Accept",
+        "required": "You must accept the terms and conditions to continue"
+      },
+      "have_account": "Already have an account?"
+    },
+    "guest": {
+      "title": "Guest",
+      "subtitle": "You can continue without an account, but you won't be able to access your saved addresses, orders, or account settings.",
+      "continue": "Continue as Guest",
+      "login": "Login to Your Account",
+      "register": "Create a New Account",
+      "login_hint": "Login or create a new account to access your saved addresses, orders, and account settings.",
+      "register_hint": "Create a new account to enjoy fast printing services and high-quality office supplies at competitive prices."
+    },
+    "logout": "Logout",
+    "password": {
+      "title": "Password",
+      "confirm": "Confirm Password",
+      "change": "Change Password",
+      "change_success": "Your password has been changed successfully",
+      "set": "Set Password",
+      "set_hint": "Enter the new password",
+      "set_subtitle": "Your new password must be different from your previously used password",
+      "reset": "Reset Password",
+      "new": "New Password",
+      "confirm_new": "Confirm New Password",
+      "old": "Old Password",
+      "forget": "Forgot Password?",
+      "forget_subtitle": "Please Enter Your Phone Number Below",
+      "email_phone": "Email or Phone Number"
+    },
+    "otp": {
+      "title": "Verification Code",
+      "hint": "Enter the code sent to",
+      "resend": "Resend Code",
+      "resend_hint": "Didn't receive the code?",
+      "timer": "The verification code will be resent in",
+      "invalid": "Invalid verification code"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "guest": "You need to login to view your Account",
+    "profile": {
+      "title": "Profile",
+      "subtitle": "You can edit your profile information, phone number, or password",
+      "show": "Show Profile",
+      "edit": {
+        "title": "Edit Profile",
+        "success": "Your information has been updated successfully"
+      },
+      "change_email": {
+        "title": "Change Email",
+        "subtitle": "Enter your new email address below",
+        "success": "Your email has been updated successfully"
+      },
+      "change_phone": {
+        "title": "Change Phone Number",
+        "subtitle": "Enter your new phone number, and we'll send you a verification code to confirm the number immediately!",
+        "success": "Your phone number has been updated successfully"
+      },
+      "logout": {
+        "title": "Logout",
+        "subtitle": "Are you sure you want to log out?"
+      },
+      "delete": {
+        "title": "Delete Account",
+        "subtitle": "Are you sure you want to delete your account?",
+        "success": "Your account has been deleted successfully"
+      },
+      "empty": {
+        "email": "No provided email, please add one"
+      }
+    }
+  },
+  "addresses": {
+    "title": "Saved Addresses",
+    "subtitle": "Fill the information below",
+    "deliver_to": "Deliver to {}",
+    "select": "Select Address for Delivery",
+    "empty": {
+      "title": "No Addresses Yet",
+      "subtitle": "You haven't added any addresses yet, start by adding a new address"
+    },
+    "guest": {
+      "title": "You need to login to view your Addresses",
+      "subtitle": "Please login or create an account to access your addresses"
+    },
+    "details": {
+      "title": "Address Details",
+      "name": "Name",
+      "default": "Set as Default Address",
+      "type": {
+        "title": "Address Type",
+        "home": "Home",
+        "work": "Work",
+        "apartment": "Apartment"
+      },
+      "label": {
+        "title": "Address Label",
+        "building": "Building Number",
+        "apartment": "Apt. no.",
+        "floor": "Floor",
+        "street": "Street Name",
+        "additional": "Additional Directions",
+        "area": "Area"
+      },
+      "hint": {
+        "title": "Enter address label",
+        "info": "Give this address a label to easily identify it later (e.g., My office)",
+        "building": "Enter building number",
+        "apartment": "Enter apartment number",
+        "floor": "Enter floor number",
+        "street": "Enter street name",
+        "additional": "Any additional directions"
+      },
+      "map": {
+        "title": "Select Location",
+        "subtitle": "Choose your location on the map",
+        "search": "Search for a street name or an area",
+        "confirm": "Complete address information",
+        "deliver": "Deliver to this address",
+        "zone": {
+          "title": "Your selected location is outside our delivery zone",
+          "message": "Please select a different location within the delivery zone."
+        }
+      }
+    },
+    "add": "Add New Address",
+    "edit": "Edit Address Details",
+    "success": {
+      "add": "Address added successfully",
+      "edit": "Address updated successfully",
+      "delete": "Address deleted successfully",
+      "default": "Address set as default successfully"
+    },
+    "delete": {
+      "title": "Delete Address",
+      "message": "Are you sure you want to delete this address?"
+    }
+  },
+  "orders": {
+    "title": "My Orders",
+    "subtitle": "View your orders history",
+    "guest": {
+      "title": "You need to login to view your Orders",
+      "subtitle": "Please login or create an account to access your orders"
+    },
+    "empty": {
+      "title": "Time to place your first order!",
+      "subtitle": "Browse our products or upload files for printing - we'll handle the rest with care",
+      "action": "Get Started"
+    },
+    "details": {
+      "title": "Order Details",
+      "number": "Order Number",
+      "date": "Order Date",
+      "time": "Order Time",
+      "status": {
+        "title": "Order Status",
+        "pending": {
+          "title": "Pending",
+          "subtitle": "We've received your order and it's being reviewed"
+        },
+        "processing": {
+          "title": "Processing",
+          "subtitle": "Your order is being prepared/"
+        },
+        "ready_delivery": {
+          "title": "Ready for Delivery",
+          "subtitle": "Your order is packed and ready to be delivered"
+        },
+        "ready_pickup": {
+          "title": "Ready for Pickup",
+          "subtitle": "Your order is ready for collection at our store"
+        },
+        "transit": {
+          "title": "In Transit",
+          "subtitle": "Your order is on the way to your delivery address"
+        },
+        "delivered": {
+          "title": "Delivered",
+          "subtitle": "Your order has been successfully delivered"
+        },
+        "cancelled": {
+          "title": "Cancelled",
+          "subtitle": "This order has been cancelled"
+        },
+        "rejected": {
+          "title": "Rejected",
+          "subtitle": "This order could not be processed"
+        },
+        "filter": {
+          "all": "All Orders",
+          "new": "New Orders",
+          "current": "Current Orders",
+          "past": "Past Orders"
+        }
+      },
+      "actions": {
+        "cancel": {
+          "title": "Cancel Order",
+          "message": "Are you sure you want to cancel this order?",
+          "success": "Your order has been cancelled successfully"
+        }
+      },
+      "delivery": "Delivery Method",
+      "address": "Delivery Address",
+      "items": "Order Items",
+      "printing": "Printing Services",
+      "stationery": "Stationery Products",
+      "summary": {
+        "title": "Order Summary",
+        "subtotal": "Subtotal",
+        "products": "Products Price",
+        "printing": "Printing Cost",
+        "bulk_discount": "Printing Bulk Discount",
+        "discounts": {
+          "coupons": "Coupon Discount",
+          "wallet": "Wallet Credit Applied",
+          "total": "Total Savings"
+        },
+        "fees": {
+          "tax": "Tax",
+          "delivery": "Delivery Fee",
+          "free_delivery": "Free Delivery",
+          "delivery_threshold": "Add {} more for free delivery"
+        },
+        "total": "Total Amount",
+        "estimated_delivery": "Estimated delivery: {}",
+        "items_count": {
+          "zero": "No items",
+          "one": "1 item",
+          "other": "{} items"
+        }
+      }
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "guest": {
+      "title": "You need to login to view Notifications",
+      "subtitle": "Please login or create an account to access your notifications"
+    },
+    "latest": "Latest Notifications",
+    "empty": {
+      "title": "No Notifications Yet",
+      "subtitle": "You haven't received any notifications yet"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "about": "About App",
+    "terms": "Terms and Conditions",
+    "privacy": "Privacy Policy",
+    "faq": "FAQ",
+    "contact": {
+      "title": "Contact Us",
+      "message": "Message content",
+      "success": "Your message has been sent successfully"
+    },
+    "language": {
+      "title": "Language",
+      "subtitle": "Choose your preferred language",
+      "success": "Language changed successfully"
+    }
+  },
+  "home": {
+    "title": "Home",
+    "welcome": {
+      "good_morning": "Good Morning",
+      "good_afternoon": "Good Afternoon",
+      "good_evening": "Good Evening",
+      "good_night": "Good Night"
+    },
+    "rewards": {
+      "title": "Your Rewards Awaits",
+      "subtitle": "Enjoy your exclusive rewards and discounts"
+    }
+  },
+  "stationery": {
+    "title": "Stationery",
+    "subtitle": "Explore our range of stationery products",
+    "empty": {
+      "title": "No Stationery Products Yet",
+      "subtitle": "Please check back later or contact us for more information"
+    },
+    "guest": {
+      "title": "You need to login to view Stationery Products",
+      "subtitle": "Please login or create an account to access our stationery products"
+    }
+  },
+  "bag": {
+    "title": "Shopping Bag",
+    "subtitle": "Review your selected items",
+    "empty": {
+      "title": "Fast, Easy, Reliable.",
+      "subtitle": "Explore our products and upload your files leave the rest to us",
+      "action": "Start Shopping"
+    },
+    "guest": {
+      "title": "Sign in to access your bag",
+      "subtitle": "Create an account or sign in to save items and track your orders",
+      "benefits": "Get personalized recommendations, faster checkout, and order history"
+    },
+    "actions": {
+      "remove": {
+        "printing": {
+          "title": "Remove Printing Files",
+          "message": "This will remove all printing files from your bag. You can find them in your uploaded files.",
+          "confirm": "Yes, Remove All",
+          "cancel": "Keep Files",
+          "success": "Printing files removed successfully",
+          "undo": "Undo"
+        }
+      },
+      "checkout": "Continue to Checkout",
+      "continue_shopping": "Continue Shopping",
+      "save_for_later": "Save for Later"
+    },
+    "checkout": {
+      "title": "Checkout",
+      "subtitle": "Complete your order",
+      "guest": {
+        "title": "You need to login to proceed to checkout",
+        "subtitle": "One step away from completing your order. Please login or create an account to continue."
+      },
+      "delivery": {
+        "title": "Delivery Method",
+        "select": "Select Delivery Method",
+        "methods": {
+          "delivery": "Home Delivery",
+          "pickup": "Store Pickup"
+        }
+      },
+      "address": {
+        "title": "Delivery Address",
+        "select": "Select Address",
+        "change": "Choose another address",
+        "required": {
+          "title": "Address Required",
+          "message": "Please add or select a delivery address to continue"
+        }
+      },
+      "payment": {
+        "title": "Payment Method",
+        "select": "Select Payment Method",
+        "methods": {
+          "cash": "Cash on Delivery",
+          "online": "Online Payment",
+          "wallet": "ضيافتكم Wallet"
+        }
+      },
+      "notes": {
+        "title": "Order Notes",
+        "hint": "Add any special instructions or notes for your order"
+      },
+      "order_success": {
+        "title": "Order Placed Successfully",
+        "subtitle": "Thank you for your order! Your order number is {}. You can track your order status in the Orders section.",
+        "continue_shopping": "Continue Shopping",
+        "view_order": "View Order"
+      }
+    },
+    "notifications": {
+      "item_added": "{} added to bag",
+      "item_removed": "{} removed from bag",
+      "quantity_updated": "Quantity updated",
+      "price_changed": "Price has been updated for some items",
+      "stock_limited": "Only {} left in stock",
+      "out_of_stock": "Item is no longer available"
+    },
+    "validation": {
+      "min_order": "Minimum order amount is {}",
+      "max_quantity": "Maximum quantity for this item is {}",
+      "address_required": "Please add a delivery address to continue"
+    }
+  },
+  "more": {
+    "title": "More",
+    "subtitle": "Explore more features and options",
+    "guest": {
+      "title": "You need to login to access more features",
+      "subtitle": "Please login or create an account to explore more"
+    }
+  },
+  "wallet": {
+    "title": "ضيافتكم Wallet",
+    "subtitle": "Manage your wallet balance",
+    "guest": {
+      "title": "You need to login to view your Wallet",
+      "subtitle": "Please login or create an account to access your wallet"
+    },
+    "balance": "Balance"
+  },
+  "coupons": {
+    "title": "Coupons",
+    "subtitle": "Manage your coupons and discounts",
+    "empty": {
+      "title": "No Coupons Yet",
+      "subtitle": "When you have coupons, they will appear here"
+    },
+    "guest": {
+      "title": "You need to login to view your Coupons",
+      "subtitle": "Please login or create an account to access your coupons"
+    },
+    "details": {
+      "title": "Coupon Details",
+      "code": "Coupon Code",
+      "hint": "Enter your coupon code here...",
+      "have_code": "Have a discount coupon?",
+      "discount": {
+        "title": "Discount Value",
+        "percentage": "{}% Off",
+        "fixed": "{} EGP Off",
+        "free_delivery": "Free Delivery"
+      },
+      "validity": {
+        "valid_from": "Valid from",
+        "valid_until": "Valid until",
+        "expires_in": "Expires in {} days",
+        "expires_today": "Expires today",
+        "expired": "This coupon has expired"
+      },
+      "conditions": {
+        "title": "Terms & Conditions",
+        "min_order": "Minimum order: {}",
+        "max_discount": "Maximum discount: {}",
+        "first_time_only": "Valid for first-time users only",
+        "single_use": "Single use per customer",
+        "product_specific": "Valid for specific products only"
+      },
+      "status": {
+        "active": "Active",
+        "used": "Already Used",
+        "expired": "Expired",
+        "upcoming": "Not yet active"
+      },
+      "actions": {
+        "use": "Use Now",
+        "copy": "Copy Code",
+        "share": "Share Coupon"
+      },
+      "feedback": {
+        "copied": "Coupon code copied to clipboard! Paste it during checkout to apply your discount.",
+        "applied": "Coupon applied successfully! Your discount has been added to your order.",
+        "no_address": "Please select a delivery address to apply this coupon",
+        "cannot_use": "This coupon cannot be used right now",
+        "already_used": "You've already used this coupon",
+        "minimum_not_met": "Your order doesn't meet the minimum requirement of {}"
+      }
+    }
+  },
+  "printing": {
+    "title": "Printing Services",
+    "ready": "Ready to Print",
+    "subtitle": "Manage your printing orders",
+    "files": {
+      "title": "Your Printing Files",
+      "subtitle": "View and manage your printing files",
+      "empty": {
+        "title": "Ready to Print Your Files?",
+        "subtitle": "Upload your files and leave the printing to us - fast delivery and high quality",
+        "support": "Supported formats: PDF, PPTX only.",
+        "upload": "Upload Now"
+      },
+      "plural": {
+        "zero": "No files",
+        "one": "file",
+        "two": "2 files",
+        "few": "{} files",
+        "many": "{} files",
+        "other": "{} files"
+      },
+      "pages": {
+        "zero": "No pages",
+        "one": "page",
+        "two": "2 pages",
+        "few": "{} pages",
+        "many": "{} pages",
+        "other": "{} pages"
+      },
+      "sheets": {
+        "zero": "No sheets",
+        "one": "sheet",
+        "two": "2 sheets",
+        "few": "{} sheets",
+        "many": "{} sheets",
+        "other": "{} sheets"
+      }
+    },
+    "actions": {
+      "upload": {
+        "title": "Upload File",
+        "loading": "Uploading file...",
+        "starting": "Starting upload...",
+        "success": "File uploaded successfully",
+        "not_supported": "{} file type is not supported, only PDF and PPTX files are allowed",
+        "error": "Failed to upload file. Please try again."
+      },
+      "clear_all": {
+        "title": "Clear All Files",
+        "message": "Are you sure you want to clear all uploaded files?",
+        "success": "All files have been cleared successfully"
+      },
+      "clear": {
+        "title": "Clear File",
+        "message": "Are you sure you want to remove this file?",
+        "success": "File has been removed successfully"
+      },
+      "preview": {
+        "title": "Preview",
+        "error": "Unable to preview file",
+        "permission": "Permission denied to open the file",
+        "no_supported_app": "No application found to open this file type",
+        "not_found": "File not found or does not exist"
+      },
+      "print": {
+        "title": "Print",
+        "settings": {
+          "title": "Printing Settings",
+          "subtitle": "Customize your printing options",
+          "empty": "No Printing Settings Yet",
+          "set_all": "Set Print Options for All",
+          "notes": {
+            "title": "Additional Notes",
+            "hint": "Enter any special instructions or notes for your printing order"
+          }
+        },
+        "price": {
+          "title": "Price",
+          "details": "Price Details",
+          "copy": "Price per Copy",
+          "copies": "Price for Copies",
+          "printing": "Printing Cost",
+          "binding": "Binding Cost",
+          "total": "Total Price",
+          "bulk_discount": {
+            "title": "Bulk Discount",
+            "description": "Print more, save more",
+            "value": "Discount",
+            "count": "NO. of Print Sheets"
+          }
+        },
+        "count": {
+          "title": "Print Count",
+          "pages": "Page Count",
+          "papers": "Paper Sheet Count",
+          "copies": "No. of Copies"
+        }
+      }
+    }
+  }
+}
