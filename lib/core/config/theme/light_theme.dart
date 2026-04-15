@@ -8,7 +8,7 @@ import 'theme_manager.dart';
 // Define your light theme colors
 class LightThemeColors {
   const LightThemeColors._();
-  static const int _primaryValue = 0xFFAD2388;
+  static const int _primaryValue = 0xFFCF9D29;
   static const MaterialColor primary = MaterialColor(_primaryValue, <int, Color>{
     50: Color(0xFFFCE4F6),
     100: Color(0xFFF8C4E8),
@@ -163,7 +163,7 @@ class LightThemeColors {
   static Color shadowBottomSheet = Color(0xFF07041A).withValues(alpha: 0.09);
   static Color shadow = Colors.black.withValues(alpha: .04);
 
-  static List<Color> primaryGradient = [tertiary[700]!, primary[600]!, primary];
+  static List<Color> primaryGradient = [primary,  Color(  0xFF694F15)];
   static List<Color> secondaryGradient = [accent, secondary];
   static List<Color> tertiaryGradient = [tertiary, primary];
   static List<Color> disabledGradient = [grey[200]!, grey[300]!, grey[400]!];

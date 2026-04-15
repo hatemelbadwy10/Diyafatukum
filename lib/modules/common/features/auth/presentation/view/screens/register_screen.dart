@@ -11,7 +11,6 @@ import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
 import '../../../../../../../core/utils/validators.dart';
 import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
-import '../../../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../../../core/widgets/custom_check_box.dart';
 import '../../../../../../../core/widgets/custom_input_field.dart';
 import '../../../../../../../core/widgets/custom_phone_field.dart';
@@ -20,6 +19,7 @@ import '../../../../settings/data/model/static_page_enum.dart';
 import '../../../../verification/data/model/verification_type_enum.dart';
 import '../../controller/register_cubit/register_cubit.dart';
 import '../../controller/register_cubit/register_mixin.dart';
+import '../widgets/auth_background_scaffold.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key, this.onRegisterSuccess});
@@ -51,31 +51,22 @@ class _RegisterScreenState extends State<RegisterScreen> with RegisterMixin {
           onFailed: (failure) => Toaster.showToast(failure.message),
         ),
         builder: (context, state) {
-          return Scaffold(
-            appBar: CustomAppBar.build(),
-            bottomNavigationBar: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomButton.gradient(
-                  isLoading: state.status.isLoading,
-                  label: LocaleKeys.auth_register_title.tr(),
-                  onPressed: () async {
-                    if (formKey.currentState!.validate()) {
-                      if (!isTermsAccepted.value) {
-                        Toaster.showToast(LocaleKeys.auth_register_accept_terms_required.tr());
-                      } else {
-                        context.read<RegisterCubit>().register(await body);
-                      }
-                    }
-                  },
-                )
-                    .setHero(HeroTags.mainButton)
-                    .paddingHorizontal(AppSize.screenPadding)
-                    .withSafeArea(minimum: 16.edgeInsetsVertical)
-                    .paddingBottom(context.keyboardPadding),
-              ],
-            ),
-            body: Form(
+          return AuthBackgroundScaffold(
+            title: LocaleKeys.auth_register_title.tr(),
+            bottom: CustomButton.gradient(
+              isLoading: state.status.isLoading,
+              label: LocaleKeys.auth_register_title.tr(),
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  if (!isTermsAccepted.value) {
+                    Toaster.showToast(LocaleKeys.auth_register_accept_terms_required.tr());
+                  } else {
+                    context.read<RegisterCubit>().register(await body);
+                  }
+                }
+              },
+            ).setHero(HeroTags.mainButton),
+            child: Form(
               key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,13 +74,17 @@ class _RegisterScreenState extends State<RegisterScreen> with RegisterMixin {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("${LocaleKeys.auth_register_welcome.tr()} ", style: context.displaySmall.regular.s18),
+                      Text(LocaleKeys.auth_register_welcome.tr(), style: context.displaySmall.regular.s18),
+                      4.gap,
                       Text(FlavorConfig.displayName, style: context.displayMedium.regular.s18),
                     ],
                   ),
                   12.gap,
-                  // Text(LocaleKeys.auth_register_subtitle.tr(), style: context.bodyLarge.regular.s12).paddingEnd(60),
-                  32.gap,
+                  Text(
+                    LocaleKeys.auth_register_subtitle.tr(),
+                    style: context.bodyLarge.regular.s13.setHeight(1.6),
+                  ),
+                  24.gap,
                   CustomTextField(
                     inputType: InputType.name,
                     controller: nameController,
@@ -129,8 +124,10 @@ class _RegisterScreenState extends State<RegisterScreen> with RegisterMixin {
                   CustomCheckBox(
                     onChanged: (value) => isTermsAccepted.value = value,
                     label: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(LocaleKeys.auth_register_accept_terms_title.tr(), style: context.bodyLarge.regular.s12),
+                        4.gap,
                         CustomTextButton(
                           label: LocaleKeys.settings_terms.tr(),
                           textStyle: context.displayLarge.regular.underline.s12,
@@ -139,8 +136,11 @@ class _RegisterScreenState extends State<RegisterScreen> with RegisterMixin {
                       ],
                     ),
                   ),
+                  16.gap,
                 ],
-              ).withListView(),
+              ).withListView(
+                padding: AppSize.screenPadding.edgeInsetsHorizontal.copyWith(top: 8, bottom: 16),
+              ),
             ),
           );
         },

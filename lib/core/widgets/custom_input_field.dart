@@ -6,6 +6,7 @@ import '../../core/config/theme/light_theme.dart';
 import '../../core/resources/resources.dart';
 import '../../core/utils/input_formatters.dart';
 import 'close_icon_button.dart';
+import 'gradient_box_border.dart';
 import 'paste_icon_button.dart';
 
 enum DecorationType { underlined, outlined, filled }
@@ -301,7 +302,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
     return ValueListenableBuilder(
       valueListenable: obscure,
       builder: (context, obscuredValue, _) {
-        return TextFormField(
+        final field = TextFormField(
           controller: widget.controller,
           initialValue: widget.initialValue,
           onSaved: widget.onSaved,
@@ -348,8 +349,28 @@ class _CustomInputFieldState extends State<CustomInputField> {
             prefixIcon: widget.prefixIcon,
             suffixIcon: _buildSuffixIcon(obscuredValue),
           ),
-        ).setTitle(titleWidget: _getTitleWidget());
+        );
+        return _buildGradientWrapper(field).setTitle(titleWidget: _getTitleWidget());
       },
+    );
+  }
+
+  Widget _buildGradientWrapper(Widget field) {
+    if (widget.gradientBorder == null || widget.decorationType == DecorationType.underlined) {
+      return field;
+    }
+    final borderRadius = widget.borderRadius ?? BorderRadius.circular(AppSize.inputBorderRadius);
+    return Container(
+      padding: const EdgeInsets.all(1),
+      decoration: BoxDecoration(
+        borderRadius: borderRadius,
+        border: GradientBoxBorder(
+          gradient: widget.gradientBorder!,
+          width: 1,
+          borderRadius: borderRadius,
+        ),
+      ),
+      child: field,
     );
   }
 
@@ -377,12 +398,20 @@ class _CustomInputFieldState extends State<CustomInputField> {
       case DecorationType.outlined:
         return OutlineInputBorder(
           borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSize.inputBorderRadius),
-          borderSide: BorderSide(color: widget.borderColor ?? LightThemeColors.inputFieldBorder),
+          borderSide:
+              widget.gradientBorder != null
+                  ? const BorderSide(color: Colors.transparent)
+                  : BorderSide(color: widget.borderColor ?? LightThemeColors.inputFieldBorder),
         );
       case DecorationType.filled:
         return OutlineInputBorder(
           borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSize.inputBorderRadius),
-          borderSide: widget.borderColor != null ? BorderSide(color: widget.borderColor!) : BorderSide.none,
+          borderSide:
+              widget.gradientBorder != null
+                  ? const BorderSide(color: Colors.transparent)
+                  : widget.borderColor != null
+                  ? BorderSide(color: widget.borderColor!)
+                  : BorderSide.none,
         );
     }
   }

@@ -115,6 +115,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     inputType: widget.inputType,
                     readOnly: widget.readOnly,
                     height: widget.height,
+                    gradientBorder: _gradientBorder(formState, hasFocus),
                     hint: widget.hint,
                     title: widget.title,
                     textAlign: widget.textAlign ?? TextAlign.start,
@@ -189,6 +190,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
     } else {
       return context.inputFieldBorderColor;
     }
+  }
+
+  Gradient? _gradientBorder(FormFieldState<String> formState, bool hasFocus) {
+    if (formState.hasError || !widget.enabled || !hasFocus) {
+      return null;
+    }
+    return GradientStyles.primaryGradient;
   }
 
   String? Function(String?)? _getValidator() {

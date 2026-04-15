@@ -14,10 +14,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart' as _svg;
 import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
-class $AssetsFontsGen {
-  const $AssetsFontsGen();
-}
-
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -213,79 +209,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/youtube_fill.svg
   SvgGenImage get youtubeFill => const SvgGenImage('assets/icons/youtube_fill.svg');
 
-  // Compatibility aliases for existing app code after the icon files were renamed.
-  SvgGenImage get apple => icon1;
-  SvgGenImage get arrowDown => stashArrowUpDuotone2;
-  SvgGenImage get arrowLeft => iconamoonArrowUp2Light1;
-  SvgGenImage get arrowLeftAlt => iconamoonArrowUp2Light1;
-  SvgGenImage get arrowRightAlt => iconamoonArrowUp2Light;
-  SvgGenImage get arrowUpLeft => iconamoonArrowUp2Light;
-  SvgGenImage get auction => iconParkOutlineTransactionOrder;
-  SvgGenImage get briefcaseArrowDown => letsIconsOrder;
-  SvgGenImage get buildingOutlined => stashShopSolid;
-  SvgGenImage get calendar => fluentMdl2DateTime2;
-  SvgGenImage get callRinging => mdiPhoneOutline1;
-  SvgGenImage get cameraAddFill => boxiconsCamera;
-  SvgGenImage get clipboardPaste => boxiconsUndo;
-  SvgGenImage get clock => materialSymbolsAlarm;
-  SvgGenImage get close => x;
-  SvgGenImage get coupon => bxsOffer;
-  SvgGenImage get currentLocationPin => ionLocationSharp;
-  SvgGenImage get docRoundedFill => iconParkOutlineTransactionOrder;
-  SvgGenImage get done => solarCartCheckBroken;
-  SvgGenImage get dropdownArrow => iconamoonArrowUp2Light;
-  SvgGenImage get editCopy => tablerEdit;
-  SvgGenImage get editSquare => tablerEdit;
-  SvgGenImage get error => xFill;
-  SvgGenImage get eyeOff => eyeOutlined2;
-  SvgGenImage get eyeOn => eyeOutlined1;
-  SvgGenImage get facebook => youtubeFill;
-  SvgGenImage get faq => ixSupport;
-  SvgGenImage get fileAlt => iconParkOutlineTransactionOrder;
-  SvgGenImage get fileSecurity => materialSymbolsLockOutline;
-  SvgGenImage get flagEg => materialSymbolsLightLanguage;
-  SvgGenImage get flagSa => materialSymbolsLightLanguage;
-  SvgGenImage get flagUsa => materialSymbolsLightLanguage;
-  SvgGenImage get global => materialSymbolsLightLanguage;
-  SvgGenImage get google => icon;
-  SvgGenImage get homeAlt => solarHome2Broken;
-  SvgGenImage get homeOutlined => solarHome2Broken;
-  SvgGenImage get imageGalleryFill => component6;
-  SvgGenImage get images => component6;
-  SvgGenImage get infoCircle => materialSymbolsInfoOutlineRounded;
-  SvgGenImage get instagram => youtubeFill;
-  SvgGenImage get key => weuiLockOutlined;
-  SvgGenImage get languageCircle => materialSymbolsLightLanguage;
-  SvgGenImage get locationPinDisabled => mingcuteLocationLine;
-  SvgGenImage get locationPinFill => ionLocationSharp;
-  SvgGenImage get locationPinFilled => mdiLocation;
-  SvgGenImage get logo => icon;
-  SvgGenImage get logout => streamlineLogout1;
-  SvgGenImage get mail => fluentMail28Regular;
-  SvgGenImage get menu => component6;
-  SvgGenImage get mobilePhone => mdiPhoneOutline;
-  SvgGenImage get moonEclipse => materialSymbolsAlarm;
-  SvgGenImage get noSearchResults => vector;
-  SvgGenImage get notificationAlt => mdiBellNotificationOutline;
-  SvgGenImage get pattern => vector;
-  SvgGenImage get peopleAlt => iconoirProfileCircle;
-  SvgGenImage get person => iconoirProfileCircle;
-  SvgGenImage get plus => icon;
-  SvgGenImage get search => vector;
-  SvgGenImage get settings => solarSettingsBroken;
-  SvgGenImage get snapchat => youtubeFill;
-  SvgGenImage get star => bxsOffer;
-  SvgGenImage get starFill => bxsOffer;
-  SvgGenImage get starHalf => bxsOffer;
-  SvgGenImage get store => stashShopSolid;
-  SvgGenImage get sun => materialSymbolsAlarm;
-  SvgGenImage get tiktok => youtubeFill;
-  SvgGenImage get trash => deleteIcon;
-  SvgGenImage get uploadCloud => boxiconsUndo;
-  SvgGenImage get warning => materialSymbolsInfoOutlineRounded;
-  SvgGenImage get warningFill => materialSymbolsInfoOutlineRounded;
-  SvgGenImage get whatsapp => whats;
-
   /// List of all assets
   List<SvgGenImage> get values => [
     component6,
@@ -357,6 +280,16 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/welcome_screen.png
+  AssetGenImage get a5381f1e88db3efa82e8876978c5ff77986fbe22c =>
+      const AssetGenImage('assets/images/welcome_screen.png');
+
+  /// File path: assets/images/Logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/images/Logo.png');
+
+  /// File path: assets/images/Welcome Screen.png
+  AssetGenImage get welcomeScreen => const AssetGenImage('assets/images/Welcome Screen.png');
+
   /// File path: assets/images/app_bar_overlay.png
   AssetGenImage get appBarOverlay => const AssetGenImage('assets/images/app_bar_overlay.png');
 
@@ -365,6 +298,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_launcher.png
   AssetGenImage get icLauncher => const AssetGenImage('assets/images/ic_launcher.png');
+
+  /// File path: assets/images/logoWhite.png
+  AssetGenImage get logoWhite => const AssetGenImage('assets/images/logoWhite.png');
 
   /// File path: assets/images/logo_b_light.png
   AssetGenImage get logoBLight => const AssetGenImage('assets/images/logo_b_light.png');
@@ -395,9 +331,13 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    a5381f1e88db3efa82e8876978c5ff77986fbe22c,
+    logo,
+    welcomeScreen,
     appBarOverlay,
     homeBanner,
     icLauncher,
+    logoWhite,
     logoBLight,
     logoBonusLight,
     logoHorizontalLight,
@@ -427,7 +367,6 @@ class Assets {
   const Assets._();
 
   static const String aEnv = '.env';
-  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLangGen lang = $AssetsLangGen();

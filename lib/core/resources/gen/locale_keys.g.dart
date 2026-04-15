@@ -282,10 +282,17 @@ abstract class  LocaleKeys {
   static const onboarding_hints_third = 'onboarding.hints.third';
   static const onboarding_hints = 'onboarding.hints';
   static const onboarding_action = 'onboarding.action';
+  static const onboarding_welcome_brand = 'onboarding.welcome.brand';
+  static const onboarding_welcome_title = 'onboarding.welcome.title';
+  static const onboarding_welcome_subtitle = 'onboarding.welcome.subtitle';
+  static const onboarding_welcome_guest_prefix = 'onboarding.welcome.guest_prefix';
+  static const onboarding_welcome_guest_action = 'onboarding.welcome.guest_action';
+  static const onboarding_welcome = 'onboarding.welcome';
   static const onboarding = 'onboarding';
   static const auth_login_title = 'auth.login.title';
   static const auth_login_subtitle = 'auth.login.subtitle';
   static const auth_login_welcome = 'auth.login.welcome';
+  static const auth_login_remember = 'auth.login.remember';
   static const auth_login_have_account = 'auth.login.have_account';
   static const auth_login_guest = 'auth.login.guest';
   static const auth_login_or = 'auth.login.or';

@@ -2,14 +2,23 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../config/flavor/flavor_config.dart';
 import 'app_route.dart';
 import '../../../modules/common/routes/common_routers.dart';
+import '../../../modules/provider/routers/provider_routes.dart';
+import '../../../modules/user/routers/user_routes.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class RouteManager {
   static void configureRoutes() {
+    BaseRouter.routes.clear();
     CommonRouter().registerRoutes();
+    if (FlavorConfig.isDriver) {
+      ProviderRoutes().registerRoutes();
+    } else {
+      UserRoutes().registerRoutes();
+    }
   }
 }
 

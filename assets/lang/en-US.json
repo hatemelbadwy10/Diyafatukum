@@ -354,13 +354,21 @@
       "second": "Add your personal touches to your prints - documents, books, stickers and more.",
       "third": "Get your order at your doorstep or pick it up from the nearest branch."
     },
-    "action": "Start Now"
+    "action": "Start Now",
+    "welcome": {
+      "brand": "Diyafatukum",
+      "title": "... your partner for every celebration",
+      "subtitle": "The best platform that brings together all event services in one smooth experience that fits your needs and budget.",
+      "guest_prefix": "Or continue ",
+      "guest_action": "as guest"
+    }
   },
   "auth": {
     "login": {
       "title": "Login",
       "subtitle": "Sign in to easily manage your printing orders and office supplies.",
       "welcome": "Welcome back to",
+      "remember": "Remember me?",
       "have_account": "Don't have an account?",
       "guest": "Continue as Guest",
       "or": "or",

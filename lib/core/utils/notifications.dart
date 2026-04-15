@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print
+import 'dart:io';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -17,7 +18,14 @@ void handleNotification(RemoteMessage? message) {
 
 class RemoteNotificationServices {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
+  static bool get _isFirebaseMessagingEnabled => !Platform.isIOS;
+
   static Future<void> initialize() async {
+    if (!_isFirebaseMessagingEnabled) {
+      log('Skipping Firebase Messaging on iOS until APNs/Firebase are configured.', name: 'FCM');
+      await LocalNotificationServices.init();
+      return;
+    }
     await requestPermission();
     await getFcmToken().then((value) => log('$value', name: 'FCM'));
     await initPushNotification();
@@ -25,6 +33,7 @@ class RemoteNotificationServices {
   }
 
   static Future<void> initPushNotification() async {
+    if (!_isFirebaseMessagingEnabled) return;
     await messaging.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
     FirebaseMessaging.onMessageOpenedApp.listen(handleNotification);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -34,15 +43,20 @@ class RemoteNotificationServices {
     });
   }
 
-  static Stream<RemoteMessage> get onMessage => FirebaseMessaging.onMessage;
+  static Stream<RemoteMessage> get onMessage =>
+      _isFirebaseMessagingEnabled ? FirebaseMessaging.onMessage : const Stream.empty();
 
   /// Handles the initial notification.
   ///
   /// This method is responsible for handling the initial notification when the app is launched from terminated.
   /// It can be used to perform any necessary actions based on the notification data.
-  static void handleInitialNotification() => messaging.getInitialMessage().then(handleNotification);
+  static void handleInitialNotification() {
+    if (!_isFirebaseMessagingEnabled) return;
+    messaging.getInitialMessage().then(handleNotification);
+  }
 
   static Future<void> requestPermission() async {
+    if (!_isFirebaseMessagingEnabled) return;
     await messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -55,6 +69,7 @@ class RemoteNotificationServices {
   }
 
   static Future<String?> getFcmToken() async {
+    if (!_isFirebaseMessagingEnabled) return null;
     try {
       final token = await messaging.getToken();
       log('FCM Token: $token', name: 'FCM');
@@ -65,7 +80,10 @@ class RemoteNotificationServices {
     }
   }
 
-  static Future<void> deleteToken() async => messaging.deleteToken();
+  static Future<void> deleteToken() async {
+    if (!_isFirebaseMessagingEnabled) return;
+    await messaging.deleteToken();
+  }
 }
 
 class LocalNotificationServices {

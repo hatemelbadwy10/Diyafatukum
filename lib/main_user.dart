@@ -10,6 +10,7 @@ import 'core/config/router/route_manager.dart';
 import 'core/config/service_locator/injection.dart';
 import 'core/utils/notifications.dart';
 import 'core/utils/platform_channels_utils.dart';
+import 'core/widgets/easy_localization_app.dart';
 import 'modules/common/features/app/app.dart';
 
 void main() async {
@@ -31,6 +32,10 @@ void main() async {
 
   RouteManager.configureRoutes();
   Future.wait([EasyLocalization.ensureInitialized(), configureInjection()]).then(
-    (value) => runApp(MyApp()),
+    (value) => runApp(
+      const EasyLocalizationApp(
+        child: MyApp(),
+      ),
+    ),
   );
 }
