@@ -24,12 +24,11 @@ class _ScaffoldWithNavBarScreenState extends State<ScaffoldWithNavBarScreen> {
     return Scaffold(
       extendBody: true,
       body: widget.shell,
-      bottomNavigationBar: CustomBottomNavigationBar(onTap: (index) => _onTap(index)),
+      bottomNavigationBar: CustomBottomNavigationBar(onTap: _onTap),
     );
   }
 
-  void _onTap(int index) {
-    bottomNavNotifier.value = NavigationBarItems.values[index];
-    widget.shell.goBranch(index);
+  void _onTap(NavigationBarItems item) {
+    item.navigate();
   }
 }

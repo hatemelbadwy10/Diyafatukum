@@ -14,7 +14,7 @@ class RouteManager {
   static void configureRoutes() {
     BaseRouter.routes.clear();
     CommonRouter().registerRoutes();
-    if (FlavorConfig.isDriver) {
+    if (FlavorConfig.isProvider) {
       ProviderRoutes().registerRoutes();
     } else {
       UserRoutes().registerRoutes();

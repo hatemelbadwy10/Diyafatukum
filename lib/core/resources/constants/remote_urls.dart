@@ -13,6 +13,7 @@ class RemoteUrls {
   /// Auth
   static String login = 'login';
   static String register = 'register';
+  static String providerRegister = '$flavor/register';
   static String logout = 'logout';
 
   /// Forget Password
@@ -35,6 +36,16 @@ class RemoteUrls {
   static String deleteAccount = '$flavor/delete';
 
   /// Notifications
+
+  /// Orders
+  static String orders = '$flavor/orders';
+  static String providerDashboard = '$flavor/home';
+
+  /// User Home
+  static String userHome = '$flavor/home';
+  static String singleService(String serviceKey) => '$flavor/services/$serviceKey';
+  static String singleServiceStore(String serviceKey, String storeId) =>
+      '$flavor/services/$serviceKey/stores/$storeId';
 
   /// Settings
   static const String contact = 'contact-us';

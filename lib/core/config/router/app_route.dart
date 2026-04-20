@@ -9,6 +9,7 @@ class AppRoutes extends BaseRoute {
   // auth
   static const login = AppRoutes('login', '/login');
   static const register = AppRoutes('register', '/register');
+  static const registerDetails = AppRoutes('registerDetails', '/register/details');
 
   // forget password
   static const forgetPassword = AppRoutes('forgetPassword', '/forget-password');
@@ -41,7 +42,16 @@ class AppRoutes extends BaseRoute {
 
   // home
   static const home = AppRoutes('home', '/home');
+  static const singleService = AppRoutes('singleService', '/single-service');
+  static const singleServiceStore = AppRoutes(
+    'singleServiceStore',
+    '/single-service-store',
+  );
   static const providerHome = AppRoutes('providerHome', '/provider-home');
+  static const providerRegisterLocation = AppRoutes(
+    'providerRegisterLocation',
+    '/provider-home/location',
+  );
 
   // stationery
   static const auctions = AppRoutes('auctions', '/auctions');

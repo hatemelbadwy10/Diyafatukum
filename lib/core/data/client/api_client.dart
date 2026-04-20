@@ -13,9 +13,13 @@ class ApiClient {
   late Dio dio;
 
   ApiClient(Dio dioC, {required this.loggingInterceptor}) {
+    final normalizedBaseUrl = RemoteUrls.baseUrl.endsWith('/')
+        ? RemoteUrls.baseUrl
+        : '${RemoteUrls.baseUrl}/';
+
     dio = dioC;
     dio
-      ..options.baseUrl = RemoteUrls.baseUrl
+      ..options.baseUrl = normalizedBaseUrl
       ..options.connectTimeout = const Duration(milliseconds: 60000)
       ..options.receiveTimeout = const Duration(milliseconds: 60000)
       ..httpClientAdapter
@@ -119,7 +123,8 @@ class ApiClient {
     downloadOptions.responseType = ResponseType.bytes;
 
     // Check if the URL is an absolute URL (starts with http or https)
-    final isAbsoluteUrl = url.startsWith('http://') || url.startsWith('https://');
+    final isAbsoluteUrl =
+        url.startsWith('http://') || url.startsWith('https://');
 
     // Create a progress callback wrapper that logs the progress
     progressWrapper(received, total) {
@@ -147,7 +152,9 @@ class ApiClient {
       );
     }
 
-    loggingInterceptor.logDownload('Using relative URL with base URL: ${dio.options.baseUrl}');
+    loggingInterceptor.logDownload(
+      'Using relative URL with base URL: ${dio.options.baseUrl}',
+    );
     return await dio.download(
       url,
       savePath,
@@ -157,8 +164,12 @@ class ApiClient {
     );
   }
 
-  void updateToken(String? token) =>
-      dio.options.headers.update('Authorization', (value) => 'Bearer $token', ifAbsent: () => 'Bearer $token');
+  void updateToken(String? token) => dio.options.headers.update(
+    'Authorization',
+    (value) => 'Bearer $token',
+    ifAbsent: () => 'Bearer $token',
+  );
 
-  void updateLanguage(String language) => dio.options.headers['Accept-Language'] = language;
+  void updateLanguage(String language) =>
+      dio.options.headers['Accept-Language'] = language;
 }

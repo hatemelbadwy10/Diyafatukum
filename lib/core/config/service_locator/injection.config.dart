@@ -42,6 +42,12 @@ import '../../../modules/common/features/auth/presentation/controller/login_cubi
     as _i621;
 import '../../../modules/common/features/auth/presentation/controller/register_cubit/register_cubit.dart'
     as _i685;
+import '../../../modules/common/features/bag/data/datasource/bag_local_datasource.dart'
+    as _i370;
+import '../../../modules/common/features/bag/data/repository/bag_repository.dart'
+    as _i217;
+import '../../../modules/common/features/bag/presentation/controller/bag_cubit/bag_cubit.dart'
+    as _i395;
 import '../../../modules/common/features/forget_password/data/datasource/forget_password_remote_datasource.dart'
     as _i1013;
 import '../../../modules/common/features/forget_password/data/repository/forget_password_repository.dart'
@@ -54,6 +60,12 @@ import '../../../modules/common/features/notifications/data/datasource/notificat
     as _i656;
 import '../../../modules/common/features/notifications/data/repository/notifications_repository.dart'
     as _i827;
+import '../../../modules/common/features/orders/data/datasource/orders_remote_datasource.dart'
+    as _i681;
+import '../../../modules/common/features/orders/data/repository/orders_repository.dart'
+    as _i1015;
+import '../../../modules/common/features/orders/presentation/controller/orders_cubit/orders_cubit.dart'
+    as _i775;
 import '../../../modules/common/features/profile/data/datasource/profile_remote_datasource.dart'
     as _i858;
 import '../../../modules/common/features/profile/data/repository/profile_repository.dart'
@@ -96,6 +108,32 @@ import '../../../modules/common/features/verification/data/repository/verificati
     as _i66;
 import '../../../modules/common/features/verification/presentation/controller/verification_cubit/verification_cubit.dart'
     as _i269;
+import '../../../modules/provider/features/home/data/datasource/provider_home_remote_datasource.dart'
+    as _i540;
+import '../../../modules/provider/features/home/data/repository/provider_home_repository.dart'
+    as _i634;
+import '../../../modules/provider/features/home/presentation/controller/provider_home_cubit/provider_home_cubit.dart'
+    as _i805;
+import '../../../modules/provider/features/onboarding/data/datasource/provider_onboarding_remote_datasource.dart'
+    as _i751;
+import '../../../modules/provider/features/onboarding/data/repository/provider_onboarding_repository.dart'
+    as _i581;
+import '../../../modules/provider/features/onboarding/presentation/controller/provider_register_cubit/provider_register_cubit.dart'
+    as _i412;
+import '../../../modules/user/features/home/data/datasource/user_home_remote_datasource.dart'
+    as _i523;
+import '../../../modules/user/features/home/data/repository/user_home_repository.dart'
+    as _i245;
+import '../../../modules/user/features/home/presentation/controller/user_home_cubit/user_home_cubit.dart'
+    as _i785;
+import '../../../modules/user/features/single_service/data/datasource/single_service_remote_datasource.dart'
+    as _i340;
+import '../../../modules/user/features/single_service/data/repository/single_service_repository.dart'
+    as _i665;
+import '../../../modules/user/features/single_service/presentation/controller/single_service_cubit/single_service_cubit.dart'
+    as _i340;
+import '../../../modules/user/features/single_service/presentation/controller/single_service_store_cubit/single_service_store_cubit.dart'
+    as _i965;
 import '../../data/client/api_client.dart' as _i897;
 import '../../data/client/logger_interceptor.dart' as _i891;
 import '../../utils/location_utils.dart' as _i494;
@@ -150,6 +188,9 @@ Future<_i174.GetIt> $initGetIt(
   gh.lazySingleton<_i78.SplashLocalDatasource>(
     () => _i78.SplashLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
   );
+  gh.lazySingleton<_i370.BagLocalDataSource>(
+    () => _i370.BagLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
+  );
   gh.lazySingleton<_i493.AuthLocalDataSource>(
     () => _i493.AuthLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
   );
@@ -179,10 +220,25 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i312.DeleteAddressCubit>(
     () => _i312.DeleteAddressCubit(gh<_i601.AddressesRepository>()),
   );
+  gh.lazySingleton<_i681.OrdersRemoteDataSource>(
+    () => _i681.OrdersRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
   gh.lazySingleton<_i30.ForgetPasswordRepository>(
     () => _i30.ForgetPasswordRepositoryImpl(
       gh<_i1013.ForgetPasswordRemoteDataSource>(),
     ),
+  );
+  gh.lazySingleton<_i523.UserHomeRemoteDataSource>(
+    () => _i523.UserHomeRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i340.SingleServiceRemoteDataSource>(
+    () => _i340.SingleServiceRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i751.ProviderOnboardingRemoteDataSource>(
+    () => _i751.ProviderOnboardingRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i217.BagRepository>(
+    () => _i217.BagRepositoryImpl(gh<_i370.BagLocalDataSource>()),
   );
   gh.factory<_i216.ContactUsCubit>(
     () => _i216.ContactUsCubit(gh<_i633.SettingsRepository>()),
@@ -192,6 +248,9 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.factory<_i477.ContactsCubit>(
     () => _i477.ContactsCubit(gh<_i633.SettingsRepository>()),
+  );
+  gh.lazySingleton<_i540.ProviderHomeRemoteDataSource>(
+    () => _i540.ProviderHomeRemoteDataSourceImpl(gh<_i897.ApiClient>()),
   );
   gh.lazySingleton<_i933.SplashRemoteDataSource>(
     () => _i933.SplashRemoteDataSourceImpl(gh<_i897.ApiClient>()),
@@ -217,12 +276,29 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i1028.ResetPasswordCubit>(
     () => _i1028.ResetPasswordCubit(gh<_i30.ForgetPasswordRepository>()),
   );
+  gh.lazySingleton<_i634.ProviderHomeRepository>(
+    () => _i634.ProviderHomeRepositoryImpl(
+      gh<_i540.ProviderHomeRemoteDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i245.UserHomeRepository>(
+    () => _i245.UserHomeRepositoryImpl(gh<_i523.UserHomeRemoteDataSource>()),
+  );
   gh.lazySingleton<_i502.SplashCubit>(
     () => _i502.SplashCubit(gh<_i505.SplashRepository>()),
   );
+  gh.lazySingleton<_i1015.OrdersRepository>(
+    () => _i1015.OrdersRepositoryImpl(gh<_i681.OrdersRemoteDataSource>()),
+  );
+  gh.factory<_i395.BagCubit>(() => _i395.BagCubit(gh<_i217.BagRepository>()));
   gh.lazySingleton<_i827.NotificationsRepository>(
     () => _i827.NotificationsRepositoryImpl(
       gh<_i656.NotificationsRemoteDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i581.ProviderOnboardingRepository>(
+    () => _i581.ProviderOnboardingRepositoryImpl(
+      gh<_i751.ProviderOnboardingRemoteDataSource>(),
     ),
   );
   gh.lazySingleton<_i1056.AuthRepository>(
@@ -231,8 +307,16 @@ Future<_i174.GetIt> $initGetIt(
       gh<_i493.AuthLocalDataSource>(),
     ),
   );
+  gh.factory<_i775.OrdersCubit>(
+    () => _i775.OrdersCubit(gh<_i1015.OrdersRepository>()),
+  );
   gh.factory<_i853.LanguageCubit>(
     () => _i853.LanguageCubit(gh<_i633.SettingsRepository>()),
+  );
+  gh.lazySingleton<_i665.SingleServiceRepository>(
+    () => _i665.SingleServiceRepositoryImpl(
+      gh<_i340.SingleServiceRemoteDataSource>(),
+    ),
   );
   gh.factory<_i621.LoginCubit>(
     () => _i621.LoginCubit(gh<_i1056.AuthRepository>()),
@@ -242,6 +326,21 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.lazySingleton<_i821.ProfileRepository>(
     () => _i821.ProfileRepositoryImpl(gh<_i858.ProfileRemoteDataSource>()),
+  );
+  gh.factory<_i805.ProviderHomeCubit>(
+    () => _i805.ProviderHomeCubit(gh<_i634.ProviderHomeRepository>()),
+  );
+  gh.factory<_i340.SingleServiceCubit>(
+    () => _i340.SingleServiceCubit(gh<_i665.SingleServiceRepository>()),
+  );
+  gh.factory<_i965.SingleServiceStoreCubit>(
+    () => _i965.SingleServiceStoreCubit(gh<_i665.SingleServiceRepository>()),
+  );
+  gh.factory<_i412.ProviderRegisterCubit>(
+    () => _i412.ProviderRegisterCubit(gh<_i581.ProviderOnboardingRepository>()),
+  );
+  gh.factory<_i785.UserHomeCubit>(
+    () => _i785.UserHomeCubit(gh<_i245.UserHomeRepository>()),
   );
   gh.lazySingleton<_i1067.AuthCubit>(
     () => _i1067.AuthCubit(

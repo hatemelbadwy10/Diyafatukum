@@ -12,23 +12,29 @@ class CustomBottomNavigationBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isActive = item == bottomNavNotifier.value;
     final activeStyle = context.bottomNavBarSelectedLabelStyle;
-    final unselectedStyle = context.bottomNavBarUnselectedLabelStyle;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        if (item == bottomNavNotifier.value)
-          item.selectedIcon.svg(width: 24, colorFilter: context.iconSelectedColor.colorFilter)
-        else
-          item.unselectedIcon.svg(width: 24, colorFilter: context.iconUnselectedColor.colorFilter),
-        2.gap,
-        Text(
-          item.label.tr(),
-          maxLines: 2,
-          style: isActive ? activeStyle : unselectedStyle,
-          textAlign: TextAlign.center,
-        ),
-      ],
-    ).withWidth(context.width / 5);
+    if (isActive) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          item.selectedIcon.svg(width: 24, height: 24, colorFilter: context.iconSelectedColor.colorFilter),
+          10.gap,
+          Text(
+            item.label.tr(),
+            maxLines: 1,
+            style: activeStyle,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ).paddingSymmetric(20, 14).setContainerToView(
+        radius: 100,
+        color: context.primarySwatch.shade50,
+      );
+    }
+
+    return item.unselectedIcon.svg(
+      width: 26,
+      height: 26,
+      colorFilter: context.iconUnselectedColor.colorFilter,
+    ).withWidth(34);
   }
 }

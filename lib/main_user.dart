@@ -8,7 +8,6 @@ import 'core/config/flavor/flavor_config.dart';
 import 'core/config/flavor/flavor_type_enum.dart';
 import 'core/config/router/route_manager.dart';
 import 'core/config/service_locator/injection.dart';
-import 'core/utils/notifications.dart';
 import 'core/utils/platform_channels_utils.dart';
 import 'core/widgets/easy_localization_app.dart';
 import 'modules/common/features/app/app.dart';
@@ -18,10 +17,6 @@ void main() async {
 
   // Initialize Parent flavor
   FlavorConfig.initialize(FlavorType.user);
-
-  await FlavorConfig.initializeFirebase();
-
-  await RemoteNotificationServices.initialize();
 
   await dotenv.load(fileName: ".env");
 

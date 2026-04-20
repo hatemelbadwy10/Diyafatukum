@@ -9,7 +9,7 @@ import 'custom_bottom_navigation_bar_item.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   const CustomBottomNavigationBar({super.key, required this.onTap});
-  final void Function(int) onTap;
+  final void Function(NavigationBarItems item) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -24,35 +24,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
       child: ValueListenableBuilder(
         valueListenable: bottomNavNotifier,
         builder: (context, value, _) {
+          final items = NavigationBarItems.displayItems;
           return BottomAppBar(
-            padding: 0.edgeInsetsAll,
-            height: kBottomNavigationBarHeight,
+            padding: 16.edgeInsetsHorizontal + 12.edgeInsetsVertical,
+            height: kBottomNavigationBarHeight + 16,
             color: context.scaffoldBackgroundColor,
-            child: Stack(
-              children: [
-                AnimatedPositionedDirectional(
-                  top: 0,
-                  duration: 200.milliseconds,
-                  curve: Curves.easeInOutCubicEmphasized,
-                  start: ((context.width / NavigationBarItems.items.length) * value.index) + 30,
-                  child: Container(
-                    height: 4,
-                    width: context.width / NavigationBarItems.values.length - 60,
-                    decoration: BoxDecoration(color: context.primaryColor, borderRadius: BorderRadius.circular(2)),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children:
-                      NavigationBarItems.values.map((item) {
-                        return CustomBottomNavigationBarItem(item: item).onTap(
-                          () => onTap.call(item.index),
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                        );
-                      }).toList(),
-                ),
-              ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children:
+                  items.map((item) {
+                    return CustomBottomNavigationBarItem(item: item).onTap(
+                      () => onTap.call(item),
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    );
+                  }).toList(),
             ),
           );
         },
