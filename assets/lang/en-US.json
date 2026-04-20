@@ -232,6 +232,46 @@
     "copied": "Copied to clipboard",
     "applied": "Applied"
   },
+  "provider": {
+    "home": {
+      "greeting": "Hello ! 👋🏻",
+      "nav": {
+        "home": "Home",
+        "store": "Store"
+      },
+      "card": {
+        "accept": "Accept",
+        "reject": "Reject",
+        "status": {
+          "pending": "Pending",
+          "accepted": "Accepted",
+          "rejected": "Rejected"
+        }
+      },
+      "messages": {
+        "accepted": "Order accepted",
+        "rejected": "Order rejected"
+      }
+    },
+    "register": {
+      "title": "Let’s Start With Merchant Details",
+      "subtitle": "Enter your information to start using our services.",
+      "commercial_register": "Commercial Register",
+      "store_title": "Tell Us About Your Store",
+      "store_subtitle": "Help us showcase your services better",
+      "store_name_ar": "Store Name in Arabic",
+      "store_name_en": "Store Name in English",
+      "store_category_title": "What is your store specialty?",
+      "store_category_hint": "Choose specialty",
+      "submit": "Create Account",
+      "success": "Merchant registration request submitted successfully",
+      "categories": {
+        "cakes": "Cakes",
+        "flowers": "Flowers",
+        "coffee": "Coffee"
+      }
+    }
+  },
   "localized": {
     "ar": "{} (Ar)",
     "en": "{} (En)",
@@ -382,6 +422,10 @@
       "subtitle": "Sign up now and enjoy fast printing services and high-quality office supplies at competitive prices.",
       "welcome": "Welcome to",
       "account": "Create Account",
+      "complete": {
+        "title": "Complete Account Setup",
+        "subtitle": "Enter your address and password to finish creating your account."
+      },
       "accept_terms": {
         "title": "Accept",
         "required": "You must accept the terms and conditions to continue"
@@ -403,6 +447,7 @@
       "confirm": "Confirm Password",
       "change": "Change Password",
       "change_success": "Your password has been changed successfully",
+      "reset_success_subtitle": "You will be redirected to the login screen to sign in again.",
       "set": "Set Password",
       "set_hint": "Enter the new password",
       "set_subtitle": "Your new password must be different from your previously used password",
@@ -415,8 +460,8 @@
       "email_phone": "Email or Phone Number"
     },
     "otp": {
-      "title": "Verification Code",
-      "hint": "Enter the code sent to",
+      "title": "OTP Code",
+      "hint": "Please enter the OTP code sent to",
       "resend": "Resend Code",
       "resend_hint": "Didn't receive the code?",
       "timer": "The verification code will be resent in",
@@ -525,8 +570,36 @@
     }
   },
   "orders": {
-    "title": "My Orders",
+    "title": "Orders",
     "subtitle": "View your orders history",
+    "tabs": {
+      "current": "Current",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "card": {
+      "code": "Order Code",
+      "badge": {
+        "received": "Received",
+        "completed": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "steps": {
+        "received": "Received"
+      }
+    },
+    "single": {
+      "store": {
+        "title": "Store Details",
+        "name": "Store Name",
+        "phone": "Phone Number"
+      },
+      "payment": {
+        "title": "Payment Details",
+        "total_paid": "Total Paid Amount"
+      },
+      "notes": "Order Notes"
+    },
     "guest": {
       "title": "You need to login to view your Orders",
       "subtitle": "Please login or create an account to access your orders"
@@ -635,6 +708,13 @@
   },
   "settings": {
     "title": "Settings",
+    "sections": {
+      "account": "My Account",
+      "general": "General"
+    },
+    "edit_profile": "Edit Profile",
+    "refund_policy": "Cancellation & Refund Policy",
+    "support": "Technical Support",
     "about": "About App",
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
@@ -657,6 +737,38 @@
       "good_afternoon": "Good Afternoon",
       "good_evening": "Good Evening",
       "good_night": "Good Night"
+    },
+    "user": {
+      "greeting": "Hello, {} 👋🏻",
+      "delivery_to": "Delivery will be to {}",
+      "delivery_default": "Riyadh",
+      "search_hint": "Search for a \"service\"...",
+      "banner": {
+        "title": "Try our best event styling services",
+        "action": "Explore"
+      },
+      "featured": {
+        "title": "Our Featured Services ✨",
+        "subtitle": "Our best services to make your occasion special."
+      },
+      "shop_now": "Shop now ←",
+      "store": {
+        "choose": "Choose",
+        "add_to_cart": "Add to cart",
+        "booking_title": "Complete booking details",
+        "booking_notes_title": "Write your request and we will contact you",
+        "booking_notes_hint": "Write your request here ...",
+        "booking_success": "Your request has been sent and we will contact you soon"
+      },
+      "services": {
+        "gifts": "Gifts",
+        "photography": "Photography",
+        "flowers": "Flowers",
+        "beauty": "Beauty",
+        "coffee": "Coffee",
+        "sweets": "Sweets",
+        "decorations": "Decorations"
+      }
     },
     "rewards": {
       "title": "Your Rewards Awaits",

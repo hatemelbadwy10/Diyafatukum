@@ -10,82 +10,82 @@ class LightThemeColors {
   const LightThemeColors._();
   static const int _primaryValue = 0xFFCF9D29;
   static const MaterialColor primary = MaterialColor(_primaryValue, <int, Color>{
-    50: Color(0xFFFCE4F6),
-    100: Color(0xFFF8C4E8),
-    200: Color(0xFFF098D5),
-    300: Color(0xFFE86CC2),
-    400: Color(0xFFE040AF),
-    500: Color(0xFFD81B9C),
-    600: Color(0xFFCC0E88),
-    700: Color(_primaryValue),
-    800: Color(0xFF8B1C6B),
-    900: Color(0xFF6A154F),
-    950: Color(0xFF490E33),
+    50: Color(0xFFFFF8E8),
+    100: Color(0xFFF8E9BE),
+    200: Color(0xFFF0D78E),
+    300: Color(0xFFE7C45D),
+    400: Color(0xFFDDB23B),
+    500: Color(_primaryValue),
+    600: Color(0xFFB88922),
+    700: Color(0xFFA2711B),
+    800: Color(0xFF875E15),
+    900: Color(0xFF6B4A10),
+    950: Color(0xFF523708),
   });
 
-  static const int _secondaryValue = 0xFF6E126A;
+  static const int _secondaryValue = 0xFFC2A279;
   static const MaterialColor secondary = MaterialColor(_secondaryValue, <int, Color>{
-    50: Color(0xFFFAE8F8),
-    100: Color(0xFFF3C7EE),
-    200: Color(0xFFE895DD),
-    300: Color(0xFFDC63CC),
-    400: Color(0xFFD031BB),
-    500: Color(0xFFB81CA0),
-    600: Color(0xFF9B1685),
-    700: Color(_secondaryValue),
-    800: Color(0xFF560F54),
-    900: Color(0xFF3F0B3E),
-    950: Color(0xFF280729),
+    50: Color(0xFFF8F3EC),
+    100: Color(0xFFEEE4D6),
+    200: Color(0xFFE3D2BC),
+    300: Color(0xFFD7BEA0),
+    400: Color(0xFFCCAE8B),
+    500: Color(_secondaryValue),
+    600: Color(0xFFAC8D66),
+    700: Color(0xFF96754E),
+    800: Color(0xFF7D6140),
+    900: Color(0xFF654D34),
+    950: Color(0xFF49361F),
   });
 
-  static const int _tertiaryValue = 0xFF361872;
+  static const int _tertiaryValue = 0xFF7A5E15;
   static const MaterialColor tertiary = MaterialColor(_tertiaryValue, <int, Color>{
-    50: Color(0xFFEDE5F3),
-    100: Color(0xFFD4C0E3),
-    200: Color(0xFFB898D0),
-    300: Color(0xFF9C70BD),
-    400: Color(0xFF8048AA),
-    500: Color(0xFF6B3B97),
-    600: Color(0xFF5A2F84),
-    700: Color(0xFF4A2371),
+    50: Color(0xFFFAF4E4),
+    100: Color(0xFFF1E4B8),
+    200: Color(0xFFE6D188),
+    300: Color(0xFFD8BD57),
+    400: Color(0xFFCCA731),
+    500: Color(0xFFB98E1D),
+    600: Color(0xFF9F7918),
+    700: Color(0xFF886614),
     800: Color(_tertiaryValue),
-    900: Color(0xFF28125A),
-    950: Color(0xFF1A0C42),
+    900: Color(0xFF5F4910),
+    950: Color(0xFF46340A),
   });
 
-  static const int _accentValue = 0xFF7A41DC;
+  static const int _accentValue = 0xFF7A5E15;
   static const MaterialColor accent = MaterialColor(_accentValue, <int, Color>{
-    50: Color(0xFFF0EBFF),
-    100: Color(0xFFDDCCFF),
-    200: Color(0xFFBB99FF),
-    300: Color(0xFF9966FF),
-    400: Color(0xFF8855EE),
+    50: Color(0xFFF7F1E1),
+    100: Color(0xFFE8D8AF),
+    200: Color(0xFFD6BC75),
+    300: Color(0xFFC4A246),
+    400: Color(0xFFAF891F),
     500: Color(_accentValue),
-    600: Color(0xFF6633CC),
-    700: Color(0xFF5522BB),
-    800: Color(0xFF4411AA),
-    900: Color(0xFF330088),
-    950: Color(0xFF220066),
+    600: Color(0xFF664F12),
+    700: Color(0xFF574310),
+    800: Color(0xFF48370D),
+    900: Color(0xFF392B0A),
+    950: Color(0xFF281D06),
   });
 
-  static const int _greyValue = 0xFF474747;
+  static const int _greyValue = 0xFF666666;
   static const MaterialColor grey = MaterialColor(_greyValue, <int, Color>{
-    50: Color(0xFFFAFAFA),
-    100: Color(0xFFF5F5F5),
-    200: Color(0xFFF7F7F8),
-    300: Color(0xFFEEEEEE),
-    400: Color(0xFFCCCCCC),
-    500: Color(0xFFA3A3A3),
-    600: Color(0xFF666666),
-    700: Color(_greyValue),
-    800: Color(0xFF292929),
-    900: Color(0xFF121212),
-    950: Color(0xFF040504),
+    50: Color(0xFFF8F8F8),
+    100: Color(0xFFEEEEEE),
+    200: Color(0xFFD6D6D6),
+    300: Color(0xFFA5A5A5),
+    400: Color(0xFF8A8A8A),
+    500: Color(0xFF4A4A4A),
+    600: Color(_greyValue),
+    700: Color(0xFF333333),
+    800: Color(0xFF252525),
+    900: Color(0xFF1D1F1F),
+    950: Color(0xFF101111),
   });
 
-  static const int _primaryVariantValue = 0xFF3A70E2;
+  static const int _primaryVariantValue = 0xFFC2A279;
   static const MaterialColor primaryVariant = MaterialColor(_primaryVariantValue, <int, Color>{
-    100: Color(0xFFE4F2FF),
+    100: Color(0xFFF8F3EC),
     500: Color(_primaryVariantValue),
   });
 
@@ -94,33 +94,33 @@ class LightThemeColors {
   static Color onTertiary = grey[100]!;
 
   // Validation Colors:
-  static const int _errorValue = 0xFFEC2D30;
+  static const int _errorValue = 0xFFF55157;
   static const MaterialColor error = MaterialColor(_errorValue, <int, Color>{
-    50: Color(0XFFFFEBEE),
-    100: Color(0XFFFFCCD2),
-    200: Color(0XFFF49898),
-    300: Color(0xFFEB6F70),
-    400: Color(0xFFF64C4C),
+    50: Color(0xFFFFECEE),
+    100: Color(0xFFFFD3D6),
+    200: Color(0xFFFFB0B4),
+    300: Color(0xFFFF8D92),
+    400: Color(0xFFFF6F75),
     500: Color(_errorValue),
   });
 
-  static const int _warningValue = 0xFFFE9B0E;
+  static const int _warningValue = 0xFFFFB74A;
   static const MaterialColor warning = MaterialColor(_warningValue, <int, Color>{
-    50: Color(0xFFFFF7E1),
-    100: Color(0xFFFFEAB3),
-    200: Color(0xFFFFDD82),
-    300: Color(0xFFFFC62B),
-    400: Color(0xFFFFAD0D),
+    50: Color(0xFFFFF4E2),
+    100: Color(0xFFFFE3B8),
+    200: Color(0xFFFFD089),
+    300: Color(0xFFFFC15D),
+    400: Color(0xFFFFB84C),
     500: Color(_warningValue),
   });
 
-  static const int _successValue = 0xFF0C9D61;
+  static const int _successValue = 0xFF50AF6C;
   static const MaterialColor success = MaterialColor(_successValue, <int, Color>{
-    50: Color(0xFFE5F5EC),
-    100: Color(0xFFC0E5D1),
-    200: Color(0xFF97D4B4),
-    300: Color(0xFF6BC497),
-    400: Color(0xFF47B881),
+    50: Color(0xFFE8F5EC),
+    100: Color(0xFFC3E5CD),
+    200: Color(0xFF9CD6AD),
+    300: Color(0xFF74C68D),
+    400: Color(0xFF59BA76),
     500: Color(_successValue),
   });
 
@@ -130,21 +130,21 @@ class LightThemeColors {
   static Color tertiaryContainer = tertiary[50]!;
   static Color accentContainer = accent[50]!;
 
-  static Color disabledContainer = grey[400]!;
-  static Color disabledButton = grey[400]!;
+  static Color disabledContainer = grey[200]!;
+  static Color disabledButton = grey[300]!;
 
   static Color primaryCard = grey[50]!;
   static Color secondaryCard = grey[100]!;
 
   // Background Color
-  static const Color background = Color(0xFFFCFDFF);
-  static const Color scaffoldBackground = Color(0xFFFCFDFF);
-  static const Color bottomSheetBackground = Color(0xFFFCFDFF);
-  static const Color dialogBackground = Color(0xFFFCFDFF);
-  static const Color appBarBackground = Color(0xFFFCFDFF);
+  static const Color background = Colors.white;
+  static const Color scaffoldBackground = Colors.white;
+  static const Color bottomSheetBackground = Colors.white;
+  static const Color dialogBackground = Colors.white;
+  static const Color appBarBackground = Colors.white;
 
   // Text Colors
-  static Color hintText = grey[600]!;
+  static Color hintText = grey[300]!;
   static Color unselectedLabel = grey[500]!; // Unselected label color for tabs
   static Color selectedLabel = primary[500]!; // Selected label color for tabs
 
@@ -157,19 +157,19 @@ class LightThemeColors {
   static Color primaryBorderColor = primary[100]!;
   static Color primaryDividerColor = grey[100]!;
   static Color secondaryDividerColor = grey[200]!;
-  static Color inputFieldBorder = grey[400]!;
+  static Color inputFieldBorder = grey[200]!;
 
   // shadow
   static Color shadowBottomSheet = Color(0xFF07041A).withValues(alpha: 0.09);
   static Color shadow = Colors.black.withValues(alpha: .04);
 
-  static List<Color> primaryGradient = [primary,  Color(  0xFF694F15)];
-  static List<Color> secondaryGradient = [accent, secondary];
-  static List<Color> tertiaryGradient = [tertiary, primary];
+  static List<Color> primaryGradient = [primary, const Color(0xFF694F15)];
+  static List<Color> secondaryGradient = [secondary, primary];
+  static List<Color> tertiaryGradient = [accent, primary];
   static List<Color> disabledGradient = [grey[200]!, grey[300]!, grey[400]!];
 
   // primary gradient with pressed state
-  static List<Color> primaryGradientPressed = [tertiary[600]!, primary[600]!, primary[900]!];
+  static List<Color> primaryGradientPressed = [primary[300]!, primary[500]!, primary[800]!];
 }
 
 class LightTheme {
@@ -205,49 +205,49 @@ class LightTheme {
       colorScheme: ColorScheme(
         brightness: Brightness.light,
         primary: LightThemeColors.primary,
-        surfaceTint: Color(0xff4f5e80),
+        surfaceTint: LightThemeColors.primary,
         onPrimary: LightThemeColors.onPrimary,
         primaryContainer: LightThemeColors.primaryContainer,
-        onPrimaryContainer: Color(0xff7786aa),
+        onPrimaryContainer: LightThemeColors.primary.shade900,
         secondary: LightThemeColors.secondary,
         onSecondary: LightThemeColors.onSecondary,
         secondaryContainer: LightThemeColors.secondaryContainer,
-        onSecondaryContainer: Color(0xfffffbff),
+        onSecondaryContainer: LightThemeColors.secondary.shade900,
         tertiary: LightThemeColors.tertiary,
         onTertiary: LightThemeColors.onTertiary,
         tertiaryContainer: LightThemeColors.tertiaryContainer,
-        onTertiaryContainer: Color(0xff007272),
+        onTertiaryContainer: LightThemeColors.tertiary.shade900,
         error: LightThemeColors.error,
-        onError: Color(0xffffffff),
+        onError: Colors.white,
         errorContainer: LightThemeColors.error.shade100,
-        onErrorContainer: Color(0xfffff6f5),
+        onErrorContainer: LightThemeColors.error.shade500,
         surface: LightThemeColors.background,
         onSurface: LightThemeColors.grey[950]!,
         onSurfaceVariant: LightThemeColors.grey[800]!,
         outline: LightThemeColors.grey[400]!,
         outlineVariant: LightThemeColors.grey[300]!,
         shadow: LightThemeColors.shadow,
-        scrim: Color(0xff000000),
-        inverseSurface: Color(0xff313030),
-        inversePrimary: Color(0xffb7c6ed),
-        primaryFixed: Color(0xffd8e2ff),
-        onPrimaryFixed: Color(0xff091b39),
-        primaryFixedDim: Color(0xffb7c6ed),
-        onPrimaryFixedVariant: Color(0xff374767),
-        secondaryFixed: Color(0xffffd9e4),
-        onSecondaryFixed: Color(0xff3e0021),
-        secondaryFixedDim: Color(0xffffb0cc),
-        onSecondaryFixedVariant: Color(0xff8d0051),
-        tertiaryFixed: Color(0xff00fbfb),
-        onTertiaryFixed: Color(0xff002020),
-        tertiaryFixedDim: Color(0xff00dddd),
-        onTertiaryFixedVariant: Color(0xff004f4f),
-        surfaceDim: Color(0xffddd9d9),
-        surfaceBright: Color(0xfffcf8f8),
-        surfaceContainerLowest: Color(0xffffffff),
-        surfaceContainerLow: Color(0xfff6f3f2),
-        surfaceContainer: Color(0xfff1edec),
-        surfaceContainerHigh: Color(0xffebe7e7),
+        scrim: Colors.black,
+        inverseSurface: LightThemeColors.grey[900]!,
+        inversePrimary: LightThemeColors.primary.shade200,
+        primaryFixed: LightThemeColors.primary.shade100,
+        onPrimaryFixed: LightThemeColors.primary.shade900,
+        primaryFixedDim: LightThemeColors.primary.shade200,
+        onPrimaryFixedVariant: LightThemeColors.primary.shade700,
+        secondaryFixed: LightThemeColors.secondary.shade100,
+        onSecondaryFixed: LightThemeColors.secondary.shade900,
+        secondaryFixedDim: LightThemeColors.secondary.shade200,
+        onSecondaryFixedVariant: LightThemeColors.secondary.shade700,
+        tertiaryFixed: LightThemeColors.tertiary.shade100,
+        onTertiaryFixed: LightThemeColors.tertiary.shade900,
+        tertiaryFixedDim: LightThemeColors.tertiary.shade200,
+        onTertiaryFixedVariant: LightThemeColors.tertiary.shade700,
+        surfaceDim: LightThemeColors.grey.shade100,
+        surfaceBright: Colors.white,
+        surfaceContainerLowest: Colors.white,
+        surfaceContainerLow: LightThemeColors.grey.shade50,
+        surfaceContainer: LightThemeColors.grey.shade50,
+        surfaceContainerHigh: LightThemeColors.grey.shade100,
         // surfaceContainerHighest: Color(0xffe5e2e1),
       ),
       cardTheme: CardThemeData(elevation: 1, color: LightThemeColors.primaryCard, shadowColor: LightThemeColors.shadow),
@@ -281,9 +281,9 @@ class LightTheme {
       //* Text Theme
       textTheme: TextTheme(
         // Display
-        displayLarge: TextStylesManager.font.copyWith(color: LightThemeColors.primary),
-        displayMedium: TextStylesManager.font.copyWith(color: LightThemeColors.secondary),
-        displaySmall: TextStylesManager.font.copyWith(color: LightThemeColors.tertiary),
+        displayLarge: TextStylesManager.font.copyWith(color: LightThemeColors.grey[900]),
+        displayMedium: TextStylesManager.font.copyWith(color: LightThemeColors.grey[800]),
+        displaySmall: TextStylesManager.font.copyWith(color: LightThemeColors.grey[900]),
 
         // Header
         headlineLarge: TextStylesManager.font.copyWith(color: LightThemeColors.error),
@@ -333,15 +333,26 @@ class LightTheme {
 
       //* Tab Bar Theme
       tabBarTheme: TabBarThemeData(
-        indicatorSize: TabBarIndicatorSize.label,
-        indicatorColor: LightThemeColors.primary,
+        tabAlignment: TabAlignment.fill,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(
+            color: LightThemeColors.primary,
+            width: 4,
+          ),
+          insets: EdgeInsets.zero,
+        ),
         labelPadding: 0.edgeInsetsAll,
         overlayColor: WidgetStateProperty.all(Colors.transparent),
         splashFactory: InkRipple.splashFactory,
-        dividerColor: LightThemeColors.grey.shade100,
+        dividerColor: Colors.transparent,
         unselectedLabelColor: LightThemeColors.unselectedIcon,
-        labelStyle: TextStylesManager.font.s12.regular.setColor(LightThemeColors.primary[950]!),
-        unselectedLabelStyle: TextStylesManager.font.s12.regular.setColor(LightThemeColors.grey.shade500),
+        labelStyle: TextStylesManager.font.s16.medium.setColor(
+          LightThemeColors.primary,
+        ),
+        unselectedLabelStyle: TextStylesManager.font.s16.regular.setColor(
+          LightThemeColors.grey.shade500,
+        ),
       ),
 
       //* ElevatedButtonThemeData

@@ -33,7 +33,6 @@ class CustomSearchField extends StatelessWidget {
       autoFocus: autoFocus,
       borderColor: context.inputFieldBorderColor,
       hint: hintText ?? '${LocaleKeys.search_title.tr()}...',
-      borderRadius: 100.borderRadius,
       prefixIcon: Assets.icons.search.path.toSvg(color: context.hintColor).paddingAll(4),
       onChanged: (query) => Debouncer.instance.run(() => onChanged?.call(query)),
     );

@@ -1,25 +1,31 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "diyafatukum",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "diyafatukum (profile mode)",
+            "name": "Diyafatukum User",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_user.dart"
+        },
+        {
+            "name": "Diyafatukum Provider",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_provider.dart"
+        },
+        {
+            "name": "Diyafatukum User (profile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_user.dart",
             "flutterMode": "profile"
         },
         {
-            "name": "diyafatukum (release mode)",
+            "name": "Diyafatukum Provider (profile)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "program": "lib/main_provider.dart",
+            "flutterMode": "profile"
         }
     ]
 }

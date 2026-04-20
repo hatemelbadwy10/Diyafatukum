@@ -12,7 +12,6 @@ import '../../../../../../../core/widgets/profile_avatar.dart';
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../../../shared/presentation/view/widgets/login_dialog.dart';
-import 'greeting_widget.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key, this.onAvatarChanged});

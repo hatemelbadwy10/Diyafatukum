@@ -30,8 +30,10 @@ extension WidgetExtension on Widget {
     AlignmentGeometry? alignment,
     List<BoxShadow>? shadows,
     Gradient? gradient,
+    double? borderWidth,
   }) {
     return AnimatedContainer(
+      
       duration: transitionDuration,
       width: width,
       height: height,
@@ -43,7 +45,8 @@ extension WidgetExtension on Widget {
         color: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(radius ?? 0)),
-          side: borderColor != null ? BorderSide(color: borderColor, width: 1) : BorderSide.none,
+          
+          side: borderColor != null ? BorderSide(color: borderColor, width: borderWidth ?? 1) : BorderSide.none,
         ),
         shadows: shadows,
       ),

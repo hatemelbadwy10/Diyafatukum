@@ -16,7 +16,7 @@ class ForgetPasswordButton extends StatelessWidget {
       children: [
         CustomTextButton(
           label: LocaleKeys.auth_password_forget.tr(),
-          textStyle: context.displayMedium.regular.s12.underline,
+          textStyle: context.displayMedium.regular.s12.underline.setColor(context.errorColor),
           onPressed: onTap,
         ),
       ],

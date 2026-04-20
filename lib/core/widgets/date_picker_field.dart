@@ -69,7 +69,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
                   title: widget.title ?? LocaleKeys.details_date_time_date.tr(),
                   hint: widget.hint ?? LocaleKeys.details_date_time_date.tr().selectHint,
                   readOnly: true,
-                  suffixIcon: Assets.icons.calendar.path,
+                  prefixIcon: Assets.icons.calendar.path,
                   onTap: () async {
                     if (!context.isAndroid) {
                       _date.value = await showDatePicker(

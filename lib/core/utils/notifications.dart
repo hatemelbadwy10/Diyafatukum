@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-import 'dart:io';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -17,12 +16,12 @@ void handleNotification(RemoteMessage? message) {
 }
 
 class RemoteNotificationServices {
-  static FirebaseMessaging messaging = FirebaseMessaging.instance;
-  static bool get _isFirebaseMessagingEnabled => !Platform.isIOS;
+  static FirebaseMessaging get messaging => FirebaseMessaging.instance;
+  static bool get _isFirebaseMessagingEnabled => false;
 
   static Future<void> initialize() async {
     if (!_isFirebaseMessagingEnabled) {
-      log('Skipping Firebase Messaging on iOS until APNs/Firebase are configured.', name: 'FCM');
+      log('Firebase Messaging is disabled.', name: 'FCM');
       await LocalNotificationServices.init();
       return;
     }

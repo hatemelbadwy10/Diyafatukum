@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../config/theme/light_theme.dart';
-import '../resources.dart';
 
 enum ToastType {
   success,

@@ -6,7 +6,7 @@ class FlavorConfig {
   static FlavorType get currentFlavor => _currentFlavor!;
 
   static bool get isParent => _currentFlavor == FlavorType.user;
-  static bool get isDriver => _currentFlavor == FlavorType.provider;
+  static bool get isProvider   => _currentFlavor == FlavorType.provider;
   static String get displayName => currentFlavor.displayName;
 
   static void initialize(FlavorType flavor) {

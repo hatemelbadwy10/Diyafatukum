@@ -7,8 +7,8 @@ class AppSize {
 
   static double screenPadding = 20.0;
 
-  static const double mainRadius = 12.0;
-  static const double inputBorderRadius = 12.0;
+  static const double mainRadius = 4.0;
+  static const double inputBorderRadius = 4.0;
 
   static const double buttonHeight = 48.0;
 
@@ -24,7 +24,7 @@ class AppSize {
   static const double buttonHeightSmall = 24.0;
   static const double buttonHeightMedium = 44.0;
   static const double buttonHeightLarge = 50.0;
-  static const double buttonBorderRadius = 12.0;
+  static const double buttonBorderRadius = 4.0;
 
   // breakpoints
   static const double mobileBreakpoint = 450.0;

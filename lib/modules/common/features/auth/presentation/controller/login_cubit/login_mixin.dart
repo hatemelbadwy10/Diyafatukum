@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/route_manager.dart';
 
 mixin LoginMixin {
@@ -13,8 +12,8 @@ mixin LoginMixin {
 
   Future<Map<String, dynamic>> get body async => {
         "test_mode": 1,
-        "username_type": "phone",
-        'username': identifierController.text.neglectStartingZero,
+        "username_type": "email",
+        'username': identifierController.text.trim(),
         'password': passwordController.text,
         'preferred_locale': rootNavigatorKey.currentContext?.locale.languageCode ?? 'en',
         'device_token': 'test',

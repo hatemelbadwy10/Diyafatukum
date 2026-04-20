@@ -32,7 +32,7 @@ extension ThemeExtension on BuildContext {
   // tertiary color
   Color get tertiaryColor => theme.colorScheme.tertiary;
   // accent color
-  Color get accentColor => displayLarge.color!;
+  Color get accentColor => accentSwatch.shade500;
 
   // surface color
   Color get surfaceColor => theme.colorScheme.surface;
@@ -52,8 +52,8 @@ extension ThemeExtension on BuildContext {
 
   // validation colors
   Color get errorColor => theme.colorScheme.error;
-  Color get warningColor => headlineMedium.color!;
-  Color get successColor => headlineSmall.color!;
+  Color get warningColor => warningSwatch.shade500;
+  Color get successColor => successSwatch.shade500;
 
   Color get errorContainer => theme.colorScheme.error;
 
@@ -66,9 +66,9 @@ extension ThemeExtension on BuildContext {
   Color get hintColor => theme.inputDecorationTheme.hintStyle!.color!;
   Color get inputFieldIconsColor => bodySmall.color!;
 
-  Color get primaryBorder => displayMedium.color!;
-  Color get secondaryBorder => labelLarge.color!;
-  Color get variantBorderColor => labelSmall.color!;
+  Color get primaryBorder => primarySwatch.shade500;
+  Color get secondaryBorder => greySwatch.shade300;
+  Color get variantBorderColor => greySwatch.shade200;
 
   Color get primaryDividerColor => theme.dividerColor;
   Color get secondaryDividerColor => theme.dividerTheme.color!;

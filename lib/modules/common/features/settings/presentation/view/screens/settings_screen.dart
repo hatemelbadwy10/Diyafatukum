@@ -1,54 +1,259 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/resources/resources.dart';
-import '../../../../../../../core/widgets/custom_app_bar.dart';
-import '../../../../../../../core/widgets/menu_item_tile.dart';
-import '../../../../../../../core/widgets/vertical_list_view.dart';
+import '../../../../../../../core/widgets/custom_dialog.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
-import '../../../../profile/presentation/view/widgets/change_password_bottom_sheet.dart';
-import '../../../data/model/settings_item_enum.dart';
+import '../../../data/model/static_page_enum.dart';
 import '../widgets/language_bottom_sheet.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _notificationsEnabled = false;
+
+  @override
   Widget build(BuildContext context) {
+    final authCubit = context.maybeRead<AuthCubit>();
+    final isAuthorized = authCubit?.state.status.isAuthorized ?? false;
+
     return Scaffold(
-      appBar: CustomAppBar.build(titleText: LocaleKeys.settings_title.tr()),
-      body: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, authState) {
-          return Column(
-            children: [
-              VerticalListView(
-                enableScroll: false,
-                padding: EdgeInsets.zero,
-                itemCount: SettingsItem.items(authState.status.isAuthorized).length,
-                itemBuilder: (_, index) {
-                  final settingItem = SettingsItem.items(authState.status.isAuthorized)[index];
-                  return MenuItemTile(
-                    enableBorder: true,
-                    padding: 8.edgeInsetsAll,
-                    iconBackgroundColor: context.primaryColor,
-                    trailing: settingItem == SettingsItem.notification ? SizedBox.shrink() : null,
-                    item: settingItem,
-                    onTap: () {
-                      if (settingItem == SettingsItem.language) {
-                        context.showBottomSheet(const LanguageBottomSheet());
-                      } else if (settingItem == SettingsItem.changePassword) {
-                        context.showScrollableBottomSheet(body: ChangePasswordBottomSheet());
-                      }
-                    },
-                  );
-                },
+      backgroundColor: context.scaffoldBackgroundColor,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          64.gap,
+          Assets.images.logo.image(height: 100).center(),
+          24.gap,
+         // if (isAuthorized) 
+            _SectionTitle(title: LocaleKeys.settings_sections_account.tr()),
+            16.gap,
+            _SettingsActionTile(
+              title: LocaleKeys.settings_edit_profile.tr(),
+              icon: Assets.icons.iconoirProfileCircle.path,
+              onTap: () => AppRoutes.profile.push(),
+            ),
+            _SettingsToggleTile(
+              title: LocaleKeys.notifications_title.tr(),
+              icon: Assets.icons.cuidaNotificationBellOutline.path,
+              value: _notificationsEnabled,
+              onChanged: (value) {
+                setState(() {
+                  _notificationsEnabled = value;
+                });
+              },
+            ),
+            24.gap,
+          
+          _SectionTitle(title: LocaleKeys.settings_sections_general.tr()),
+          16.gap,
+          _SettingsActionTile(
+            title: LocaleKeys.settings_language_title.tr(),
+            icon: Assets.icons.materialSymbolsLightLanguage.path,
+            onTap: () => context.showBottomSheet(
+              const LanguageBottomSheet(),
+            ),
+          ),
+          _SettingsActionTile(
+            title: LocaleKeys.settings_about.tr(),
+            icon: Assets.icons.materialSymbolsInfoOutlineRounded.path,
+            onTap: () => AppRoutes.staticPage.push(
+              extra: StaticPage.about,
+            ),
+          ),
+          _SettingsActionTile(
+            title: LocaleKeys.settings_refund_policy.tr(),
+            icon: Assets.icons.boxiconsUndo.path,
+          ),
+          _SettingsActionTile(
+            title: LocaleKeys.settings_support.tr(),
+            icon: Assets.icons.component6.path,
+            onTap: () => AppRoutes.contact.push(),
+          ),
+          _SettingsActionTile(
+            title: LocaleKeys.settings_privacy.tr(),
+            icon: Assets.icons.weuiLockOutlined.path,
+            onTap: () => AppRoutes.staticPage.push(
+              extra: StaticPage.privacy,
+            ),
+          ),
+          _SettingsActionTile(
+            title: LocaleKeys.settings_terms.tr(),
+            icon: Assets.icons.iconParkOutlineTransactionOrder.path,
+            onTap: () => AppRoutes.staticPage.push(
+              extra: StaticPage.terms,
+            ),
+          ),
+          if (isAuthorized)
+            _SettingsActionTile(
+              title: LocaleKeys.account_profile_logout_title.tr(),
+              icon: Assets.icons.streamlineLogout1.path,
+              isDestructive: true,
+              showArrow: false,
+              onTap: () {
+                CustomDialog.destructive(
+                  autoCloseOnAction: true,
+                  onConfirm: () {
+                    authCubit?.logout();
+                    AppRoutes.login.go();
+                  },
+                  title: LocaleKeys.account_profile_logout_title.tr(),
+                  subtitle: LocaleKeys.account_profile_logout_subtitle.tr(),
+                ).show(context);
+              },
+            ),
+        ],
+      ).withListView(
+        padding: AppSize.screenPadding.edgeInsetsWithBottomNavBar,
+      ),
+    );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: context.titleLarge.regular.setColor(
+        context.colorScheme.onSurface,
+      ),
+    );
+  }
+}
+
+class _SettingsActionTile extends StatelessWidget {
+  const _SettingsActionTile({
+    required this.title,
+    required this.icon,
+    this.onTap,
+    this.isDestructive = false,
+    this.showArrow = true,
+  });
+
+  final String title;
+  final String icon;
+  final VoidCallback? onTap;
+  final bool isDestructive;
+  final bool showArrow;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: 14.edgeInsetsVertical,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: context.greySwatch.shade100),
+        ),
+      ),
+      child: Row(
+        children: [
+            icon
+              .toSvg(
+                width: 28,
+                height: 28,
+                color: isDestructive ? context.errorColor : context.primaryColor,
+              )
+              .setContainerToView(
+                color: isDestructive
+                    ? context.errorColor.withValues(alpha: 0.08)
+                    : context.primaryColor.withValues(alpha: 0.08),
+                radius: 22,
+                padding: 10,
               ),
-            ],
-          );
-        },
-      ).withListView(padding: AppSize.screenPadding.edgeInsetsWithBottomNavBar),
+          if (showArrow)
+           
+          if (showArrow) 12.gap,
+          Text(
+            title,
+            style: context.titleMedium.regular.setColor(
+              isDestructive ? context.errorColor : context.colorScheme.onSurface,
+            ),
+          ).expand(),
+          12.gap,
+         Transform.flip(
+          flipX: true,
+           child: Assets.icons.icon
+                  .svg(
+                    height: 22,
+                    colorFilter: context.greySwatch.shade400.colorFilter,
+                  ),
+         )
+               ,
+        ],
+      ),
+    ).onTap(
+      onTap,
+      borderRadius: 12.borderRadius,
+    );
+  }
+}
+
+class _SettingsToggleTile extends StatelessWidget {
+  const _SettingsToggleTile({
+    required this.title,
+    required this.icon,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String title;
+  final String icon;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: 14.edgeInsetsVertical,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: context.greySwatch.shade100),
+        ),
+      ),
+      child: Row(
+        children: [
+           icon
+              .toSvg(
+                width: 28,
+                height: 28,
+                color: context.primaryColor,
+              )
+              .setContainerToView(
+                color: context.primaryColor.withValues(alpha: 0.08),
+                radius: 22,
+                padding: 10,
+              ),
+          12.gap,
+          Text(
+            title,
+            style: context.titleMedium.regular.setColor(
+              context.colorScheme.onSurface,
+            ),
+          ).expand(),
+          12.gap,
+         
+              Switch(
+            value: value,
+            onChanged: onChanged,
+            activeThumbColor: context.primaryColor,
+            activeTrackColor: context.primaryColor.withValues(alpha: 0.35),
+            inactiveThumbColor: context.scaffoldBackgroundColor,
+            inactiveTrackColor: context.greySwatch.shade300,
+          ),
+        ],
+      ),
     );
   }
 }

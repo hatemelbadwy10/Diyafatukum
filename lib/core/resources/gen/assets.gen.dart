@@ -17,6 +17,9 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/Cancel-2.svg
+  SvgGenImage get cancel2 => const SvgGenImage('assets/icons/Cancel-2.svg');
+
   /// File path: assets/icons/Component 6.svg
   SvgGenImage get component6 => const SvgGenImage('assets/icons/Component 6.svg');
 
@@ -25,6 +28,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/Icon.svg
   SvgGenImage get icon => const SvgGenImage('assets/icons/Icon.svg');
+
+  /// File path: assets/icons/Vector Stroke.svg
+  SvgGenImage get vectorStroke => const SvgGenImage('assets/icons/Vector Stroke.svg');
 
   /// File path: assets/icons/Vector.svg
   SvgGenImage get vector => const SvgGenImage('assets/icons/Vector.svg');
@@ -55,6 +61,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/eye-outlined.svg
   SvgGenImage get eyeOutlined => const SvgGenImage('assets/icons/eye-outlined.svg');
+
+  /// File path: assets/icons/eye-svgrepo-com.svg
+  SvgGenImage get eyeSvgrepoCom => const SvgGenImage('assets/icons/eye-svgrepo-com.svg');
 
   /// File path: assets/icons/fluent-mdl2_date-time-2.svg
   SvgGenImage get fluentMdl2DateTime2 => const SvgGenImage('assets/icons/fluent-mdl2_date-time-2.svg');
@@ -155,6 +164,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/solar_settings-broken.svg
   SvgGenImage get solarSettingsBroken => const SvgGenImage('assets/icons/solar_settings-broken.svg');
 
+  /// File path: assets/icons/solar_user-bold.svg
+  SvgGenImage get solarUserBold => const SvgGenImage('assets/icons/solar_user-bold.svg');
+
   /// File path: assets/icons/stash_arrow-up-duotone-1.svg
   SvgGenImage get stashArrowUpDuotone1 => const SvgGenImage('assets/icons/stash_arrow-up-duotone-1.svg');
 
@@ -211,9 +223,11 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+    cancel2,
     component6,
     icon1,
     icon,
+    vectorStroke,
     vector,
     whats,
     boxiconsCamera,
@@ -224,6 +238,7 @@ class $AssetsIconsGen {
     eyeOutlined1,
     eyeOutlined2,
     eyeOutlined,
+    eyeSvgrepoCom,
     fluentMdl2DateTime2,
     fluentMail28Regular1,
     fluentMail28Regular,
@@ -256,6 +271,7 @@ class $AssetsIconsGen {
     solarChairLinear,
     solarHome2Broken,
     solarSettingsBroken,
+    solarUserBold,
     stashArrowUpDuotone1,
     stashArrowUpDuotone2,
     stashArrowUpDuotone,
@@ -280,15 +296,14 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/welcome_screen.png
-  AssetGenImage get a5381f1e88db3efa82e8876978c5ff77986fbe22c =>
-      const AssetGenImage('assets/images/welcome_screen.png');
-
   /// File path: assets/images/Logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/Logo.png');
 
   /// File path: assets/images/Welcome Screen.png
-  AssetGenImage get welcomeScreen => const AssetGenImage('assets/images/Welcome Screen.png');
+  AssetGenImage get welcomeScreenPng => const AssetGenImage('assets/images/Welcome Screen.png');
+
+  /// File path: assets/images/welcome_screen.png
+  AssetGenImage get welcomeScreenPng_ => const AssetGenImage('assets/images/welcome_screen.png');
 
   /// File path: assets/images/app_bar_overlay.png
   AssetGenImage get appBarOverlay => const AssetGenImage('assets/images/app_bar_overlay.png');
@@ -331,9 +346,9 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-    a5381f1e88db3efa82e8876978c5ff77986fbe22c,
     logo,
-    welcomeScreen,
+    welcomeScreenPng,
+    welcomeScreenPng_,
     appBarOverlay,
     homeBanner,
     icLauncher,

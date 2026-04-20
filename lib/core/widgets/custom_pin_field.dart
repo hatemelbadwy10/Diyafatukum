@@ -54,7 +54,7 @@ class CustomPinInputField extends StatelessWidget {
                   activeBorderWidth: 1,
                   selectedBorderWidth: 1,
                   inactiveBorderWidth: 1,
-                  selectedColor: context.primaryBorder,
+                  selectedColor: context.primaryColor,
                   activeColor: context.primaryColor,
                   inactiveColor: LightThemeColors.inputFieldBorder,
                 ),

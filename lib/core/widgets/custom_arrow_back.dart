@@ -12,11 +12,20 @@ class CustomArrowBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomIconButton.svg(
-      svg: Assets.icons.arrowLeftAlt,
-      matchTextDirection: true,
-      foregroundColor: context.onPrimary,
-      onPressed: onPressed ?? () => context.pop(context),
+    return Transform.flip(
+      flipX: true,
+      child: CustomIconButton.svg(
+        svg: Assets.icons.icon,
+        matchTextDirection: true,
+        size: 20,
+        foregroundColor: iconColor?? context.greySwatch.shade900,
+        onPressed: onPressed ?? () => context.pop(context),
+      ).setContainerToView(
+        width: 40,
+        height: 40,
+        borderColor: context.greySwatch.shade300,
+        radius: 12,
+      ),
     );
   }
 }

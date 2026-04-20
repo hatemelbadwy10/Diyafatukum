@@ -33,7 +33,7 @@ class GradientStyles {
   static LinearGradient primaryGradientPressed = LinearGradient(
     begin: AlignmentDirectional.centerEnd,
     end: AlignmentDirectional.centerStart,
-    colors: LightThemeColors.primaryGradient,
+    colors: LightThemeColors.primaryGradientPressed,
     stops: const [.1, .6, .9],
   );
   static LinearGradient primaryGradient = LinearGradient(

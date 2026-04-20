@@ -440,10 +440,10 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
   Widget _buildVisibilityIcon(bool obscuredValue) {
     return obscuredValue
-        ? Assets.icons.eyeOn.path
+        ? Assets.icons.eyeOff.path
               .toSvg(color: LightThemeColors.hintText)
               .onTap(() => obscure.value = !obscuredValue, borderRadius: 100.borderRadius)
-        : Assets.icons.eyeOff.path
+        : Assets.icons.eyeOn.path
               .toSvg(color: LightThemeColors.hintText)
               .onTap(() => obscure.value = !obscuredValue, borderRadius: 100.borderRadius);
   }

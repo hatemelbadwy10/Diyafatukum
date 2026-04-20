@@ -9,8 +9,9 @@ import '../../../../../../../core/resources/constants/hero_tags.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
 import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
-import '../../../../../../../core/widgets/custom_app_bar.dart';
-import '../../../../../../../core/widgets/custom_phone_field.dart';
+import '../../../../../../../core/widgets/custom_input_field.dart';
+import '../../../../../../../core/widgets/custom_text_field.dart';
+import '../../../../auth/presentation/view/widgets/auth_background_scaffold.dart';
 import '../../../../verification/data/model/verification_type_enum.dart';
 import '../../controller/forget_password_cubit/forget_password_cubit.dart';
 
@@ -23,8 +24,14 @@ class ForgetPasswordScreen extends StatefulWidget {
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TextEditingController _valueController = TextEditingController();
+
+  @override
+  void dispose() {
+    _valueController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -34,38 +41,52 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           onFailed: (failure) => Toaster.showToast(failure.message),
           onSuccess: (code) => AppRoutes.verification.push(
             extra: {'type': VerificationType.forgetPassword},
-            queries: {'code': code, 'identifier': _valueController.text},
+            queries: {
+              'code': code,
+              'identifier': _valueController.text.trim(),
+            },
           ),
         ),
         builder: (context, state) {
-          return Scaffold(
-            appBar: CustomAppBar.build(),
-            body: Form(
+          return AuthBackgroundScaffold(
+            title: LocaleKeys.auth_password_forget.tr(),
+            child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(LocaleKeys.auth_password_forget.tr(), style: context.displaySmall.medium.s18),
-                  8.gap,
                   Text(
                     LocaleKeys.auth_password_forget_subtitle.tr(),
-                    style: context.bodyLarge.regular.s12,
-                    textAlign: TextAlign.center,
+                    style: context.bodyLarge.regular.s13.setHeight(1.6),
                   ),
                   24.gap,
-                  CustomPhoneField(controller: _valueController),
-                  32.gap,
-                  CustomButton(
+                  CustomTextField(
+                    controller: _valueController,
+                    showRequiredIndicator: false,
+                    inputType: InputType.email,
+                    title: LocaleKeys.details_contact_email.tr(),
+                    hint: LocaleKeys.details_contact_email.tr().enterHint,
+                    prefixIcon: Assets.icons.mail.path,
+                  ),
+                  28.gap,
+                  CustomButton.gradient(
+                    borderRadius: AppSize.buttonBorderRadius,
                     isLoading: state.status.isLoading,
                     label: LocaleKeys.actions_next.tr(),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        context.read<ForgetPasswordCubit>().forgetPassword(_valueController.text.neglectStartingZero);
+                        AppRoutes.verification.push(
+                          extra: {'type': VerificationType.forgetPassword},
+                          queries: {
+                            'code': '123456',
+                            'identifier': _valueController.text.trim(),
+                          },
+                        );
                       }
                     },
-                  ).setHero(HeroTags.secondaryButton),
+                  ).setHero(HeroTags.mainButton),
                 ],
-              ).withListView(),
+              ),
             ),
           );
         },

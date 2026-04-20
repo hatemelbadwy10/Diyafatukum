@@ -45,7 +45,7 @@ class CustomPhoneField extends StatelessWidget {
               children: [
                 Directionality(textDirection: ui.TextDirection.ltr, child: Text('+966', style: context.hintTextStyle)),
                 8.gap,
-                Assets.icons.fluentMail28Regular.svg(height: 24, width: 24),
+                Assets.icons.mdiPhoneOutline.svg(height: 24, width: 24),
               ],
             )
             .paddingHorizontal(8)

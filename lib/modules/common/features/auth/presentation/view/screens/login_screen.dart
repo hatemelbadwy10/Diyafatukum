@@ -1,3 +1,4 @@
+import 'package:deals/core/config/flavor/flavor_config.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,7 +75,14 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                     style: context.bodyLarge.regular.s13.setHeight(1.6),
                   ),
                   24.gap,
-                  CustomTextField(controller: identifierController, showRequiredIndicator: false),
+                  CustomTextField(
+                    controller: identifierController,
+                    showRequiredIndicator: false,
+                    inputType: InputType.email,
+                    title: LocaleKeys.details_contact_email.tr(),
+                    hint: LocaleKeys.details_contact_email.tr().enterHint,
+                    prefixIcon: Assets.icons.mail.path,
+                  ),
                   16.gap,
                   CustomTextField(
                     isRequired: true,
@@ -83,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                     controller: passwordController,
                     title: LocaleKeys.auth_password_title.tr(),
                     hint: LocaleKeys.auth_password_title.tr().enterHint,
-                    prefixIcon: Assets.icons.eyeOutlined.path,
+                    prefixIcon: Assets.icons.weuiLockOutlined.path,
                   ),
                   8.gap,
                   Row(
@@ -98,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                   ),
                   28.gap,
                   CustomButton.gradient(
+                    borderRadius: AppSize.buttonBorderRadius,
                     isLoading: state.status.isLoading,
                     label: LocaleKeys.auth_login_title.tr(),
                     onPressed: () async {
@@ -113,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                   //   return SocialLoginButton(type: type).paddingBottom(16);
                   // }),
                   16.gap,
-                  SignUpButton(isLogin: true, onTap: () => AppRoutes.register.push()),
+                  SignUpButton(isLogin: true, onTap: () => FlavorConfig.isProvider?AppRoutes.providerHome.push():AppRoutes.register.push()),
                   8.gap,
                   CustomTextButton(
                     alignIconEnd: true,
@@ -126,8 +135,6 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                     },
                   ).center(),
                 ],
-              ).withListView(
-                padding: AppSize.screenPadding.edgeInsetsHorizontal.copyWith(top: 8, bottom: 16),
               ),
             ),
           );
