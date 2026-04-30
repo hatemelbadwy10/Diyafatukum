@@ -1,14 +1,14 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/resources/resources.dart';
-import '../../../data/model/single_service_model.dart';
+import '../../../../../../../core/widgets/custom_image.dart';
+import '../../../data/model/single_service_store_model.dart';
 
 class SingleServiceStoreHeader extends StatelessWidget {
   const SingleServiceStoreHeader({super.key, required this.store});
 
-  final SingleServiceProductModel store;
+  final SingleServiceStoreDetailsModel store;
 
   @override
   Widget build(BuildContext context) {
@@ -17,24 +17,24 @@ class SingleServiceStoreHeader extends StatelessWidget {
       children: [
         AspectRatio(
           aspectRatio: 1.08,
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(store.imagePath),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.08),
-                    Colors.black.withValues(alpha: 0.58),
-                  ],
+          child: ClipRRect(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                CustomImage(height: double.infinity, imageUrl: store.logo),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.08),
+                        Colors.black.withValues(alpha: 0.58),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -46,7 +46,7 @@ class SingleServiceStoreHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  store.categoryKey.tr(),
+                  store.specializationName,
                   style: context.bodySmall.regular.s14.setColor(
                     context.scaffoldBackgroundColor.withValues(alpha: 0.86),
                   ),
@@ -69,17 +69,16 @@ class SingleServiceStoreHeader extends StatelessWidget {
                     ),
                     6.gap,
                     Text(
-                      store.locationKey.tr(),
+                      store.address,
                       style: context.bodyMedium.regular.s16.setColor(
                         context.scaffoldBackgroundColor,
                       ),
-                    ),
-                    
+                    ).flexible(),
                   ],
                 ),
               ],
             ).expand(),
-             Container(
+            Container(
               width: 48,
               height: 48,
               decoration: const BoxDecoration(
@@ -93,7 +92,7 @@ class SingleServiceStoreHeader extends StatelessWidget {
                     colorFilter: Colors.white.colorFilter,
                   )
                   .center(),
-            ).onTap(() {}),
+            ).onTap(() => store.whatsapp.launchWhatsApp()),
           ],
         ).paddingOnly(
           bottom: 28,

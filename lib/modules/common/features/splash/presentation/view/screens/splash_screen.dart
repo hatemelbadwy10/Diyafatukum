@@ -8,7 +8,6 @@ import '../../../../../../../core/resources/resources.dart';
 
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../../../shared/data/model/navigation_bar_items.dart';
-import '../../controller/splash_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -127,12 +126,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             // RemoteNotificationServices.handleInitialNotification();
           },
           onUnauthorized: () {
-            final bool skipOnboarding = context.read<SplashCubit>().state.isOnboardingViewed;
-            if (skipOnboarding) {
-              _setPendingNavigation(() => AppRoutes.login.go());
-            } else {
-              _setPendingNavigation(() => AppRoutes.onboarding.go());
-            }
+            _setPendingNavigation(() => AppRoutes.onboarding.go());
           },
         );
       },

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/widgets/custom_slider.dart';
@@ -16,33 +15,16 @@ class UserHomeBanner extends StatefulWidget {
 }
 
 class _UserHomeBannerState extends State<UserHomeBanner> {
-  late final List<String> _bannerImages = _resolveBannerImages();
   int _currentIndex = 0;
-
-  List<String> _resolveBannerImages() {
-    final images = widget.data.services
-        .map((service) => service.imagePath)
-        .where((path) => path.isNotEmpty)
-        .toSet()
-        .toList();
-
-    if (images.isEmpty) {
-      return const [
-        'assets/images/home_banner.png',
-        'assets/images/welcome_screen.png',
-      ];
-    }
-
-    if (images.length == 1) {
-      images.add(images.first == 'assets/images/home_banner.png' ? 'assets/images/welcome_screen.png' : 'assets/images/home_banner.png');
-    }
-
-    return images;
-  }
 
   @override
   Widget build(BuildContext context) {
-    final nextIndex = (_currentIndex + 1) % _bannerImages.length;
+    if (widget.data.banners.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final banners = widget.data.banners;
+    final nextIndex = (_currentIndex + 1) % banners.length;
     return SizedBox(
       height: 270,
       child: Stack(
@@ -52,9 +34,9 @@ class _UserHomeBannerState extends State<UserHomeBanner> {
             top: 18,
             bottom: 18,
             child: UserHomeBannerPreview(
-              imagePath: _bannerImages[nextIndex],
+              imageUrl: banners[nextIndex].imageUrl,
               currentIndex: _currentIndex,
-              itemsCount: _bannerImages.length,
+              itemsCount: banners.length,
             ),
           ),
           PositionedDirectional(
@@ -64,7 +46,7 @@ class _UserHomeBannerState extends State<UserHomeBanner> {
             bottom: 0,
             child: CustomSlider(
               height: 270,
-              itemCount: _bannerImages.length,
+              itemCount: banners.length,
               autoPlay: true,
               enableInfiniteScroll: true,
               autoPlayInterval: const Duration(milliseconds: 2600),
@@ -75,10 +57,9 @@ class _UserHomeBannerState extends State<UserHomeBanner> {
                 setState(() => _currentIndex = index);
               },
               itemBuilder: (context, itemIndex, _) {
+                final banner = banners[itemIndex];
                 return UserHomeBannerSlide(
-                  imagePath: _bannerImages[itemIndex],
-                  title: widget.data.bannerTitleKey.tr(),
-                  actionLabel: widget.data.bannerActionKey.tr(),
+                  banner: banner,
                 );
               },
             ),

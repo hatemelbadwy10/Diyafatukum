@@ -6,7 +6,8 @@ import '../../../../../../../core/resources/resources.dart';
 enum StaticPage {
   about,
   terms,
-  privacy;
+  privacy,
+  cancellationRefund;
 
   String get title {
     switch (this) {
@@ -16,6 +17,8 @@ enum StaticPage {
         return LocaleKeys.settings_terms.tr();
       case StaticPage.privacy:
         return LocaleKeys.settings_privacy.tr();
+      case StaticPage.cancellationRefund:
+        return LocaleKeys.settings_refund_policy.tr();
     }
   }
 
@@ -27,6 +30,8 @@ enum StaticPage {
         return RemoteUrls.terms;
       case StaticPage.privacy:
         return RemoteUrls.privacy;
+      case StaticPage.cancellationRefund:
+        return RemoteUrls.cancellationRefund;
     }
   }
 }

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +30,7 @@ class SingleServiceScreen extends StatelessWidget {
         backgroundColor: context.scaffoldBackgroundColor,
         appBar: CustomAppBar.build(
           removeBack: false,
-          titleText: service.titleKey.tr(),
-          titleStyle: context.titleSmall.bold.s24,
+          titleText: service.name,
           backgroundColor: context.scaffoldBackgroundColor,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),

@@ -14,12 +14,27 @@ class UserHomeCubit extends Cubit<UserHomeState> {
 
   final UserHomeRepository _repository;
 
-  Future<void> getHomeData() async {
-    emit(state.copyWith(status: CubitStatus.loading(data: state.status.data)));
-    final result = await _repository.getHomeData();
+  Future<void> getHomeData({String? search}) async {
+    final query = search ?? state.searchQuery;
+    emit(
+      state.copyWith(
+        searchQuery: query,
+        status: CubitStatus.loading(data: state.status.data),
+      ),
+    );
+    final result = await _repository.getHomeData(search: query);
     result.fold(
       (failure) => emit(state.copyWith(status: CubitStatus.failed(message: failure.message, error: failure))),
-      (response) => emit(state.copyWith(status: CubitStatus.success(data: response))),
+      (response) => emit(
+        state.copyWith(
+          searchQuery: query,
+          status: CubitStatus.success(data: response.data),
+        ),
+      ),
     );
+  }
+
+  Future<void> onSearchChanged(String value) async {
+    await getHomeData(search: value.trim());
   }
 }

@@ -3,9 +3,9 @@ part of 'login_cubit.dart';
 class LoginState extends Equatable {
   const LoginState({required this.status});
 
-  final CubitStatus<AuthModel> status;
+  final CubitStatus<LoginResponseModel> status;
 
-  LoginState copyWith({CubitStatus<AuthModel>? status}) {
+  LoginState copyWith({CubitStatus<LoginResponseModel>? status}) {
     return LoginState(status: status ?? this.status);
   }
 

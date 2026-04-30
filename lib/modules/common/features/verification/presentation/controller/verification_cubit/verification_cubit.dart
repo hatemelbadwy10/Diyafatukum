@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/resources/type_defs.dart';
+import '../../../../../../../core/data/error/error_constants.dart';
 import '../../../../auth/data/model/auth_model.dart';
 import '../../../../profile/data/model/user_model.dart';
 import '../../../data/model/verification_type_enum.dart';
@@ -31,17 +33,17 @@ class VerificationCubit extends Cubit<VerificationState> {
         authModel = authModel.copyWith(user: response.data);
         emit(state.copyWith(status: CubitStatus.success(data: authModel)));
       } else if (response.data is String) {
-        emit(state.copyWith(status: CubitStatus.success(data: response)));
+        emit(state.copyWith(status: CubitStatus.success(data: response.data)));
       } else {
-        emit(state.copyWith(status: CubitStatus.failed(message: 'Unknown response type')));
+        emit(state.copyWith(status: CubitStatus.failed(message: ErrorConstants.defaultError.tr())));
         return;
       }
     });
   }
 
-  Future<void> resendCode({required String phone}) async {
+  Future<void> resendCode({required String identifier}) async {
     emit(state.copyWith(resendStatus: CubitStatus.loading(), status: CubitStatus.initial()));
-    final response = await _repository.resendCode(phone: phone, type: state.type);
+    final response = await _repository.resendCode(identifier: identifier, type: state.type);
 
     response.fold(
       (failure) => emit(state.copyWith(resendStatus: CubitStatus.failed(message: failure.message))),

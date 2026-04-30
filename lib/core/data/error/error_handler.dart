@@ -157,7 +157,7 @@ class ErrorHandler implements Exception {
     if (BaseRouter.routerConfig.canPop()) {
       BaseRouter.routerConfig.pop();
     }
-    AppRoutes.login.go();
+    AppRoutes.onboarding.go();
     Toaster.showToast(ErrorConstants.unauthorizedError.tr());
   }
 

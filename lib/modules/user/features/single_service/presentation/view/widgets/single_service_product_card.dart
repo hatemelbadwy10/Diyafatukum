@@ -1,8 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/resources/resources.dart';
+import '../../../../../../../core/widgets/custom_image.dart';
 import '../../../data/model/single_service_model.dart';
 
 class SingleServiceProductCard extends StatelessWidget {
@@ -25,10 +25,12 @@ class SingleServiceProductCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: 24.borderRadius,
-              image: DecorationImage(
-                image: AssetImage(product.imagePath),
-                fit: BoxFit.cover,
-              ),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: CustomImage.rounded(
+              height: double.infinity,
+              imageUrl: product.imagePath,
+              radius: 24,
             ),
           ).setContainerToView(
             borderWidth: 4,
@@ -38,7 +40,7 @@ class SingleServiceProductCard extends StatelessWidget {
         ),
         10.gap,
         Text(
-          product.categoryKey.tr(),
+          product.categoryKey,
           style: context.bodySmall.regular.s12,
           textAlign: TextAlign.center,
           maxLines: 1,
@@ -64,9 +66,11 @@ class SingleServiceProductCard extends StatelessWidget {
             ),
             4.gap,
             Text(
-              product.locationKey.tr(),
+              product.locationKey,
               style: context.bodyMedium.regular.s14,
               textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

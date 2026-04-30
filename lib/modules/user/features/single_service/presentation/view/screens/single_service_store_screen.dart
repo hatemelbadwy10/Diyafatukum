@@ -14,6 +14,7 @@ import '../../../../../../common/features/bag/data/model/bag_model.dart';
 import '../../../data/model/single_service_store_model.dart';
 import '../../controller/single_service_store_cubit/single_service_store_cubit.dart';
 import '../widgets/single_service_store_bottom_bar.dart';
+import '../widgets/single_service_store_categories.dart';
 import '../widgets/single_service_store_checkout_bottom_sheet.dart';
 import '../widgets/single_service_store_header.dart';
 import '../widgets/single_service_store_item_card.dart';
@@ -37,7 +38,6 @@ class SingleServiceStoreScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           systemOverlayStyle: SystemUiOverlayStyle.light,
           title: const SizedBox.shrink(),
-          leading: CustomArrowBack(iconColor: Colors.white),
         ),
         bottomNavigationBar:
             BlocBuilder<SingleServiceStoreCubit, SingleServiceStoreState>(
@@ -80,16 +80,25 @@ class SingleServiceStoreScreen extends StatelessWidget {
               ),
               onSuccess: (_) => CustomScrollView(
                 slivers: [
-                  SingleServiceStoreHeader(store: arguments.store).toSliver(),
+                  if (state.storeDetails != null)
+                    SingleServiceStoreHeader(
+                      store: state.storeDetails!,
+                    ).toSliver(),
+                  20.gap.toSliver(),
+                  SingleServiceStoreCategories(
+                    categories: state.categories,
+                    selectedCategoryId: state.selectedCategoryId,
+                    onCategorySelected: cubit.selectCategory,
+                  ).toSliver(),
                   20.gap.toSliver(),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(
                       horizontal: AppSize.screenPadding,
                     ),
                     sliver: SliverList.separated(
-                      itemCount: state.items.length,
+                      itemCount: state.filteredItems.length,
                       itemBuilder: (context, index) {
-                        final item = state.items[index];
+                        final item = state.filteredItems[index];
                         return SingleServiceStoreItemCard(
                           item: item,
                           quantity: state.quantityFor(item.id),

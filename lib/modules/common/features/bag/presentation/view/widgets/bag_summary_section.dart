@@ -7,10 +7,7 @@ import '../../../../../../../core/widgets/buttons/custom_button.dart';
 import '../../../data/model/bag_model.dart';
 
 class BagSummarySection extends StatelessWidget {
-  const BagSummarySection({
-    super.key,
-    required this.bag,
-  });
+  const BagSummarySection({super.key, required this.bag});
 
   final BagModel bag;
 
@@ -20,17 +17,20 @@ class BagSummarySection extends StatelessWidget {
       children: [
         _BagSummaryRow(
           label: LocaleKeys.printing_actions_print_price_title.tr(),
-          value: '${bag.subtotal.toStringAsFixed(0)} ${LocaleKeys.currency_sar.tr()}',
+          value:
+              '${bag.subtotal.toStringAsFixed(0)} ${LocaleKeys.currency_sar.tr()}',
         ),
         20.gap,
         _BagSummaryRow(
           label: LocaleKeys.coupons_details_discount_title.tr(),
-          value: '- ${bag.discount.toStringAsFixed(0)} ${LocaleKeys.currency_sar.tr()}',
+          value:
+              '- ${bag.discount.toStringAsFixed(0)} ${LocaleKeys.currency_sar.tr()}',
         ),
         Divider(height: 40, color: context.greySwatch.shade300),
         _BagSummaryRow(
           label: LocaleKeys.orders_details_summary_total.tr(),
-          value: '${bag.total.toStringAsFixed(0)} ${LocaleKeys.currency_sar.tr()}',
+          value:
+              '${bag.total.toStringAsFixed(0)} ${LocaleKeys.currency_sar.tr()}',
           isHighlighted: true,
         ),
         24.gap,
@@ -62,9 +62,10 @@ class _BagSummaryRow extends StatelessWidget {
 
     return Row(
       children: [
-        Text(value, style: valueStyle),
-        const Spacer(),
         Text(label, style: context.titleMedium.medium.s18),
+
+        const Spacer(),
+        Text(value, style: valueStyle),
       ],
     );
   }

@@ -42,7 +42,7 @@ class MoreScreen extends StatelessWidget {
                           autoCloseOnAction: true,
                           onConfirm: () {
                             context.read<AuthCubit>().logout();
-                            AppRoutes.login.go();
+                            AppRoutes.onboarding.go();
                           },
                           title: LocaleKeys.account_profile_logout_title.tr(),
                           subtitle: LocaleKeys.account_profile_logout_subtitle.tr(),

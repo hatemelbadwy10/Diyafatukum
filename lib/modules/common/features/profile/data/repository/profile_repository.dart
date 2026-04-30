@@ -15,6 +15,8 @@ abstract class ProfileRepository {
 
   Result changePhone(BodyMap body);
 
+  Result changeEmail(BodyMap body);
+
   Result changePassword(BodyMap body);
 
   Result deleteAccount(String password);
@@ -38,6 +40,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Result changePhone(BodyMap body) async {
     return remoteDataSource.changePhone(body).toResult(noDataFromJson);
+  }
+
+  @override
+  Result changeEmail(BodyMap body) async {
+    return remoteDataSource.changeEmail(body).toResult(noDataFromJson);
   }
 
   @override

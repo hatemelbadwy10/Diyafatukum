@@ -241,6 +241,104 @@ abstract class LocaleKeys {
   static const action_success_copied = 'action_success.copied';
   static const action_success_applied = 'action_success.applied';
   static const action_success = 'action_success';
+  static const provider_home_greeting = 'provider.home.greeting';
+  static const provider_home_nav_home = 'provider.home.nav.home';
+  static const provider_home_nav_store = 'provider.home.nav.store';
+  static const provider_home_nav = 'provider.home.nav';
+  static const provider_home_card_accept = 'provider.home.card.accept';
+  static const provider_home_card_reject = 'provider.home.card.reject';
+  static const provider_home_card_status_pending =
+      'provider.home.card.status.pending';
+  static const provider_home_card_status_accepted =
+      'provider.home.card.status.accepted';
+  static const provider_home_card_status_rejected =
+      'provider.home.card.status.rejected';
+  static const provider_home_card_status = 'provider.home.card.status';
+  static const provider_home_card = 'provider.home.card';
+  static const provider_home_messages_accepted =
+      'provider.home.messages.accepted';
+  static const provider_home_messages_rejected =
+      'provider.home.messages.rejected';
+  static const provider_home_messages = 'provider.home.messages';
+  static const provider_home_orders_next_step_hint =
+      'provider.home.orders.next_step_hint';
+  static const provider_home_orders = 'provider.home.orders';
+  static const provider_home = 'provider.home';
+  static const provider_store_edit = 'provider.store.edit';
+  static const provider_store_about_title = 'provider.store.about_title';
+  static const provider_store_fields_name_ar = 'provider.store.fields.name_ar';
+  static const provider_store_fields_name_en = 'provider.store.fields.name_en';
+  static const provider_store_fields_category =
+      'provider.store.fields.category';
+  static const provider_store_fields_address = 'provider.store.fields.address';
+  static const provider_store_fields_whatsapp =
+      'provider.store.fields.whatsapp';
+  static const provider_store_fields_about = 'provider.store.fields.about';
+  static const provider_store_fields_about_hint =
+      'provider.store.fields.about_hint';
+  static const provider_store_fields_category_name =
+      'provider.store.fields.category_name';
+  static const provider_store_fields_product_name =
+      'provider.store.fields.product_name';
+  static const provider_store_fields_price = 'provider.store.fields.price';
+  static const provider_store_fields_product_category =
+      'provider.store.fields.product_category';
+  static const provider_store_fields_product_image =
+      'provider.store.fields.product_image';
+  static const provider_store_fields = 'provider.store.fields';
+  static const provider_store_sheets_edit_title =
+      'provider.store.sheets.edit_title';
+  static const provider_store_sheets_about_title =
+      'provider.store.sheets.about_title';
+  static const provider_store_sheets_add_category_title =
+      'provider.store.sheets.add_category_title';
+  static const provider_store_sheets_add_product_title =
+      'provider.store.sheets.add_product_title';
+  static const provider_store_sheets = 'provider.store.sheets';
+  static const provider_store_categories_all = 'provider.store.categories.all';
+  static const provider_store_categories_add = 'provider.store.categories.add';
+  static const provider_store_categories = 'provider.store.categories';
+  static const provider_store_actions_add_product =
+      'provider.store.actions.add_product';
+  static const provider_store_actions_upload_image =
+      'provider.store.actions.upload_image';
+  static const provider_store_actions = 'provider.store.actions';
+  static const provider_store_empty_title = 'provider.store.empty.title';
+  static const provider_store_empty_subtitle = 'provider.store.empty.subtitle';
+  static const provider_store_empty = 'provider.store.empty';
+  static const provider_store_messages_saved = 'provider.store.messages.saved';
+  static const provider_store_messages_category_added =
+      'provider.store.messages.category_added';
+  static const provider_store_messages_product_added =
+      'provider.store.messages.product_added';
+  static const provider_store_messages = 'provider.store.messages';
+  static const provider_store = 'provider.store';
+  static const provider_register_title = 'provider.register.title';
+  static const provider_register_subtitle = 'provider.register.subtitle';
+  static const provider_register_commercial_register =
+      'provider.register.commercial_register';
+  static const provider_register_store_title = 'provider.register.store_title';
+  static const provider_register_store_subtitle =
+      'provider.register.store_subtitle';
+  static const provider_register_store_name_ar =
+      'provider.register.store_name_ar';
+  static const provider_register_store_name_en =
+      'provider.register.store_name_en';
+  static const provider_register_store_category_title =
+      'provider.register.store_category_title';
+  static const provider_register_store_category_hint =
+      'provider.register.store_category_hint';
+  static const provider_register_submit = 'provider.register.submit';
+  static const provider_register_success = 'provider.register.success';
+  static const provider_register_categories_cakes =
+      'provider.register.categories.cakes';
+  static const provider_register_categories_flowers =
+      'provider.register.categories.flowers';
+  static const provider_register_categories_coffee =
+      'provider.register.categories.coffee';
+  static const provider_register_categories = 'provider.register.categories';
+  static const provider_register = 'provider.register';
+  static const provider = 'provider';
   static const localized_ar = 'localized.ar';
   static const localized_en = 'localized.en';
   static const localized_elapsed_time_seconds =
@@ -514,52 +612,6 @@ abstract class LocaleKeys {
   static const settings_language_success = 'settings.language.success';
   static const settings_language = 'settings.language';
   static const settings = 'settings';
-  static const provider_register_title = 'provider.register.title';
-  static const provider_register_subtitle = 'provider.register.subtitle';
-  static const provider_register_commercial_register =
-      'provider.register.commercial_register';
-  static const provider_register_store_title = 'provider.register.store_title';
-  static const provider_register_store_subtitle =
-      'provider.register.store_subtitle';
-  static const provider_register_store_name_ar =
-      'provider.register.store_name_ar';
-  static const provider_register_store_name_en =
-      'provider.register.store_name_en';
-  static const provider_register_store_category_title =
-      'provider.register.store_category_title';
-  static const provider_register_store_category_hint =
-      'provider.register.store_category_hint';
-  static const provider_register_submit = 'provider.register.submit';
-  static const provider_register_success = 'provider.register.success';
-  static const provider_register_categories_cakes =
-      'provider.register.categories.cakes';
-  static const provider_register_categories_flowers =
-      'provider.register.categories.flowers';
-  static const provider_register_categories_coffee =
-      'provider.register.categories.coffee';
-  static const provider_register_categories = 'provider.register.categories';
-  static const provider_register = 'provider.register';
-  static const provider_home_greeting = 'provider.home.greeting';
-  static const provider_home_nav_home = 'provider.home.nav.home';
-  static const provider_home_nav_store = 'provider.home.nav.store';
-  static const provider_home_nav = 'provider.home.nav';
-  static const provider_home_card_accept = 'provider.home.card.accept';
-  static const provider_home_card_reject = 'provider.home.card.reject';
-  static const provider_home_card_status_pending =
-      'provider.home.card.status.pending';
-  static const provider_home_card_status_accepted =
-      'provider.home.card.status.accepted';
-  static const provider_home_card_status_rejected =
-      'provider.home.card.status.rejected';
-  static const provider_home_card_status = 'provider.home.card.status';
-  static const provider_home_card = 'provider.home.card';
-  static const provider_home_messages_accepted =
-      'provider.home.messages.accepted';
-  static const provider_home_messages_rejected =
-      'provider.home.messages.rejected';
-  static const provider_home_messages = 'provider.home.messages';
-  static const provider_home = 'provider.home';
-  static const provider = 'provider';
   static const home_title = 'home.title';
   static const home_welcome_good_morning = 'home.welcome.good_morning';
   static const home_welcome_good_afternoon = 'home.welcome.good_afternoon';
@@ -576,6 +628,8 @@ abstract class LocaleKeys {
   static const home_user_featured_title = 'home.user.featured.title';
   static const home_user_featured_subtitle = 'home.user.featured.subtitle';
   static const home_user_featured = 'home.user.featured';
+  static const home_user_store_categories_all =
+      'home.user.store_categories_all';
   static const home_user_shop_now = 'home.user.shop_now';
   static const home_user_store_choose = 'home.user.store.choose';
   static const home_user_store_add_to_cart = 'home.user.store.add_to_cart';

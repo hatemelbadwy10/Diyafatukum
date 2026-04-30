@@ -1,95 +1,114 @@
 import 'package:equatable/equatable.dart';
 
-UserHomeModel userHomeFromJson(dynamic json) => UserHomeModel.fromJson(json as Map<String, dynamic>);
+import '../../../../../../../core/config/extensions/all_extensions.dart';
+
+UserHomeModel userHomeFromJson(dynamic json) =>
+    UserHomeModel.fromJson(json as Map<String, dynamic>);
 
 class UserHomeModel extends Equatable {
   const UserHomeModel({
-    required this.searchHintKey,
-    required this.bannerTitleKey,
-    required this.bannerActionKey,
-    required this.featuredTitleKey,
-    required this.featuredSubtitleKey,
-    required this.shopNowKey,
+    required this.banners,
     required this.services,
   });
 
-  final String searchHintKey;
-  final String bannerTitleKey;
-  final String bannerActionKey;
-  final String featuredTitleKey;
-  final String featuredSubtitleKey;
-  final String shopNowKey;
+  final List<UserHomeBannerModel> banners;
   final List<UserHomeServiceModel> services;
 
   factory UserHomeModel.fromJson(Map<String, dynamic> json) {
     return UserHomeModel(
-      searchHintKey: json['search_hint_key'] ?? '',
-      bannerTitleKey: json['banner_title_key'] ?? '',
-      bannerActionKey: json['banner_action_key'] ?? '',
-      featuredTitleKey: json['featured_title_key'] ?? '',
-      featuredSubtitleKey: json['featured_subtitle_key'] ?? '',
-      shopNowKey: json['shop_now_key'] ?? '',
-      services: userHomeServicesFromJson(json['services'] ?? []),
+      banners: userHomeBannersFromJson(json['banner'] ?? []),
+      services: userHomeServicesFromJson(json['specializations'] ?? []),
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'search_hint_key': searchHintKey,
-      'banner_title_key': bannerTitleKey,
-      'banner_action_key': bannerActionKey,
-      'featured_title_key': featuredTitleKey,
-      'featured_subtitle_key': featuredSubtitleKey,
-      'shop_now_key': shopNowKey,
-      'services': services.map((service) => service.toJson()).toList(),
-    };
+  @override
+  List<Object?> get props => [banners, services];
+}
+
+List<UserHomeBannerModel> userHomeBannersFromJson(dynamic json) {
+  return List<UserHomeBannerModel>.from(
+    (json as List).map(
+      (item) => UserHomeBannerModel.fromJson(item as Map<String, dynamic>),
+    ),
+  );
+}
+
+class UserHomeBannerModel extends Equatable {
+  const UserHomeBannerModel({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.imageUrl,
+    required this.link,
+  });
+
+  final int id;
+  final String title;
+  final String description;
+  final String imageUrl;
+  final String link;
+
+  String get plainDescription => description.stripHtmlTags;
+
+  factory UserHomeBannerModel.fromJson(Map<String, dynamic> json) {
+    return UserHomeBannerModel(
+      id: json['id'] ?? 0,
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      imageUrl: json['image'] ?? '',
+      link: json['link'] ?? '',
+    );
   }
 
   @override
-  List<Object?> get props => [
-        searchHintKey,
-        bannerTitleKey,
-        bannerActionKey,
-        featuredTitleKey,
-        featuredSubtitleKey,
-        shopNowKey,
-        services,
-      ];
+  List<Object?> get props => [id, title, description, imageUrl, link];
 }
 
 List<UserHomeServiceModel> userHomeServicesFromJson(dynamic json) {
   return List<UserHomeServiceModel>.from(
-    (json as List).map((item) => UserHomeServiceModel.fromJson(item as Map<String, dynamic>)),
+    (json as List).map(
+      (item) => UserHomeServiceModel.fromJson(item as Map<String, dynamic>),
+    ),
   );
 }
 
 class UserHomeServiceModel extends Equatable {
   const UserHomeServiceModel({
-    required this.titleKey,
-    required this.iconKey,
-    required this.imagePath,
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.imageUrl,
+    required this.mobileIconUrl,
+    required this.storesCount,
   });
 
-  final String titleKey;
-  final String iconKey;
-  final String imagePath;
+  final int id;
+  final String name;
+  final String description;
+  final String imageUrl;
+  final String mobileIconUrl;
+  final int storesCount;
+
+  String get serviceKey => id.toString();
 
   factory UserHomeServiceModel.fromJson(Map<String, dynamic> json) {
     return UserHomeServiceModel(
-      titleKey: json['title_key'] ?? '',
-      iconKey: json['icon_key'] ?? '',
-      imagePath: json['image_path'] ?? '',
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      imageUrl: json['image'] ?? '',
+      mobileIconUrl: json['mobile_icon'] ?? '',
+      storesCount: json['stores_count'] ?? 0,
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'title_key': titleKey,
-      'icon_key': iconKey,
-      'image_path': imagePath,
-    };
-  }
-
   @override
-  List<Object?> get props => [titleKey, iconKey, imagePath];
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        imageUrl,
+        mobileIconUrl,
+        storesCount,
+      ];
 }

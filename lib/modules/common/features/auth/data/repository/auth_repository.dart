@@ -3,16 +3,20 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../core/data/client/api_client.dart';
+import '../../../../../../core/data/error/error_constants.dart';
 import '../../../../../../core/data/error/error_handler.dart';
 import '../../../../../../core/data/models/base_response.dart';
+import 'package:dio/dio.dart';
 import '../../../../../../../core/resources/type_defs.dart';
 import '../datasource/auth_local_data_source.dart';
 import '../datasource/auth_remote_datasource.dart';
 import '../model/auth_model.dart';
+import '../model/login_response_model.dart';
+import '../model/register_response_model.dart';
 
 abstract class AuthRepository {
-  Result register(BodyMap body);
-  Result<AuthModel> login(BodyMap body);
+  Result<RegisterResponseModel> register(BodyMap body);
+  Result<LoginResponseModel> login(BodyMap body);
   Result logout();
 
   void saveUserData(AuthModel authModel);
@@ -27,13 +31,29 @@ class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl(this.remoteDataSource, this.localDataSource);
 
   @override
-  Result<Unit> register(BodyMap body) async {
-    return remoteDataSource.register(body).toResult(noDataFromJson);
+  Result<RegisterResponseModel> register(BodyMap body) async {
+    return remoteDataSource.register(body).toResult(registerResponseModelFromJson);
   }
 
   @override
-  Result<AuthModel> login(BodyMap body) async {
-    return remoteDataSource.login(body).toResult(authModelFromJson, fullParse: true);
+  Result<LoginResponseModel> login(BodyMap body) async {
+    try {
+      final response = await remoteDataSource.login(body);
+      return Right(parseBaseResponse(response.data, loginResponseModelFromJson));
+    } catch (e) {
+      if (e is DioException && e.response?.statusCode == ResponseCode.FORBIDDEN) {
+        final responseData = e.response?.data;
+        if (responseData is Map<String, dynamic>) {
+          final payload = responseData['payload'];
+          if (payload is Map<String, dynamic> && payload['verified'] == false) {
+            return Right(parseBaseResponse(responseData, loginResponseModelFromJson));
+          }
+        }
+      }
+
+      final failure = ErrorHandler.handle(e).failure;
+      return Left(failure);
+    }
   }
 
   @override

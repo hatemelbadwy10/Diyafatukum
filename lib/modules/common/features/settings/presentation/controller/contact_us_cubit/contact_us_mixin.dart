@@ -12,9 +12,7 @@ mixin ContactUsMixin {
   BodyMap get body => {
     'name': nameController.text,
     'phone': phoneController.text,
-    'email': emailController.text,
     'message': messageController.text,
-    "type": "complain",
   };
 
   bool validateForm() {

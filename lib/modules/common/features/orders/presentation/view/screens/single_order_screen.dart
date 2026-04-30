@@ -5,6 +5,7 @@ import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
 import '../../../data/model/order_model.dart';
+import '../widgets/provider_order_status_card.dart';
 import '../widgets/single_order_info_tile.dart';
 import '../widgets/single_order_section_card.dart';
 
@@ -12,9 +13,11 @@ class SingleOrderScreen extends StatelessWidget {
   const SingleOrderScreen({
     super.key,
     required this.order,
+    this.isProviderView = false,
   });
 
   final OrderModel order;
+  final bool isProviderView;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +111,22 @@ class SingleOrderScreen extends StatelessWidget {
               ),
             ],
           ),
+          if (isProviderView) ...[
+            28.gap,
+            Text(
+              LocaleKeys.orders_details_status_title.tr(),
+              style: context.titleMedium.semiBold.s16.setColor(
+                context.colorScheme.onSurface,
+              ),
+            ),
+            20.gap,
+            ...OrderProgressStage.values.map(
+              (stage) => ProviderOrderStatusCard(
+                stage: stage,
+                activeStage: order.activeStage,
+              ).paddingBottom(16),
+            ),
+          ],
         ],
       ).withListView(
         padding: AppSize.screenPadding.edgeInsetsWithBottomNavBar,

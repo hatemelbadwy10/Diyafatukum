@@ -45,7 +45,7 @@ class CustomAppBar {
             toolbarHeight: height,
             leadingWidth: leadingWidth,
             centerTitle: centerTitle,
-            titleTextStyle: titleStyle,
+            titleTextStyle: titleStyle??context.titleSmall.bold.s18,
             backgroundColor: backgroundColor ?? Colors.transparent,
             title: title ?? Text(titleText ?? '', style: titleStyle),
             iconTheme: context.iconTheme?.copyWith(color: iconColor),

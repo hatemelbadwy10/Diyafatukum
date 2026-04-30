@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
@@ -39,38 +40,55 @@ class SingleServiceStoreCubit extends Cubit<SingleServiceStoreState> {
   Future<void> _loadStore() async {
     emit(state.copyWith(status: CubitStatus.loading(data: state.status.data)));
 
-    final result = await _repository.getStore(
-      _service.iconKey,
-      _store.id,
-      {'page': '1'},
-    );
+    final result = await _repository.getStore(_service.serviceKey, _store.id, {
+      'page': '1',
+    });
 
-    result.fold((failure) {
-      emit(
-        state.copyWith(
-          status: CubitStatus.failed(
-            message: failure.message,
-            error: failure,
-          ),
-        ),
-      );
-    }, (response) {
-      final storeData = response.data;
-      if (storeData == null) {
+    result.fold(
+      (failure) {
         emit(
           state.copyWith(
-            status: CubitStatus.failed(message: response.message ?? ''),
+            status: CubitStatus.failed(
+              message: failure.message,
+              error: failure,
+            ),
           ),
         );
-        return;
-      }
-      emit(
-        state.copyWith(
-          status: CubitStatus.success(data: _store.name),
-          items: storeData.items,
-        ),
-      );
-    });
+      },
+      (response) {
+        final storeData = response.data;
+        if (storeData == null) {
+          emit(
+            state.copyWith(
+              status: CubitStatus.failed(message: response.message ?? ''),
+            ),
+          );
+          return;
+        }
+        emit(
+          state.copyWith(
+            status: CubitStatus.success(data: _store.name),
+            storeDetails: storeData,
+            categories: _buildCategories(storeData),
+            selectedCategoryId: _allCategoryId,
+            items: storeData.items,
+            filteredItems: storeData.items,
+          ),
+        );
+      },
+    );
+  }
+
+  void selectCategory(String categoryId) {
+    final filteredItems = categoryId == _allCategoryId
+        ? state.items
+        : state.items.where((item) => item.categoryId == categoryId).toList();
+    emit(
+      state.copyWith(
+        selectedCategoryId: categoryId,
+        filteredItems: filteredItems,
+      ),
+    );
   }
 
   void selectItem(SingleServiceStoreItemModel item) {
@@ -110,4 +128,24 @@ class SingleServiceStoreCubit extends Cubit<SingleServiceStoreState> {
       return total + item.price * (quantities[item.id] ?? 0);
     });
   }
+
+  List<SingleServiceStoreCategoryModel> _buildCategories(
+    SingleServiceStoreDetailsModel storeData,
+  ) {
+    final categories = storeData.categories;
+    final hasAll = categories.any((category) => category.id == _allCategoryId);
+    if (hasAll) return categories;
+
+    return [
+      SingleServiceStoreCategoryModel(
+        id: _allCategoryId,
+        name: LocaleKeys.home_user_store_categories_all.tr(),
+        description: '',
+        productsCount: storeData.items.length,
+      ),
+      ...categories,
+    ];
+  }
+
+  static const String _allCategoryId = '0';
 }

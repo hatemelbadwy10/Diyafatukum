@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/resources/type_defs.dart';
-import '../../../data/model/auth_model.dart';
+import '../../../data/model/login_response_model.dart';
 import '../../../data/repository/auth_repository.dart';
 
 part 'login_state.dart';
@@ -19,7 +19,7 @@ class LoginCubit extends Cubit<LoginState> {
     final response = await _repository.login(body);
     response.fold(
       (error) => emit(state.copyWith(status: CubitStatus.failed(message: error.message))),
-      (data) => emit(state.copyWith(status: CubitStatus.success(data: data))),
+      (data) => emit(state.copyWith(status: CubitStatus.success(data: data.data))),
     );
   }
 }

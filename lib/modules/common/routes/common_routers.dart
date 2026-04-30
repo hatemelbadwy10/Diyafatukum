@@ -33,8 +33,8 @@ List<RouteBase> get _authRoutes => [
     path: AppRoutes.splash.path,
     pageBuilder: (context, state) => MultiBlocProvider(
       providers: [
-        BlocProvider<AuthCubit>(create: (_) => sl<AuthCubit>()),
-        BlocProvider<SplashCubit>(create: (_) => sl<SplashCubit>()),
+        BlocProvider<AuthCubit>.value(value: sl<AuthCubit>()),
+        BlocProvider<SplashCubit>.value(value: sl<SplashCubit>()),
       ],
       child: const SplashScreen(),
     ).buildPage(),
@@ -42,8 +42,8 @@ List<RouteBase> get _authRoutes => [
   GoRoute(
     name: AppRoutes.onboarding.name,
     path: AppRoutes.onboarding.path,
-    pageBuilder: (context, state) => BlocProvider<SplashCubit>(
-      create: (_) => sl<SplashCubit>(),
+    pageBuilder: (context, state) => BlocProvider<SplashCubit>.value(
+      value: sl<SplashCubit>(),
       child: const OnboardingScreen(),
     ).buildPage(),
   ),
@@ -51,7 +51,10 @@ List<RouteBase> get _authRoutes => [
     name: AppRoutes.login.name,
     path: AppRoutes.login.path,
     pageBuilder: (context, state) {
-      return LoginScreen().buildPage();
+      return BlocProvider<AuthCubit>.value(
+        value: sl<AuthCubit>(),
+        child: const LoginScreen(),
+      ).buildPage();
     },
   ),
   GoRoute(
@@ -130,6 +133,8 @@ List<RouteBase> get _authRoutes => [
             code: state.uri.queryParameters['code'],
             type: type,
             onVerificationSuccess: onVerificationSuccess,
+          ).withBlocProvider(
+            sl<AuthCubit>(),
           ).buildPage(transition: PageTransitions.cupertino);
         },
       ),

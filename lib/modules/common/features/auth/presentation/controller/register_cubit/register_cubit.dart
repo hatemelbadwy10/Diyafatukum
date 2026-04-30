@@ -19,7 +19,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(state.copyWith(status: CubitStatus.loading()));
     final result = await _repository.register(body);
     result.fold((error) => emit(state.copyWith(status: CubitStatus.failed(message: error.message))), (response) {
-      emit(state.copyWith(status: CubitStatus.success()));
+      emit(state.copyWith(status: CubitStatus.success(data: response.data)));
     });
   }
 }

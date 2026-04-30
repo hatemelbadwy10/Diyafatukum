@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/widgets/custom_image.dart';
 import '../../../../../../../core/resources/gen/locale_keys.g.dart';
 import '../../../data/model/single_service_store_model.dart';
 import 'single_service_store_item_action.dart';
@@ -29,18 +30,11 @@ class SingleServiceStoreItemCard extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-              Container(
-              width: 92,
-              height: 92,
-              decoration: BoxDecoration(
-                borderRadius: 18.borderRadius,
-                image: DecorationImage(
-                  image: AssetImage(item.imagePath),
-                  fit: BoxFit.cover,
-                ),
-              ),
+            CustomImage.square(
+              imageUrl: item.imagePath,
+              size: 92,
+              borderRadius: 18.borderRadius,
             ),
-          
             14.gap,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,6 +43,17 @@ class SingleServiceStoreItemCard extends StatelessWidget {
                   item.name,
                   style: context.titleMedium.medium.s20,
                   textAlign: TextAlign.right,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                4.gap,
+                Text(
+                  item.categoryName,
+                  style: context.bodySmall.regular.s13.setColor(
+                    context.greySwatch.shade600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 6.gap,
                 Text(

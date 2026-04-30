@@ -18,12 +18,12 @@ mixin RegisterMixin {
   final ValueNotifier<bool> isTermsAccepted = ValueNotifier<bool>(false);
 
   Future<BodyMap> get body async => {
-        'username_type': 'phone',
         'name': nameController.text,
         'email': emailController.text,
-        'username': phoneController.text.neglectStartingZero,
+        'phone': phoneController.text.neglectStartingZero,
         'password': passwordController.text,
         'password_confirmation': confirmPasswordController.text,
+        'accept_terms': isTermsAccepted.value ? 1 : 0,
         'device_token': 'test',
         // 'device_token': await RemoteNotificationServices.getFcmToken()
         'preferred_locale': rootNavigatorKey.currentContext?.locale.languageCode ?? 'en',

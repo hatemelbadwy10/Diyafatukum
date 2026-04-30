@@ -17,7 +17,7 @@ class BaseResponse<T> {
 
   factory BaseResponse.fromJson(Map<String, dynamic> json, FromJson<T> fromJsonT) {
     return BaseResponse<T>(
-      success: json['success'] ?? true,
+      success: json['success'] ?? json['status'] ?? true,
       data: _parseData(json, fromJsonT),
       message: json['message'] ?? '',
     );
@@ -26,6 +26,10 @@ class BaseResponse<T> {
   static T? _parseData<T>(Map<String, dynamic> json, FromJson<T> fromJsonT) {
     if (json['data'] != null) {
       return fromJsonT(json['data']);
+    }
+
+    if (json['payload'] != null) {
+      return fromJsonT(json['payload']);
     }
 
     return null;

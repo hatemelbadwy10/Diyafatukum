@@ -251,6 +251,50 @@
       "messages": {
         "accepted": "تم قبول الطلب",
         "rejected": "تم رفض الطلب"
+      },
+      "orders": {
+        "next_step_hint": "اضغط على الحالة التالية للمتابعة"
+      }
+    },
+    "store": {
+      "edit": "تعديل",
+      "about_title": "عن المتجر",
+      "fields": {
+        "name_ar": "اسم المتجر بالعربية",
+        "name_en": "اسم المتجر بالإنجليزية",
+        "category": "ما هو تخصص متجرك ؟",
+        "address": "العنوان",
+        "whatsapp": "رقم الواتساب",
+        "about": "عن المتجر",
+        "about_hint": "اكتب نبذة مختصرة عن متجرك",
+        "category_name": "اسم الفئة",
+        "product_name": "اسم المنتج",
+        "price": "السعر (ريال)",
+        "product_category": "الفئة",
+        "product_image": "صورة المنتج"
+      },
+      "sheets": {
+        "edit_title": "تعديل البيانات",
+        "about_title": "تعديل عن المتجر",
+        "add_category_title": "إضافة فئة",
+        "add_product_title": "إضافة منتج"
+      },
+      "categories": {
+        "all": "الكل",
+        "add": "إضافة فئة"
+      },
+      "actions": {
+        "add_product": "إضافة منتج",
+        "upload_image": "رفع صورة"
+      },
+      "empty": {
+        "title": "لا توجد منتجات",
+        "subtitle": "لا يوجد لديك أي منتجات حالية للعرض."
+      },
+      "messages": {
+        "saved": "تم الحفظ بنجاح",
+        "category_added": "تمت إضافة الفئة بنجاح",
+        "product_added": "تمت إضافة المنتج بنجاح"
       }
     },
     "register": {
@@ -626,6 +670,7 @@
         "title": "خدماتنا المتميزة ✨",
         "subtitle": "أفضل خدماتنا لجعل مناسبتكم مميزة."
       },
+      "store_categories_all": "الكل",
       "shop_now": "تسوّق الآن ←",
       "store": {
         "choose": "اختر",

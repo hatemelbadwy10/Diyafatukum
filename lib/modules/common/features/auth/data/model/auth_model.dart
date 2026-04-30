@@ -13,11 +13,14 @@ class AuthModel extends Equatable {
   bool get isVerified => user.isPhoneVerified;
 
   Map<String, dynamic> toJson() {
-    return {'data': user.toJson(), 'token': accessToken};
+    return {'user': user.toJson(), 'token': accessToken};
   }
 
   factory AuthModel.fromJson(Map<String, dynamic> json) {
-    return AuthModel(user: userModelFromJson(json['data']), accessToken: json["token"]);
+    return AuthModel(
+      user: userModelFromJson(json['user'] ?? json['data']),
+      accessToken: json["token"],
+    );
   }
 
   AuthModel copyWith({UserModel? user, String? accessToken}) {

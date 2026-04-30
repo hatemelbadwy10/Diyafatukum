@@ -120,6 +120,12 @@ import '../../../modules/provider/features/onboarding/data/repository/provider_o
     as _i581;
 import '../../../modules/provider/features/onboarding/presentation/controller/provider_register_cubit/provider_register_cubit.dart'
     as _i412;
+import '../../../modules/provider/features/store/data/datasource/provider_store_remote_datasource.dart'
+    as _i1021;
+import '../../../modules/provider/features/store/data/repository/provider_store_repository.dart'
+    as _i731;
+import '../../../modules/provider/features/store/presentation/controller/provider_store_cubit/provider_store_cubit.dart'
+    as _i32;
 import '../../../modules/user/features/home/data/datasource/user_home_remote_datasource.dart'
     as _i523;
 import '../../../modules/user/features/home/data/repository/user_home_repository.dart'
@@ -264,6 +270,9 @@ Future<_i174.GetIt> $initGetIt(
   gh.lazySingleton<_i656.NotificationsRemoteDataSource>(
     () => _i656.NotificationsRemoteDataSourceImpl(gh<_i897.ApiClient>()),
   );
+  gh.lazySingleton<_i1021.ProviderStoreRemoteDataSource>(
+    () => _i1021.ProviderStoreRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
   gh.lazySingleton<_i505.SplashRepository>(
     () => _i505.SplashRepositoryImpl(
       gh<_i933.SplashRemoteDataSource>(),
@@ -294,6 +303,11 @@ Future<_i174.GetIt> $initGetIt(
   gh.lazySingleton<_i827.NotificationsRepository>(
     () => _i827.NotificationsRepositoryImpl(
       gh<_i656.NotificationsRemoteDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i731.ProviderStoreRepository>(
+    () => _i731.ProviderStoreRepositoryImpl(
+      gh<_i1021.ProviderStoreRemoteDataSource>(),
     ),
   );
   gh.lazySingleton<_i581.ProviderOnboardingRepository>(
@@ -329,6 +343,9 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.factory<_i805.ProviderHomeCubit>(
     () => _i805.ProviderHomeCubit(gh<_i634.ProviderHomeRepository>()),
+  );
+  gh.factory<_i32.ProviderStoreCubit>(
+    () => _i32.ProviderStoreCubit(gh<_i731.ProviderStoreRepository>()),
   );
   gh.factory<_i340.SingleServiceCubit>(
     () => _i340.SingleServiceCubit(gh<_i665.SingleServiceRepository>()),

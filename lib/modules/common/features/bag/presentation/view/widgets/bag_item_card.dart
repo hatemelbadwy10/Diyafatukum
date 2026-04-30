@@ -47,8 +47,9 @@ class BagItemCard extends StatelessWidget {
     )
         .paddingAll(16)
         .setContainerToView(
+          height: 120,
           radius: 24,
-          borderColor: context.greySwatch.shade100,
+          borderColor: context.greySwatch.shade200,
           color: context.scaffoldBackgroundColor,
         );
   }

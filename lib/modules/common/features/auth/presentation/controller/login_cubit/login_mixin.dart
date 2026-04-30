@@ -1,7 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../../../core/config/router/route_manager.dart';
+import '../../../../../../../core/config/flavor/flavor_config.dart';
 
 mixin LoginMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -11,13 +10,9 @@ mixin LoginMixin {
   final TextEditingController passwordController = TextEditingController();
 
   Future<Map<String, dynamic>> get body async => {
-        "test_mode": 1,
-        "username_type": "email",
-        'username': identifierController.text.trim(),
+        'identifier': identifierController.text.trim(),
         'password': passwordController.text,
-        'preferred_locale': rootNavigatorKey.currentContext?.locale.languageCode ?? 'en',
-        'device_token': 'test',
-        // 'device_token': await RemoteNotificationServices.getFcmToken()
+        'user_role': FlavorConfig.isProvider ? 'provider' : 'user',
       };
 
   void disposeVariables() {

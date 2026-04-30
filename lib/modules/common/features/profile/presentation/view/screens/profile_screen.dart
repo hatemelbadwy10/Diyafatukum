@@ -9,7 +9,6 @@ import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
-
 import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
 import '../../../../../../../core/widgets/custom_input_field.dart';
 import '../../../../../../../core/widgets/custom_phone_field.dart';
@@ -17,6 +16,7 @@ import '../../../../../../../core/widgets/custom_text_field.dart';
 
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../controller/profile_cubit/profile_cubit.dart';
+import '../widgets/change_password_bottom_sheet.dart';
 import '../widgets/delete_account_bottom_sheet.dart';
 import 'profile_mixin.dart';
 
@@ -73,28 +73,45 @@ class _ProfileScreenState extends State<ProfileScreen> with ProfileMixin {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: isEditing
-                              ? CustomButton.gradient(
-                                  isLoading: state.status.isLoading,
-                                  label: LocaleKeys.actions_save_changes.tr(),
-                                  onPressed: () async {
-                                    if (isProfileUpdated(auth.user)) {
-                                      toggleEditing();
-                                    } else {
-                                      if (isValidForm) {
-                                        context.read<ProfileCubit>().updateProfile(body);
-                                      }
-                                    }
-                                  },
-                                )
-                              : CustomButton.destructive(
-                                  label: LocaleKeys.account_profile_delete_title.tr(),
-                                  onPressed: () async {
-                                    context.showBottomSheet(const DeleteAccountBottomSheet());
-                                  },
-                                ),
-                        )
+                              duration: const Duration(milliseconds: 300),
+                              child: isEditing
+                                  ? CustomButton.gradient(
+                                      isLoading: state.status.isLoading,
+                                      label: LocaleKeys.actions_save_changes
+                                          .tr(),
+                                      onPressed: () async {
+                                        if (isProfileUpdated(auth.user)) {
+                                          toggleEditing();
+                                        } else {
+                                          if (isValidForm) {
+                                            context
+                                                .read<ProfileCubit>()
+                                                .updateProfile({
+                                                  ...body,
+                                                  'latitude':
+                                                      auth.user.address?.lat
+                                                          .toString() ??
+                                                      '',
+                                                  'longitude':
+                                                      auth.user.address?.lng
+                                                          .toString() ??
+                                                      '',
+                                                });
+                                          }
+                                        }
+                                      },
+                                    )
+                                  : CustomButton.destructive(
+                                      label: LocaleKeys
+                                          .account_profile_delete_title
+                                          .tr(),
+                                      onPressed: () async {
+                                        context.showBottomSheet(
+                                          const DeleteAccountBottomSheet(),
+                                        );
+                                      },
+                                    ),
+                            )
                             .setHero(HeroTags.mainButton)
                             .paddingHorizontal(AppSize.screenPadding)
                             .withSafeArea(minimum: 16.edgeInsetsVertical)
@@ -121,8 +138,11 @@ class _ProfileScreenState extends State<ProfileScreen> with ProfileMixin {
                             titleIcon: isEditing
                                 ? CustomTextButton(
                                     label: "${LocaleKeys.actions_edit.tr()}>>",
-                                    onPressed: () =>
-                                        AppRoutes.phone.push(queries: {'identifier': auth.user.id.toString()}),
+                                    onPressed: () => AppRoutes.phone.push(
+                                      queries: {
+                                        'identifier': auth.user.id.toString(),
+                                      },
+                                    ),
                                   )
                                 : null,
                           ),
@@ -133,8 +153,36 @@ class _ProfileScreenState extends State<ProfileScreen> with ProfileMixin {
                             inputType: InputType.email,
                             controller: emailController,
                             title: LocaleKeys.details_contact_email.tr(),
-                            hint: LocaleKeys.details_contact_email.tr().enterHint,
+                            hint: LocaleKeys.details_contact_email
+                                .tr()
+                                .enterHint,
                             prefixIcon: Assets.icons.fluentMail28Regular.path,
+                          ),
+                          16.gap,
+                          CustomTextField(
+                            isRequired: false,
+                            enabled: false,
+                            controller: addressController,
+                            title: LocaleKeys.details_location_address.tr(),
+                            hint: LocaleKeys.details_location_address
+                                .tr()
+                                .enterHint,
+                            prefixIcon: Assets.icons.locationPinDisabled.path,
+                          ),
+                          16.gap,
+                          Row(
+                            children: [
+                              Text(
+                                LocaleKeys.auth_password_title.tr(),
+                                style: context.titleMedium.regular,
+                              ).expand(),
+                              CustomTextButton(
+                                label: LocaleKeys.auth_password_change.tr(),
+                                onPressed: () => context.showBottomSheet(
+                                  const ChangePasswordBottomSheet(),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ).withListView(),

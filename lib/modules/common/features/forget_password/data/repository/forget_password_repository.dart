@@ -8,7 +8,7 @@ import '../../../../../../../core/resources/type_defs.dart';
 import '../datasource/forget_password_remote_datasource.dart';
 
 abstract class ForgetPasswordRepository {
-  Result forgetPassword(String phone);
+  Result forgetPassword(String identifier);
   Result resetPassword(BodyMap body);
 }
 
@@ -18,8 +18,8 @@ class ForgetPasswordRepositoryImpl implements ForgetPasswordRepository {
   const ForgetPasswordRepositoryImpl(this.remoteDataSource);
 
   @override
-  Result forgetPassword(String phone) {
-    return remoteDataSource.forgetPassword(phone).toResult(noDataFromJson);
+  Result forgetPassword(String identifier) {
+    return remoteDataSource.forgetPassword(identifier).toResult(noDataFromJson);
   }
 
   @override

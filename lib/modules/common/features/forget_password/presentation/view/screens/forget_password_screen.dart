@@ -39,11 +39,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       child: BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
         listener: (context, state) => state.status.listen(
           onFailed: (failure) => Toaster.showToast(failure.message),
-          onSuccess: (code) => AppRoutes.verification.push(
+          onSuccess: (identifier) => AppRoutes.verification.push(
             extra: {'type': VerificationType.forgetPassword},
             queries: {
-              'code': code,
-              'identifier': _valueController.text.trim(),
+              'identifier': identifier,
             },
           ),
         ),
@@ -75,12 +74,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     label: LocaleKeys.actions_next.tr(),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        AppRoutes.verification.push(
-                          extra: {'type': VerificationType.forgetPassword},
-                          queries: {
-                            'code': '123456',
-                            'identifier': _valueController.text.trim(),
-                          },
+                        context.read<ForgetPasswordCubit>().forgetPassword(
+                          _valueController.text,
                         );
                       }
                     },

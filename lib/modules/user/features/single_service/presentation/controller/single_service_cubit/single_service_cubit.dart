@@ -35,7 +35,7 @@ class SingleServiceCubit extends Cubit<SingleServiceState> {
     _service = service;
     emit(
       state.copyWith(
-        status: CubitStatus.success(data: service.titleKey),
+        status: CubitStatus.success(data: service.name),
         service: service,
       ),
     );
@@ -46,7 +46,7 @@ class SingleServiceCubit extends Cubit<SingleServiceState> {
     if (pageKey == 1) {
       emit(state.copyWith(status: CubitStatus.loading(data: state.status.data)));
     }
-    final result = await _repository.getService(_service.iconKey, {
+    final result = await _repository.getService(_service.serviceKey, {
       'page': pageKey.toString(),
     });
 

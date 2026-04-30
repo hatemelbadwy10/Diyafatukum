@@ -7,7 +7,11 @@ import '../../../../../../../core/resources/type_defs.dart';
 
 abstract class SingleServiceRemoteDataSource {
   Future<Response> getService(String serviceKey, ParamsMap params);
-  Future<Response> getStore(String serviceKey, String storeId, ParamsMap params);
+  Future<Response> getStore(
+    String serviceKey,
+    String storeId,
+    ParamsMap params,
+  );
 }
 
 @LazySingleton(as: SingleServiceRemoteDataSource)
@@ -39,7 +43,11 @@ class SingleServiceRemoteDataSourceImpl
   }
 
   @override
-  Future<Response> getStore(String serviceKey, String storeId, ParamsMap params) async {
+  Future<Response> getStore(
+    String serviceKey,
+    String storeId,
+    ParamsMap params,
+  ) async {
     try {
       return await client.get(
         RemoteUrls.singleServiceStore(serviceKey, storeId),
@@ -58,71 +66,71 @@ class SingleServiceRemoteDataSourceImpl
 }
 
 Map<String, dynamic> _fallbackResponse(String serviceKey, int page) {
-  final titleKey = 'home.user.services.${_serviceTitle(serviceKey)}';
   const lastPage = 2;
   final names = _serviceNames(serviceKey);
   return {
     'success': true,
     'message': '',
-    'data': {
-      'title_key': titleKey,
+    'payload': {
+      'specialization': {
+        'id': serviceKey,
+        'name': 'Sweet Bliss',
+        'description': 'Stores and services for events and gifts',
+        'image': 'https://picsum.photos/600/800?random=$serviceKey',
+        'stores_count': 8,
+      },
       'current_page': page,
       'last_page': lastPage,
-      'products': page == 1
+      'stores': page == 1
           ? List.generate(6, (index) {
               return {
                 'id': '${serviceKey}_${page}_$index',
-                'category_key': titleKey,
+                'specialization': {'name': 'Sweet Bliss'},
                 'name': names[index],
-                'location_key': 'home.user.delivery_default',
-                'image_path': index.isEven
-                    ? 'assets/images/welcome_screen.png'
-                    : 'assets/images/home_banner.png',
+                'description': 'Premium selections for events and occasions',
+                'address': 'الرياض',
+                'logo':
+                    'https://picsum.photos/500/500?random=${serviceKey}_$index',
+                'whatsapp': '+966500000000',
+                'owner': {'name': 'Store Owner', 'phone': '+966500000000'},
               };
             })
           : List.generate(2, (index) {
               return {
                 'id': '${serviceKey}_${page}_${index + 6}',
-                'category_key': titleKey,
+                'specialization': {'name': 'Sweet Bliss'},
                 'name': names[index + 6],
-                'location_key': 'home.user.delivery_default',
-                'image_path': index.isEven
-                    ? 'assets/images/home_banner.png'
-                    : 'assets/images/welcome_screen.png',
+                'description': 'Premium selections for events and occasions',
+                'address': 'الرياض',
+                'logo':
+                    'https://picsum.photos/500/500?random=${serviceKey}_${index + 6}',
+                'whatsapp': '+966500000000',
+                'owner': {'name': 'Store Owner', 'phone': '+966500000000'},
               };
             }),
     },
   };
 }
 
-String _serviceTitle(String serviceKey) {
-  switch (serviceKey) {
-    case 'gift':
-      return 'gifts';
-    case 'camera':
-      return 'photography';
-    case 'flowers':
-      return 'flowers';
-    case 'beauty':
-      return 'beauty';
-    case 'coffee':
-      return 'coffee';
-    case 'decorations':
-      return 'decorations';
-    case 'sweets':
-    default:
-      return 'sweets';
-  }
-}
-
 Map<String, dynamic> _fallbackStoreResponse(String serviceKey, String storeId) {
   return {
     'success': true,
     'message': '',
-    'data': {
-      'current_page': 1,
-      'last_page': 1,
-      'items': _storeItems(serviceKey, storeId),
+    'payload': {
+      'id': storeId,
+      'name': 'Milagry Cake Shop',
+      'description': 'Premium cakes and sweet boxes for events and occasions',
+      'whatsapp': '+966501234567',
+      'address': 'الرياض',
+      'latitude': '24.8103',
+      'longitude': '46.671',
+      'logo': 'https://picsum.photos/800/900?random=store_$storeId',
+      'specialization': {'id': serviceKey, 'name': 'حلويات'},
+      'categories_count': 3,
+      'products_count': 5,
+      'owner': {'name': 'محمد العنزي', 'phone': '+966501234567'},
+      'categories': _storeCategories(),
+      'products': _storeItems(serviceKey, storeId),
     },
   };
 }
@@ -184,11 +192,35 @@ List<Map<String, dynamic>> _storeItems(String serviceKey, String storeId) {
     final item = items[index];
     return {
       'id': '${storeId}_${item[0]}',
+      'store_id': storeId,
+      'category_id': index < 2 ? 1 : 2,
+      'category_name': index < 2 ? 'كيك المناسبات' : 'بوكسات الحلويات',
       'name': item[1],
+      'description': 'منتج مميز مناسب للمناسبات والهدايا',
       'price': item[2],
-      'image_path': index.isEven ? 'assets/images/home_banner.png' : 'assets/images/welcome_screen.png',
+      'image': 'https://picsum.photos/300/300?random=${storeId}_${item[0]}',
+      'quantity': 20,
+      'in_stock': true,
     };
   });
+}
+
+List<Map<String, dynamic>> _storeCategories() {
+  return const [
+    {'id': 0, 'name': 'الكل', 'description': '', 'products_count': 0},
+    {
+      'id': 1,
+      'name': 'كيك المناسبات',
+      'description': 'كيك مخصص للحفلات والمناسبات السعيدة',
+      'products_count': 2,
+    },
+    {
+      'id': 2,
+      'name': 'بوكسات الحلويات',
+      'description': 'تشكيلات حلويات جاهزة للتقديم والإهداء',
+      'products_count': 3,
+    },
+  ];
 }
 
 List<String> _serviceNames(String serviceKey) {

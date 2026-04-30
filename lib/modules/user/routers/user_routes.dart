@@ -14,6 +14,7 @@ import '../../common/features/orders/presentation/controller/orders_cubit/orders
 import '../../common/features/orders/presentation/view/screens/orders_screen.dart';
 import '../../common/features/orders/presentation/view/screens/single_order_screen.dart';
 import '../../common/features/profile/presentation/view/screens/profile_screen.dart';
+import '../../common/features/profile/presentation/view/screens/phone_screen.dart';
 import '../../common/features/shared/presentation/view/screens/scaffold_with_nav_bar_screen.dart';
 import '../../common/features/settings/data/model/static_page_enum.dart';
 import '../../common/features/settings/presentation/view/screens/contact_us_screen.dart';
@@ -33,7 +34,8 @@ class UserRoutes extends BaseRouter {
   static List<RouteBase> get routes => [
     StatefulShellRoute.indexedStack(
       parentNavigatorKey: rootNavigatorKey,
-      pageBuilder: (context, state, shell) => ScaffoldWithNavBarScreen(shell: shell).buildPage(),
+      pageBuilder: (context, state, shell) =>
+          ScaffoldWithNavBarScreen(shell: shell).buildPage(),
       branches: [
         StatefulShellBranch(routes: _homeRoutes),
         StatefulShellBranch(routes: _ordersRoutes),
@@ -59,6 +61,13 @@ class UserRoutes extends BaseRouter {
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.phone.path,
+      name: AppRoutes.phone.name,
+      pageBuilder: (context, state) =>
+          const PhoneScreen().buildPage(transition: PageTransitions.cupertino),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: AppRoutes.staticPage.path,
       name: AppRoutes.staticPage.name,
       pageBuilder: (context, state) {
@@ -66,9 +75,9 @@ class UserRoutes extends BaseRouter {
         if (type == null) {
           return const Scaffold().buildPage();
         }
-        return StaticPageScreen(type: type).buildPage(
-          transition: PageTransitions.cupertino,
-        );
+        return StaticPageScreen(
+          type: type,
+        ).buildPage(transition: PageTransitions.cupertino);
       },
     ),
     GoRoute(
@@ -80,9 +89,9 @@ class UserRoutes extends BaseRouter {
         if (order == null) {
           return const Scaffold().buildPage();
         }
-        return SingleOrderScreen(order: order).buildPage(
-          transition: PageTransitions.cupertino,
-        );
+        return SingleOrderScreen(
+          order: order,
+        ).buildPage(transition: PageTransitions.cupertino);
       },
     ),
     GoRoute(
@@ -94,9 +103,9 @@ class UserRoutes extends BaseRouter {
         if (service == null) {
           return const Scaffold().buildPage();
         }
-        return SingleServiceScreen(service: service).buildPage(
-          transition: PageTransitions.cupertino,
-        );
+        return SingleServiceScreen(
+          service: service,
+        ).buildPage(transition: PageTransitions.cupertino);
       },
     ),
     GoRoute(
@@ -108,9 +117,9 @@ class UserRoutes extends BaseRouter {
         if (arguments == null) {
           return const Scaffold().buildPage();
         }
-        return SingleServiceStoreScreen(arguments: arguments).buildPage(
-          transition: PageTransitions.cupertino,
-        );
+        return SingleServiceStoreScreen(
+          arguments: arguments,
+        ).buildPage(transition: PageTransitions.cupertino);
       },
     ),
   ];

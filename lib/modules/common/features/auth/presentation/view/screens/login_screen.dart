@@ -45,18 +45,30 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
       child: BlocConsumer<LoginCubit, LoginState>(
         listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) => state.status.listen(
-          onSuccess: (auth) {
-            context.read<AuthCubit>().updateAuthData(auth);
-            if (auth.isVerified) {
+          onSuccess: (response) {
+            final auth = response.auth;
+            if (auth != null) {
+              context.read<AuthCubit>().updateAuthData(auth);
+            }
+
+            if (response.requiresVerification) {
+              AppRoutes.verification.push(
+                extra: {"type": VerificationType.register, "onVerificationSuccess": widget.onLoginSuccess},
+                queries: {
+                  'identifier': response.identifier,
+                  if (response.otp?.isNotEmpty ?? false) 'code': response.otp,
+                },
+              );
+            } else if (auth != null && auth.isVerified) {
               if (widget.onLoginSuccess != null) {
                 widget.onLoginSuccess?.call();
               } else {
                 bottomNavNotifier.value.navigate();
               }
-            } else {
+            } else if (auth != null) {
               AppRoutes.verification.push(
                 extra: {"type": VerificationType.register, "onVerificationSuccess": widget.onLoginSuccess},
-                queries: {'identifier': auth.user.phone},
+                queries: {'identifier': auth.user.email ?? auth.user.phone},
               );
             }
           },
@@ -65,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
         builder: (context, state) {
           return AuthBackgroundScaffold(
             title: LocaleKeys.auth_login_title.tr(),
+            onBackPressed: () => AppRoutes.onboarding.go(),
             child: Form(
               key: formKey,
               child: Column(

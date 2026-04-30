@@ -18,7 +18,7 @@ class StaticPageScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<StaticPageCubit>()..getStaticPageContent(type),
       child: Scaffold(
-        appBar: CustomAppBar.build(titleText: type.title),
+        appBar: CustomAppBar.build(titleText: type.title,titleStyle: context.titleSmall.bold.s18,backgroundColor: context.scaffoldBackgroundColor,),
         body: BlocBuilder<StaticPageCubit, StaticPageState>(
           builder: (context, state) {
             return state.status.build(onSuccess: (content) => Column(children: [HtmlWidget(content)]).withListView());

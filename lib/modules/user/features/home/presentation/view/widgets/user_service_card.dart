@@ -1,9 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
-import '../../../../../../../core/resources/resources.dart';
+import '../../../../../../../core/widgets/custom_image.dart';
 import '../../../data/model/user_home_model.dart';
 
 class UserServiceCard extends StatelessWidget {
@@ -21,13 +20,18 @@ class UserServiceCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: 26.borderRadius,
-              image: DecorationImage(
-                image: AssetImage(service.imagePath),
-                fit: BoxFit.cover,
-              ),
             ),
+            clipBehavior: Clip.antiAlias,
             child:
-                Align(
+                Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CustomImage.rounded(
+                      height: double.infinity,
+                      imageUrl: service.imageUrl,
+                      radius: 26,
+                    ),
+                    Align(
                       alignment: AlignmentDirectional.bottomStart,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -39,74 +43,58 @@ class UserServiceCard extends StatelessWidget {
                           borderRadius: 10.borderRadius,
                         ),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisSize: MainAxisSize.max,
                           children: [
-                            _serviceIcon.svg(
-                              width: 16,
-                              height: 16,
-                              colorFilter: context.onPrimary.colorFilter,
+                            CustomImage.square(
+                              imageUrl: service.mobileIconUrl,
+                              size: 16,
+                              borderRadius: 4.borderRadius,
                             ),
                             8.gap,
                             Text(
-                              service.titleKey.tr(),
+                              service.name,
                               style: context.labelSmall.medium.s16,
-                            ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ).flexible(),
                           ],
                         ),
                       ),
                     )
-                    .paddingAll(12)
-                    .onTap(
-                      () => AppRoutes.singleService.push(extra: service),
-                      borderRadius: 26.borderRadius,
-                    )
-                    .setContainerToView(
-                      borderWidth: 4,
-                      borderColor: context.primarySwatch.shade100,
-                      radius: 26,
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.06),
-                          Colors.black.withValues(alpha: 0.26),
-                        ],
+                        .paddingAll(12),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: 26.borderRadius,
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.06),
+                            Colors.black.withValues(alpha: 0.26),
+                          ],
+                        ),
                       ),
                     ),
+                  ],
+                ).setContainerToView(
+                  borderWidth: 4,
+                  borderColor: context.primarySwatch.shade100,
+                  radius: 26,
+                ),
           ),
         ),
 
         12.gap,
         Text(
-          LocaleKeys.home_user_shop_now.tr(),
+          service.description,
           style: context.bodyLarge.regular.s16,
-          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     ).onTap(
       () => AppRoutes.singleService.push(extra: service),
       borderRadius: 26.borderRadius,
     );
-  }
-
-  SvgGenImage get _serviceIcon {
-    switch (service.iconKey) {
-      case 'gift':
-        return Assets.icons.mdiGiftOutline;
-      case 'camera':
-        return Assets.icons.boxiconsCamera;
-      case 'flowers':
-        return Assets.icons.solarChairLinear;
-      case 'beauty':
-        return Assets.icons.iconoirProfileCircle;
-      case 'coffee':
-        return Assets.icons.letsIconsOrder;
-      case 'sweets':
-        return Assets.icons.iconoirBirthdayCake;
-      case 'decorations':
-        return Assets.icons.solarChairLinear;
-      default:
-        return Assets.icons.mdiGiftOutline;
-    }
   }
 }

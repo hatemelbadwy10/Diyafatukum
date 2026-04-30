@@ -5,58 +5,67 @@ import 'environment_keys.dart';
 
 class RemoteUrls {
   /// Base url for the api
-  static String get baseUrl => dotenv.env[EnvironmentKeys.apiBaseUrl] ?? 'add your base url here';
+  static String get baseUrl =>
+      dotenv.env[EnvironmentKeys.apiBaseUrl] ?? 'add your base url here';
 
   /// Current flavor endpoint
   static String get flavor => FlavorConfig.currentFlavor.endpoint;
 
   /// Auth
-  static String login = 'login';
-  static String register = 'register';
+  static String login = 'auth/login';
+  static String register = 'auth/register-user';
   static String providerRegister = '$flavor/register';
-  static String logout = 'logout';
+  static String logout = 'auth/logout';
 
   /// Forget Password
-  static String forgetPassword = '$flavor/password/forget';
-  static String resetPassword = '$flavor/password/reset';
+  static String forgetPassword = 'auth/forgot-password';
+  static String resetPassword = 'auth/reset-password';
 
   /// Verification
-  static String verifyAccount = '$flavor/verification/verify';
-  static String verifyPassword = '$flavor/password/code';
-  static String verifyPhone = '$flavor/authenticable/verify';
+  static String verifyAccount = 'auth/verify-otp';
+  static String verifyPassword = 'auth/verify-otp';
+  static String verifyPhone = 'auth/verify-otp';
 
   static String resendCode = '$flavor/verification/send';
-  static String resendPasswordCode = '$flavor/password/forget';
-  static String resendPhoneCode = '$flavor/authenticable/update';
+  static String resendPasswordCode = 'auth/forgot-password';
+  static String resendPhoneCode = 'user/phone';
 
   /// Profile
-  static String profile = '$flavor/profile';
-  static String changePhone = '$flavor/authenticable/update';
-  static String changePassword = '$flavor/profile/password/update';
+  static String profile = 'user/profile';
+  static String changePhone = 'user/phone';
+  static String changeEmail = 'user/email';
+  static String changePassword = 'user/profile/password';
   static String deleteAccount = '$flavor/delete';
 
   /// Notifications
+  static String notifications = 'user/notifications';
+  static String markNotificationRead(String id) =>
+      'user/notifications/$id/read';
+  static String notificationSettings = 'user/notifications/settings';
 
   /// Orders
   static String orders = '$flavor/orders';
   static String providerDashboard = '$flavor/home';
+  static String providerStore = '$flavor/store';
 
   /// User Home
-  static String userHome = '$flavor/home';
-  static String singleService(String serviceKey) => '$flavor/services/$serviceKey';
+  static String userHome = 'home';
+  static String singleService(String serviceKey) =>
+      'specializations/$serviceKey';
   static String singleServiceStore(String serviceKey, String storeId) =>
-      '$flavor/services/$serviceKey/stores/$storeId';
+      'stores/$storeId';
 
   /// Settings
-  static const String contact = 'contact-us';
+  static const String contact = 'user/support';
   static const String contacts = 'contact';
 
   static String language = '$flavor/preferred-locale';
 
   /// Static Pages
-  static const String about = 'about';
-  static const String terms = 'terms';
-  static const String privacy = 'privacy';
+  static const String about = 'pages/about';
+  static const String terms = 'pages/terms';
+  static const String privacy = 'pages/privacy';
+  static const String cancellationRefund = 'pages/cancellation-refund';
   static const String faq = 'faqs';
 
   /// Addresses

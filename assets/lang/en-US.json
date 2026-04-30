@@ -251,6 +251,50 @@
       "messages": {
         "accepted": "Order accepted",
         "rejected": "Order rejected"
+      },
+      "orders": {
+        "next_step_hint": "Tap the next status to continue"
+      }
+    },
+    "store": {
+      "edit": "Edit",
+      "about_title": "About Store",
+      "fields": {
+        "name_ar": "Store name in Arabic",
+        "name_en": "Store name in English",
+        "category": "What is your store specialty?",
+        "address": "Address",
+        "whatsapp": "WhatsApp number",
+        "about": "About store",
+        "about_hint": "Write a short description about your store",
+        "category_name": "Category name",
+        "product_name": "Product name",
+        "price": "Price (SAR)",
+        "product_category": "Category",
+        "product_image": "Product image"
+      },
+      "sheets": {
+        "edit_title": "Edit details",
+        "about_title": "Edit about store",
+        "add_category_title": "Add category",
+        "add_product_title": "Add product"
+      },
+      "categories": {
+        "all": "All",
+        "add": "Add Category"
+      },
+      "actions": {
+        "add_product": "Add Product",
+        "upload_image": "Upload image"
+      },
+      "empty": {
+        "title": "No products available",
+        "subtitle": "You don't have any products available for display."
+      },
+      "messages": {
+        "saved": "Saved successfully",
+        "category_added": "Category added successfully",
+        "product_added": "Product added successfully"
       }
     },
     "register": {
@@ -751,6 +795,7 @@
         "title": "Our Featured Services ✨",
         "subtitle": "Our best services to make your occasion special."
       },
+      "store_categories_all": "All",
       "shop_now": "Shop now ←",
       "store": {
         "choose": "Choose",

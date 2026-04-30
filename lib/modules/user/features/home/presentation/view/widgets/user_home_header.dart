@@ -15,11 +15,14 @@ class UserHomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = sl<AuthRepository>().getAuthData()?.user ?? const UserModel.guest();
+    final userName = user.id == 0 ? user.name.tr() : user.name;
     final deliveryLocation = user.address?.area.isNotEmpty == true
         ? user.address!.area
         : user.address?.fullAddress.isNotEmpty == true
             ? user.address!.fullAddress
-            : LocaleKeys.home_user_delivery_default.tr();
+            : user.addressText.isNotEmpty
+                ? user.addressText
+                : LocaleKeys.home_user_delivery_default.tr();
 
     return Row(
       children: [
@@ -27,19 +30,20 @@ class UserHomeHeader extends StatelessWidget {
         12.gap,
         Expanded(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                LocaleKeys.home_user_greeting.tr(args: [user.name]),
+                LocaleKeys.home_user_greeting.tr(args: [userName]),
                 style: context.titleSmall.semiBold.s18,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.start,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
               4.gap,
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
                     LocaleKeys.home_user_delivery_to.tr(args: [deliveryLocation]),

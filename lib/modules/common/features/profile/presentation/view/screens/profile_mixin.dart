@@ -12,8 +12,14 @@ mixin ProfileMixin {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
 
-  BodyMap get body => {'name': nameController.text, 'email': emailController.text, 'username': phoneController.text};
+  BodyMap get body => {
+    'name': nameController.text,
+    'email': emailController.text,
+    'phone': phoneController.text,
+    'address': addressController.text,
+  };
 
   void toggleEditing() => isEditingNotifier.value = !isEditingNotifier.value;
 
@@ -25,6 +31,7 @@ mixin ProfileMixin {
     nameController.text = user.name;
     phoneController.text = user.phone;
     emailController.text = user.email ?? '';
+    addressController.text = user.addressText;
   }
 
   void disposeVariables() {
@@ -32,9 +39,12 @@ mixin ProfileMixin {
     emailController.dispose();
     nameController.dispose();
     phoneController.dispose();
+    addressController.dispose();
   }
 
   bool isProfileUpdated(UserModel user) {
-    return user.name == nameController.text && user.email == emailController.text;
+    return user.name == nameController.text &&
+        user.email == emailController.text &&
+        user.addressText == addressController.text;
   }
 }

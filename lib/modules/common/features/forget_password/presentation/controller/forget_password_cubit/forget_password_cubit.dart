@@ -13,11 +13,12 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit(this._repository) : super(ForgetPasswordState(status: CubitStatus.initial()));
 
   Future<void> forgetPassword(String value) async {
+    final identifier = value.trim();
     emit(state.copyWith(status: CubitStatus.loading()));
-    final response = await _repository.forgetPassword(value);
+    final response = await _repository.forgetPassword(identifier);
     response.fold(
       (error) => emit(state.copyWith(status: CubitStatus.failed(message: error.message))),
-      (code) => emit(state.copyWith(status: CubitStatus.success(data: code.toString()))),
+      (_) => emit(state.copyWith(status: CubitStatus.success(data: identifier))),
     );
   }
 }

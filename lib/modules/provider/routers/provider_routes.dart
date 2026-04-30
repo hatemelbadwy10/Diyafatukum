@@ -7,12 +7,18 @@ import '../../../core/config/router/app_route.dart';
 import '../../../core/config/router/page_transition.dart';
 import '../../../core/config/router/route_manager.dart';
 import '../../../core/config/service_locator/injection.dart';
+import '../../common/features/orders/data/model/order_model.dart';
+import '../../common/features/orders/presentation/controller/orders_cubit/orders_cubit.dart';
+import '../../common/features/orders/presentation/view/screens/orders_screen.dart';
+import '../../common/features/orders/presentation/view/screens/single_order_screen.dart';
 import '../../common/features/settings/presentation/view/screens/settings_screen.dart';
 import '../../common/features/shared/presentation/view/screens/scaffold_with_nav_bar_screen.dart';
 import '../features/home/presentation/controller/provider_home_cubit/provider_home_cubit.dart';
 import '../features/home/presentation/view/screens/provider_home_screen.dart';
 import '../features/onboarding/presentation/view/screens/provider_register_location_screen.dart';
 import '../features/onboarding/presentation/view/screens/provider_register_screen.dart';
+import '../features/store/presentation/controller/provider_store_cubit/provider_store_cubit.dart';
+import '../features/store/presentation/view/screens/provider_store_screen.dart';
 
 class ProviderRoutes extends BaseRouter {
   @override
@@ -49,6 +55,23 @@ class ProviderRoutes extends BaseRouter {
                 .buildPage(transition: PageTransitions.cupertino);
           },
         ),
+        GoRoute(
+          parentNavigatorKey: rootNavigatorKey,
+          path: AppRoutes.orderDetails.path,
+          name: AppRoutes.orderDetails.name,
+          pageBuilder: (context, state) {
+            final order = state.extra as OrderModel?;
+            if (order == null) {
+              return const Scaffold().buildPage();
+            }
+            return SingleOrderScreen(
+              order: order,
+              isProviderView: true,
+            ).buildPage(
+              transition: PageTransitions.cupertino,
+            );
+          },
+        ),
       ];
 
   static List<RouteBase> get _homeRoutes => [
@@ -67,8 +90,8 @@ class ProviderRoutes extends BaseRouter {
           path: AppRoutes.orders.path,
           name: AppRoutes.orders.name,
           pageBuilder: (context, state) => BlocProvider(
-            create: (_) => sl<ProviderHomeCubit>()..loadHome(),
-            child: const ProviderHomeScreen(),
+            create: (_) => sl<OrdersCubit>()..loadOrders(),
+            child: const OrdersScreen(),
           ).buildPage(),
         ),
       ];
@@ -78,8 +101,8 @@ class ProviderRoutes extends BaseRouter {
           path: AppRoutes.store.path,
           name: AppRoutes.store.name,
           pageBuilder: (context, state) => BlocProvider(
-            create: (_) => sl<ProviderHomeCubit>()..loadHome(),
-            child: const ProviderHomeScreen(),
+            create: (_) => sl<ProviderStoreCubit>()..loadStore(),
+            child: const ProviderStoreScreen(),
           ).buildPage(),
         ),
       ];

@@ -19,6 +19,7 @@ import '../../../../../../../core/widgets/custom_input_field.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../settings/data/model/static_page_enum.dart';
 import '../../../../verification/data/model/verification_type_enum.dart';
+import '../../../data/model/register_response_model.dart';
 import '../../controller/register_cubit/register_cubit.dart';
 import '../widgets/auth_background_scaffold.dart';
 import '../../../../addresses/presentation/view/screens/map_screen.dart';
@@ -70,21 +71,21 @@ class _RegisterStepTwoScreenState extends State<RegisterStepTwoScreen> {
 
   Future<Map<String, dynamic>> _buildBody() async {
     return {
-      'username_type': 'phone',
       'name': widget.args.name,
       'email': widget.args.email,
-      'username': widget.args.phone.neglectStartingZero,
+      'phone': widget.args.phone.neglectStartingZero,
       'address': _addressController.text.trim(),
-      'lat': _selectedLatLng!.latitude.toString(),
-      'long': _selectedLatLng!.longitude.toString(),
+      'latitude': _selectedLatLng!.latitude.toString(),
+      'longitude': _selectedLatLng!.longitude.toString(),
       'password': _passwordController.text,
       'password_confirmation': _confirmPasswordController.text,
+      'accept_terms': 1,
       'device_token': 'test',
       'preferred_locale': rootNavigatorKey.currentContext?.locale.languageCode ?? 'en',
     };
   }
 
-  Future<void> _submit() async {
+  Future<void> _submit(BuildContext context) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_selectedLatLng == null || _selectedPlacemark == null) {
       Toaster.showToast(LocaleKeys.validator_location.tr());
@@ -104,13 +105,19 @@ class _RegisterStepTwoScreenState extends State<RegisterStepTwoScreen> {
       create: (context) => sl<RegisterCubit>(),
       child: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) => state.status.listen(
-          onSuccess: (_) {
+          onSuccess: (data) {
+            final registerResponse = data is RegisterResponseModel ? data : null;
+            final identifier = registerResponse?.identifier ?? widget.args.phone;
+            final otp = registerResponse?.otp;
             AppRoutes.verification.push(
               extra: {
                 "type": VerificationType.register,
                 "onVerificationSuccess": widget.args.onRegisterSuccess,
               },
-              queries: {'identifier': widget.args.phone},
+              queries: {
+                'identifier': identifier,
+                if (otp?.isNotEmpty ?? false) 'code': otp,
+              },
             );
           },
           onFailed: (failure) => Toaster.showToast(failure.message),
@@ -122,7 +129,7 @@ class _RegisterStepTwoScreenState extends State<RegisterStepTwoScreen> {
               borderRadius: AppSize.buttonBorderRadius,
               isLoading: state.status.isLoading,
               label: LocaleKeys.auth_register_account.tr(),
-              onPressed: _submit,
+              onPressed: () => _submit(context),
             ).setHero(HeroTags.mainButton),
             child: Form(
               key: _formKey,
