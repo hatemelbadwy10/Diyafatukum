@@ -7,9 +7,14 @@ import '../../../../../../../core/widgets/buttons/custom_button.dart';
 import '../../../data/model/bag_model.dart';
 
 class BagSummarySection extends StatelessWidget {
-  const BagSummarySection({super.key, required this.bag});
+  const BagSummarySection({
+    super.key,
+    required this.bag,
+    required this.onCheckout,
+  });
 
   final BagModel bag;
+  final VoidCallback onCheckout;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,7 @@ class BagSummarySection extends StatelessWidget {
         24.gap,
         CustomButton(
           label: LocaleKeys.bag_actions_checkout.tr(),
-          onPressed: () {},
+          onPressed: onCheckout,
         ),
       ],
     ).paddingHorizontal(AppSize.screenPadding).paddingBottom(16);

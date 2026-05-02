@@ -1,6 +1,6 @@
-import 'package:deals/core/config/flavor/flavor_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../../config/flavor/flavor_config.dart';
 import 'environment_keys.dart';
 
 class RemoteUrls {
@@ -44,7 +44,16 @@ class RemoteUrls {
   static String notificationSettings = 'user/notifications/settings';
 
   /// Orders
-  static String orders = '$flavor/orders';
+  static String get orders =>
+      FlavorConfig.isParent ? 'user/orders' : '$flavor/orders';
+  static String orderDetails(String id) =>
+      FlavorConfig.isParent ? 'user/orders/$id' : '$flavor/orders/$id';
+  static String cancelOrder(String id) => FlavorConfig.isParent
+      ? 'user/orders/$id/cancel'
+      : '$flavor/orders/$id/cancel';
+  static String trackOrder(String id) => FlavorConfig.isParent
+      ? 'user/orders/$id/track'
+      : '$flavor/orders/$id/track';
   static String providerDashboard = '$flavor/home';
   static String providerStore = '$flavor/store';
 
@@ -54,6 +63,12 @@ class RemoteUrls {
       'specializations/$serviceKey';
   static String singleServiceStore(String serviceKey, String storeId) =>
       'stores/$storeId';
+
+  /// Cart
+  static String cart = 'user/cart';
+  static String cartItems = 'user/cart/items';
+  static String cartItem(String id) => 'user/cart/items/$id';
+  static String checkout = 'user/checkout';
 
   /// Settings
   static const String contact = 'user/support';

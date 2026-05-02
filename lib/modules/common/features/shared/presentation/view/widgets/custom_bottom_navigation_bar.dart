@@ -1,8 +1,8 @@
 
-import 'package:deals/core/config/extensions/all_extensions.dart';
 import 'package:flutter/material.dart';
 
 
+import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../data/model/navigation_bar_items.dart';
 import 'custom_bottom_navigation_bar_item.dart';

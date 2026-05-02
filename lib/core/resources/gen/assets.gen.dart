@@ -58,7 +58,7 @@ class $AssetsIconsGen {
   SvgGenImage get deleteIcon => const SvgGenImage('assets/icons/delete icon.svg');
 
   /// File path: assets/icons/eye-outlined-1.svg
-  SvgGenImage get eyeOutlined1 => const SvgGenImage('assets/icons/eye-outlined-1.svg');
+  SvgGenImage get eyeOutlined1 => const SvgGenImage('assets/icons/open_eye.svg');
 
   /// File path: assets/icons/eye-outlined-2.svg
   SvgGenImage get eyeOutlined2 => const SvgGenImage('assets/icons/eye-outlined-2.svg');

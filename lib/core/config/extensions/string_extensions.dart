@@ -370,7 +370,8 @@ class Patterns {
   // and arabic letters
   static String specialCharacters = r'[!@#$%^&*(),.?":{}|<>]';
 
-  static String email = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+  static String email =
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+$";
 
   static String image = r'.(jpeg|jpg|gif|png|bmp)$';
 

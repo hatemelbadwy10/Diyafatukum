@@ -1,12 +1,14 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../core/data/client/api_client.dart';
 import '../../../../../../core/data/error/error_constants.dart';
+import '../../../../../../core/data/error/failure.dart';
 import '../../../../../../core/data/error/error_handler.dart';
 import '../../../../../../core/data/models/base_response.dart';
-import 'package:dio/dio.dart';
 import '../../../../../../../core/resources/type_defs.dart';
 import '../datasource/auth_local_data_source.dart';
 import '../datasource/auth_remote_datasource.dart';
@@ -32,21 +34,33 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Result<RegisterResponseModel> register(BodyMap body) async {
-    return remoteDataSource.register(body).toResult(registerResponseModelFromJson);
+    return remoteDataSource
+        .register(body)
+        .toResult(registerResponseModelFromJson);
   }
 
   @override
   Result<LoginResponseModel> login(BodyMap body) async {
     try {
       final response = await remoteDataSource.login(body);
-      return Right(parseBaseResponse(response.data, loginResponseModelFromJson));
+      final baseResponse = parseBaseResponse(
+        response.data,
+        loginResponseModelFromJson,
+      );
+      final failure = _validateLoginResponse(response, baseResponse);
+      if (failure != null) return Left(failure);
+
+      return Right(baseResponse);
     } catch (e) {
-      if (e is DioException && e.response?.statusCode == ResponseCode.FORBIDDEN) {
+      if (e is DioException &&
+          e.response?.statusCode == ResponseCode.FORBIDDEN) {
         final responseData = e.response?.data;
         if (responseData is Map<String, dynamic>) {
           final payload = responseData['payload'];
           if (payload is Map<String, dynamic> && payload['verified'] == false) {
-            return Right(parseBaseResponse(responseData, loginResponseModelFromJson));
+            return Right(
+              parseBaseResponse(responseData, loginResponseModelFromJson),
+            );
           }
         }
       }
@@ -76,7 +90,37 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   AuthModel? getAuthData() {
     final authModel = localDataSource.getAuthData();
-    if (authModel != null) sl<ApiClient>().updateToken(authModel.accessToken ?? '');
+    if (authModel != null) {
+      sl<ApiClient>().updateToken(authModel.accessToken ?? '');
+    }
     return authModel;
+  }
+
+  Failure? _validateLoginResponse(
+    Response response,
+    BaseResponse<LoginResponseModel> baseResponse,
+  ) {
+    final loginData = baseResponse.data;
+    if (loginData?.requiresVerification ?? false) {
+      return null;
+    }
+
+    if (baseResponse.success == false || loginData == null) {
+      return ServerFailure(
+        message: _responseMessage(baseResponse.message),
+        statusCode: response.statusCode ?? ResponseCode.BAD_REQUEST,
+        details: response.data?.toString(),
+      );
+    }
+
+    return null;
+  }
+
+  String _responseMessage(String? message) {
+    final trimmedMessage = message?.trim();
+    if (trimmedMessage?.isNotEmpty ?? false) {
+      return trimmedMessage!;
+    }
+    return ErrorConstants.badRequestError.tr();
   }
 }

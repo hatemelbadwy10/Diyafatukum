@@ -13,8 +13,11 @@ import '../../common/features/orders/data/model/order_model.dart';
 import '../../common/features/orders/presentation/controller/orders_cubit/orders_cubit.dart';
 import '../../common/features/orders/presentation/view/screens/orders_screen.dart';
 import '../../common/features/orders/presentation/view/screens/single_order_screen.dart';
+import '../../common/features/notifications/presentation/controller/notifications_cubit/notifications_cubit.dart';
+import '../../common/features/notifications/presentation/view/screens/notifications_screen.dart';
 import '../../common/features/profile/presentation/view/screens/profile_screen.dart';
 import '../../common/features/profile/presentation/view/screens/phone_screen.dart';
+import '../../common/features/auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../common/features/shared/presentation/view/screens/scaffold_with_nav_bar_screen.dart';
 import '../../common/features/settings/data/model/static_page_enum.dart';
 import '../../common/features/settings/presentation/view/screens/contact_us_screen.dart';
@@ -58,6 +61,21 @@ class UserRoutes extends BaseRouter {
       pageBuilder: (context, state) => const ContactUsScreen().buildPage(
         transition: PageTransitions.cupertino,
       ),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.notifications.path,
+      name: AppRoutes.notifications.name,
+      pageBuilder: (context, state) {
+        final authCubit = context.read<AuthCubit>();
+        return BlocProvider(
+          create: (_) => NotificationsCubit(
+            sl(),
+            authCubit.state.user.notificationEnabled,
+          ),
+          child: const NotificationsScreen(),
+        ).buildPage(transition: PageTransitions.cupertino);
+      },
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,

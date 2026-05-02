@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/resources/resources.dart';
-import '../../../../../../../core/widgets/custom_dialog.dart';
+import '../../../../../../../core/widgets/app_dialog.dart';
 import '../../../../../../../core/widgets/menu_item_tile.dart';
 import '../../../../../../../core/widgets/vertical_list_view.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
@@ -28,7 +28,9 @@ class MoreScreen extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 itemCount: MoreMenuItem.items(state.status.isAuthorized).length,
                 itemBuilder: (_, index) {
-                  final menuItem = MoreMenuItem.items(state.status.isAuthorized)[index];
+                  final menuItem = MoreMenuItem.items(
+                    state.status.isAuthorized,
+                  )[index];
                   return MenuItemTile(
                     enableBorder: true,
                     padding: 8.edgeInsetsAll,
@@ -38,14 +40,22 @@ class MoreScreen extends StatelessWidget {
                     trailing: menuItem.isLogout ? SizedBox.shrink() : null,
                     onTap: () {
                       if (menuItem.isLogout) {
-                        CustomDialog.destructive(
-                          autoCloseOnAction: true,
+                        AppDialog(
                           onConfirm: () {
                             context.read<AuthCubit>().logout();
                             AppRoutes.onboarding.go();
                           },
                           title: LocaleKeys.account_profile_logout_title.tr(),
-                          subtitle: LocaleKeys.account_profile_logout_subtitle.tr(),
+                          subtitle: LocaleKeys.account_profile_logout_subtitle
+                              .tr(),
+                          confirmLabel: LocaleKeys.actions_confirm.tr(),
+                          cancelLabel: LocaleKeys.actions_cancel.tr(),
+                          confirmDestructive: true,
+                          icon: Icon(
+                            Icons.logout_rounded,
+                            color: context.onPrimary,
+                            size: 28,
+                          ),
                         ).show(context);
                       }
                     },

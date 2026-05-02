@@ -9,7 +9,7 @@ class CloseIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Assets.icons.close
+    return Assets.icons.cancel2
         .svg(colorFilter: context.iconDisabledColor.colorFilter, height: 20)
         .center()
         .withSize(12, 12)

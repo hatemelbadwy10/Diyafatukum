@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../config/router/route_manager.dart';
+import '../../resources/constants/localization_constants.dart';
 import '../../resources/constants/remote_urls.dart';
 import '../../resources/type_defs.dart';
 import 'logger_interceptor.dart';
@@ -25,7 +26,9 @@ class ApiClient {
       ..httpClientAdapter
       ..options.headers = {
         'Accept': 'application/json',
-        'Accept-Language': rootNavigatorKey.currentContext?.locale.languageCode,
+        'lang':
+            rootNavigatorKey.currentContext?.locale.languageCode ??
+            LocalizationConstants.favoriteLang.languageCode,
       };
     dio.interceptors.add(loggingInterceptor);
   }
@@ -164,12 +167,20 @@ class ApiClient {
     );
   }
 
-  void updateToken(String? token) => dio.options.headers.update(
-    'Authorization',
-    (value) => 'Bearer $token',
-    ifAbsent: () => 'Bearer $token',
-  );
+  void updateToken(String? token) {
+    final normalizedToken = token?.trim();
+    if (normalizedToken == null || normalizedToken.isEmpty) {
+      dio.options.headers.remove('Authorization');
+      return;
+    }
+
+    dio.options.headers.update(
+      'Authorization',
+      (value) => 'Bearer $normalizedToken',
+      ifAbsent: () => 'Bearer $normalizedToken',
+    );
+  }
 
   void updateLanguage(String language) =>
-      dio.options.headers['Accept-Language'] = language;
+      dio.options.headers['lang'] = language;
 }

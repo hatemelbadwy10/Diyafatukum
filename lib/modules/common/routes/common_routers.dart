@@ -1,6 +1,3 @@
-import 'package:deals/modules/common/features/auth/presentation/view/screens/login_screen.dart';
-import 'package:deals/modules/common/features/forget_password/presentation/view/screens/forget_password_screen.dart';
-import 'package:deals/modules/common/features/forget_password/presentation/view/screens/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -12,8 +9,11 @@ import '../../../core/config/router/route_manager.dart';
 import '../../../core/config/service_locator/injection.dart';
 import '../features/addresses/presentation/view/screens/map_screen.dart';
 import '../features/auth/presentation/controller/auth_cubit/auth_cubit.dart';
+import '../features/auth/presentation/view/screens/login_screen.dart';
 import '../features/auth/presentation/view/screens/register_screen.dart';
 import '../features/auth/presentation/view/screens/register_step_two_screen.dart';
+import '../features/forget_password/presentation/view/screens/forget_password_screen.dart';
+import '../features/forget_password/presentation/view/screens/reset_password_screen.dart';
 import '../features/splash/presentation/controller/splash_cubit.dart';
 import '../features/splash/presentation/view/screens/onboarding_screen.dart';
 import '../features/splash/presentation/view/screens/splash_screen.dart';
@@ -94,17 +94,13 @@ List<RouteBase> get _authRoutes => [
       final args = extra is Map<String, dynamic>
           ? extra
           : extra is Map
-              ? Map<String, dynamic>.from(extra)
-              : null;
-      final token = args?['token'] as String?;
+          ? Map<String, dynamic>.from(extra)
+          : null;
       final identifier = args?['identifier'] as String?;
-      if (token == null || identifier == null) {
+      if (identifier == null) {
         return const Scaffold().buildPage();
       }
-      return ResetPasswordScreen(
-        token: token,
-        identifier: identifier,
-      ).buildPage();
+      return ResetPasswordScreen(identifier: identifier).buildPage();
     },
   ),
   GoRoute(
@@ -114,31 +110,30 @@ List<RouteBase> get _authRoutes => [
       arguments: state.extra as MapScreenArguments?,
     ).buildPage(transition: PageTransitions.cupertino),
   ),
-   GoRoute(
-        name: AppRoutes.verification.name,
-        path: AppRoutes.verification.path,
-        pageBuilder: (context, state) {
-          final extra = state.extra;
-          VerificationType type = VerificationType.register;
-          void Function()? onVerificationSuccess;
-          if (extra is Map && extra['type'] != null) {
-            type = extra['type'] as VerificationType;
-          }
-          if (extra is Map && extra['onVerificationSuccess'] != null) {
-            onVerificationSuccess =
-                extra['onVerificationSuccess'] as void Function()?;
-          }
-          return VerificationScreen(
+  GoRoute(
+    name: AppRoutes.verification.name,
+    path: AppRoutes.verification.path,
+    pageBuilder: (context, state) {
+      final extra = state.extra;
+      VerificationType type = VerificationType.register;
+      void Function()? onVerificationSuccess;
+      if (extra is Map && extra['type'] != null) {
+        type = extra['type'] as VerificationType;
+      }
+      if (extra is Map && extra['onVerificationSuccess'] != null) {
+        onVerificationSuccess =
+            extra['onVerificationSuccess'] as void Function()?;
+      }
+      return VerificationScreen(
             identifier: state.uri.queryParameters['identifier'] as String,
             code: state.uri.queryParameters['code'],
             type: type,
             onVerificationSuccess: onVerificationSuccess,
-          ).withBlocProvider(
-            sl<AuthCubit>(),
-          ).buildPage(transition: PageTransitions.cupertino);
-        },
-      ),
-
+          )
+          .withBlocProvider(sl<AuthCubit>())
+          .buildPage(transition: PageTransitions.cupertino);
+    },
+  ),
 ];
 
 List<RouteBase> get _ordersRoutes => [
@@ -146,7 +141,8 @@ List<RouteBase> get _ordersRoutes => [
     parentNavigatorKey: rootNavigatorKey,
     path: AppRoutes.orders.path,
     name: AppRoutes.orders.name,
-    pageBuilder: (context, state) => const Scaffold().buildPage(transition: PageTransitions.cupertino),
+    pageBuilder: (context, state) =>
+        const Scaffold().buildPage(transition: PageTransitions.cupertino),
   ),
 ];
 
@@ -161,7 +157,8 @@ List<RouteBase> get moreMenuRoutes => [
         parentNavigatorKey: rootNavigatorKey,
         path: AppRoutes.settings.path,
         name: AppRoutes.settings.name,
-        pageBuilder: (context, state) => const Scaffold().buildPage(transition: PageTransitions.cupertino),
+        pageBuilder: (context, state) =>
+            const Scaffold().buildPage(transition: PageTransitions.cupertino),
       ),
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,
@@ -176,25 +173,29 @@ List<RouteBase> get moreMenuRoutes => [
         parentNavigatorKey: rootNavigatorKey,
         path: AppRoutes.profile.path,
         name: AppRoutes.profile.name,
-        pageBuilder: (context, state) => const Scaffold().buildPage(transition: PageTransitions.cupertino),
+        pageBuilder: (context, state) =>
+            const Scaffold().buildPage(transition: PageTransitions.cupertino),
       ),
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,
         path: AppRoutes.coupons.path,
         name: AppRoutes.coupons.name,
-        pageBuilder: (context, state) => const Scaffold().buildPage(transition: PageTransitions.cupertino),
+        pageBuilder: (context, state) =>
+            const Scaffold().buildPage(transition: PageTransitions.cupertino),
       ),
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,
         path: AppRoutes.contact.path,
         name: AppRoutes.contact.name,
-        pageBuilder: (context, state) => const Scaffold().buildPage(transition: PageTransitions.cupertino),
+        pageBuilder: (context, state) =>
+            const Scaffold().buildPage(transition: PageTransitions.cupertino),
       ),
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,
         path: AppRoutes.phone.path,
         name: AppRoutes.phone.name,
-        pageBuilder: (context, state) => const Scaffold().buildPage(transition: PageTransitions.cupertino),
+        pageBuilder: (context, state) =>
+            const Scaffold().buildPage(transition: PageTransitions.cupertino),
       ),
       ..._ordersRoutes,
     ],

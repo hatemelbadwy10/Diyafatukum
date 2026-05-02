@@ -68,6 +68,8 @@ class SingleServiceStoreItemCard extends StatelessWidget {
             14.gap,
             SingleServiceStoreItemAction(
               quantity: quantity,
+              maxQuantity: item.quantity,
+              isAvailable: item.isAvailable,
               onSelect: onSelect,
               onIncrement: onIncrement,
               onDecrement: onDecrement,

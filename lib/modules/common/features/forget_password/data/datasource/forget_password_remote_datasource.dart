@@ -12,23 +12,20 @@ abstract class ForgetPasswordRemoteDataSource {
 }
 
 @LazySingleton(as: ForgetPasswordRemoteDataSource)
-class ForgetPasswordRemoteDataSourceImpl implements ForgetPasswordRemoteDataSource {
+class ForgetPasswordRemoteDataSourceImpl
+    implements ForgetPasswordRemoteDataSource {
   final ApiClient client;
   const ForgetPasswordRemoteDataSourceImpl(this.client);
 
   @override
   Future<Response> forgetPassword(String identifier) {
-    final username = identifier.trim();
-    final usernameType = username.contains('@') ? 'email' : 'phone';
     return client.post(
       RemoteUrls.forgetPassword,
-      data: {
-        'username': username,
-        'username_type': usernameType,
-      },
+      data: {'identifier': identifier.trim()},
     );
   }
 
   @override
-  Future<Response> resetPassword(BodyMap body) => client.post(RemoteUrls.resetPassword, data: body);
+  Future<Response> resetPassword(BodyMap body) =>
+      client.post(RemoteUrls.resetPassword, data: body);
 }

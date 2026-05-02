@@ -92,14 +92,21 @@ class SingleServiceStoreCubit extends Cubit<SingleServiceStoreState> {
   }
 
   void selectItem(SingleServiceStoreItemModel item) {
+    if (!item.isAvailable) return;
+
     final quantities = Map<String, int>.from(state.quantities);
     quantities[item.id] = 1;
     _emitSelectionState(quantities);
   }
 
   void incrementItem(SingleServiceStoreItemModel item) {
+    if (!item.isAvailable) return;
+
     final quantities = Map<String, int>.from(state.quantities);
-    quantities[item.id] = (quantities[item.id] ?? 0) + 1;
+    final nextQuantity = (quantities[item.id] ?? 0) + 1;
+    if (nextQuantity > item.quantity) return;
+
+    quantities[item.id] = nextQuantity;
     _emitSelectionState(quantities);
   }
 
@@ -112,6 +119,10 @@ class SingleServiceStoreCubit extends Cubit<SingleServiceStoreState> {
       quantities[item.id] = currentQuantity - 1;
     }
     _emitSelectionState(quantities);
+  }
+
+  void clearSelection() {
+    _emitSelectionState(const {});
   }
 
   void _emitSelectionState(Map<String, int> quantities) {

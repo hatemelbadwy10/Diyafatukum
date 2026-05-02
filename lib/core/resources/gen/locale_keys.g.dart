@@ -450,6 +450,7 @@ abstract class LocaleKeys {
   static const auth_guest_title = 'auth.guest.title';
   static const auth_guest_subtitle = 'auth.guest.subtitle';
   static const auth_guest_continue = 'auth.guest.continue';
+  static const auth_guest_login_first = 'auth.guest.login_first';
   static const auth_guest_login = 'auth.guest.login';
   static const auth_guest_register = 'auth.guest.register';
   static const auth_guest_login_hint = 'auth.guest.login_hint';
@@ -640,6 +641,10 @@ abstract class LocaleKeys {
       'home.user.store.booking_notes_hint';
   static const home_user_store_booking_success =
       'home.user.store.booking_success';
+  static const home_user_store_cart_conflict_title =
+      'home.user.store.cart_conflict_title';
+  static const home_user_store_cart_conflict_message =
+      'home.user.store.cart_conflict_message';
   static const home_user_store = 'home.user.store';
   static const home_user_services_gifts = 'home.user.services.gifts';
   static const home_user_services_photography =
@@ -687,6 +692,10 @@ abstract class LocaleKeys {
   static const bag_actions_remove_printing_undo =
       'bag.actions.remove.printing.undo';
   static const bag_actions_remove_printing = 'bag.actions.remove.printing';
+  static const bag_actions_remove_item_title = 'bag.actions.remove.item.title';
+  static const bag_actions_remove_item_message =
+      'bag.actions.remove.item.message';
+  static const bag_actions_remove_item = 'bag.actions.remove.item';
   static const bag_actions_remove = 'bag.actions.remove';
   static const bag_actions_checkout = 'bag.actions.checkout';
   static const bag_actions_continue_shopping = 'bag.actions.continue_shopping';
@@ -802,12 +811,24 @@ abstract class LocaleKeys {
   static const orders_details_status_pending_subtitle =
       'orders.details.status.pending.subtitle';
   static const orders_details_status_pending = 'orders.details.status.pending';
+  static const orders_details_status_accepted_title =
+      'orders.details.status.accepted.title';
+  static const orders_details_status_accepted_subtitle =
+      'orders.details.status.accepted.subtitle';
+  static const orders_details_status_accepted =
+      'orders.details.status.accepted';
   static const orders_details_status_processing_title =
       'orders.details.status.processing.title';
   static const orders_details_status_processing_subtitle =
       'orders.details.status.processing.subtitle';
   static const orders_details_status_processing =
       'orders.details.status.processing';
+  static const orders_details_status_preparing_title =
+      'orders.details.status.preparing.title';
+  static const orders_details_status_preparing_subtitle =
+      'orders.details.status.preparing.subtitle';
+  static const orders_details_status_preparing =
+      'orders.details.status.preparing';
   static const orders_details_status_ready_delivery_title =
       'orders.details.status.ready_delivery.title';
   static const orders_details_status_ready_delivery_subtitle =
@@ -825,6 +846,12 @@ abstract class LocaleKeys {
   static const orders_details_status_transit_subtitle =
       'orders.details.status.transit.subtitle';
   static const orders_details_status_transit = 'orders.details.status.transit';
+  static const orders_details_status_on_the_way_title =
+      'orders.details.status.on_the_way.title';
+  static const orders_details_status_on_the_way_subtitle =
+      'orders.details.status.on_the_way.subtitle';
+  static const orders_details_status_on_the_way =
+      'orders.details.status.on_the_way';
   static const orders_details_status_delivered_title =
       'orders.details.status.delivered.title';
   static const orders_details_status_delivered_subtitle =

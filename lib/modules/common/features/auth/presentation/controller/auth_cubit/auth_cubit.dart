@@ -17,33 +17,57 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _repository;
   final ProfileRepository _accountRepository;
-  AuthCubit(this._repository, this._accountRepository) : super(const AuthState());
+
+  AuthCubit(this._repository, this._accountRepository)
+    : super(
+        (() {
+          final authModel = _repository.getAuthData();
+          if (authModel == null) {
+            return const AuthState();
+          }
+          if (authModel == const AuthModel.guest()) {
+            return const AuthState(
+              auth: AuthModel.guest(),
+              status: AuthStatus.guest,
+            );
+          }
+          return AuthState(auth: authModel, status: AuthStatus.authorized);
+        })(),
+      );
 
   Future<void> checkAuthStatus() async {
     await Future.delayed(const Duration(milliseconds: 1000));
     emit(state.copyWith(status: AuthStatus.loading));
     final authModel = _repository.getAuthData();
-    if (authModel != null) {
-      final result = await _accountRepository.getProfile();
-      result.fold(
-        (error) {
-          emit(state.copyWith(status: AuthStatus.unauthorized));
-          _repository.clearUserData();
-        },
-        (response) {
-          final updatedAuthModel = authModel.copyWith(user: response.data);
-          updateAuthData(updatedAuthModel);
-        },
-      );
-    } else {
+    if (authModel == null) {
       emit(state.copyWith(status: AuthStatus.unauthorized));
+      return;
     }
+    if (authModel == const AuthModel.guest()) {
+      emit(state.copyWith(auth: authModel, status: AuthStatus.guest));
+      return;
+    }
+    final result = await _accountRepository.getProfile();
+    result.fold(
+      (error) {
+        emit(state.copyWith(status: AuthStatus.unauthorized));
+        _repository.clearUserData();
+      },
+      (response) {
+        final updatedAuthModel = authModel.copyWith(user: response.data);
+        updateAuthData(updatedAuthModel);
+      },
+    );
   }
 
   void updateAuthData(AuthModel authModel) {
-    sl<ApiClient>().updateToken(authModel.accessToken);
+    sl<ApiClient>().updateToken(
+      authModel == const AuthModel.guest() ? null : authModel.accessToken,
+    );
     _repository.saveUserData(authModel);
-    final status = authModel == const AuthModel.guest() ? AuthStatus.unauthorized : AuthStatus.authorized;
+    final status = authModel == const AuthModel.guest()
+        ? AuthStatus.guest
+        : AuthStatus.authorized;
     emit(state.copyWith(auth: authModel, status: status));
   }
 
@@ -54,6 +78,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   void updateUserAddress(AddressModel address) {
     final updatedUser = state.auth.user.copyWith(address: address);
+    updateUserData(updatedUser);
+  }
+
+  void updateUserCartStoreId(int? cartStoreId) {
+    final updatedUser = state.auth.user.copyWith(cartStoreId: cartStoreId);
     updateUserData(updatedUser);
   }
 

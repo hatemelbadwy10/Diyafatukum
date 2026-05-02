@@ -1,10 +1,10 @@
-import 'package:deals/core/utils/geocoding_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../../../core/resources/type_defs.dart';
 
+import '../../../../../../../core/utils/geocoding_utils.dart';
 import '../../../data/model/address_model.dart';
 import '../../../data/model/address_type_enum.dart';
 

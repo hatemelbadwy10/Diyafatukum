@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/resources/resources.dart';
+import '../../../../../../../core/widgets/custom_image.dart';
 import '../../../data/model/order_model.dart';
+import 'order_timeline_status_style.dart';
 import 'orders_progress_step.dart';
 import 'orders_status_badge.dart';
 
@@ -48,12 +50,7 @@ class OrderItemCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: 12.borderRadius,
-                child: Image.asset(
-                  order.storeImagePath,
-                  width: 84,
-                  height: 84,
-                  fit: BoxFit.cover,
-                ),
+                child: _buildStoreImage(context),
               ),
               12.gap,
               Column(
@@ -71,19 +68,13 @@ class OrderItemCard extends StatelessWidget {
               ).expand(),
               12.gap,
 
-              OrdersStatusBadge(status: order.tabStatus),
+              OrdersStatusBadge(status: order.activeStatus),
             ],
           ),
           24.gap,
           Row(
-            children: OrderProgressStage.values
-                .map(
-                  (stage) => OrdersProgressStep(
-                    stage: stage,
-                    orderStatus: order.tabStatus,
-                    activeStage: order.activeStage,
-                  ),
-                )
+            children: order.timeline
+                .map((step) => OrdersProgressStep(step: step))
                 .toList(),
           ),
         ],
@@ -99,11 +90,32 @@ class OrderItemCard extends StatelessWidget {
   Color _borderColor(BuildContext context) {
     switch (order.tabStatus) {
       case OrderTabStatus.completed:
-        return context.successColor.withValues(alpha: 0.35);
+        return order.activeStatus.color(context).withValues(alpha: 0.35);
       case OrderTabStatus.cancelled:
-        return context.greySwatch.shade200;
+        return order.activeStatus.color(context).withValues(alpha: 0.28);
       case OrderTabStatus.current:
-        return context.primaryColor.withValues(alpha: 0.9);
+        return order.activeStatus.color(context).withValues(alpha: 0.9);
     }
+  }
+
+  Widget _buildStoreImage(BuildContext context) {
+    final imagePath = order.storeImagePath.trim();
+    if (imagePath.startsWith('http')) {
+      return CustomImage(height: 84, width: 84, imageUrl: imagePath);
+    }
+
+    if (imagePath.isNotEmpty) {
+      return Image.asset(imagePath, width: 84, height: 84, fit: BoxFit.cover);
+    }
+
+    return Container(
+      width: 84,
+      height: 84,
+      color: context.greySwatch.shade100,
+      child: Assets.icons.boxiconsCamera
+          .svg(colorFilter: context.greySwatch.shade400.colorFilter)
+          .paddingAll(20)
+          .center(),
+    );
   }
 }

@@ -159,6 +159,8 @@ class SingleServiceStoreItemModel extends Equatable {
   final int quantity;
   final bool inStock;
 
+  bool get isAvailable => inStock && quantity > 0;
+
   factory SingleServiceStoreItemModel.fromJson(Map<String, dynamic> json) {
     return SingleServiceStoreItemModel(
       id: json['id']?.toString() ?? '',

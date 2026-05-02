@@ -6,16 +6,19 @@ import 'package:flutter/services.dart';
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/resources.dart';
+import '../../../../../../../core/utils/toaster_utils.dart';
+import '../../../../../../../core/widgets/app_dialog.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
-import '../../../../../../../core/widgets/custom_arrow_back.dart';
 import '../../../../../../../core/widgets/custom_fallback_view.dart';
 import '../../../../../../../core/widgets/custom_loading.dart';
+import '../../../../../../common/features/auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../../../../../common/features/bag/data/model/bag_model.dart';
+import '../../../../../../common/features/bag/data/repository/bag_repository.dart';
+import '../../../../../../common/features/shared/presentation/view/widgets/login_dialog.dart';
 import '../../../data/model/single_service_store_model.dart';
 import '../../controller/single_service_store_cubit/single_service_store_cubit.dart';
 import '../widgets/single_service_store_bottom_bar.dart';
 import '../widgets/single_service_store_categories.dart';
-import '../widgets/single_service_store_checkout_bottom_sheet.dart';
 import '../widgets/single_service_store_header.dart';
 import '../widgets/single_service_store_item_card.dart';
 
@@ -23,6 +26,107 @@ class SingleServiceStoreScreen extends StatelessWidget {
   const SingleServiceStoreScreen({super.key, required this.arguments});
 
   final SingleServiceStoreScreenArguments arguments;
+
+  Future<void> _addItemsToCart({
+    required BuildContext context,
+    required SingleServiceStoreCubit cubit,
+    required List<BagItemModel> selectedItems,
+    required int? currentStoreId,
+  }) async {
+    final result = await sl<BagRepository>().addItems(selectedItems);
+    if (!context.mounted) return;
+
+    result.fold((failure) => Toaster.showToast(failure.message), (response) {
+      context.maybeRead<AuthCubit>()?.updateUserCartStoreId(currentStoreId);
+      cubit.clearSelection();
+      Toaster.showToast(
+        response.message?.trim().isNotEmpty == true
+            ? response.message!
+            : LocaleKeys.home_user_store_booking_success.tr(),
+        isError: false,
+      );
+    });
+  }
+
+  Future<void> _replaceCartAndAddItems({
+    required BuildContext context,
+    required SingleServiceStoreCubit cubit,
+    required List<BagItemModel> selectedItems,
+    required int? currentStoreId,
+  }) async {
+    final clearResult = await sl<BagRepository>().clearCart();
+    if (!context.mounted) return;
+
+    await clearResult.fold(
+      (failure) async => Toaster.showToast(failure.message),
+      (_) async {
+        context.maybeRead<AuthCubit>()?.updateUserCartStoreId(null);
+        await _addItemsToCart(
+          context: context,
+          cubit: cubit,
+          selectedItems: selectedItems,
+          currentStoreId: currentStoreId,
+        );
+      },
+    );
+  }
+
+  Future<void> _handleAddToCart({
+    required BuildContext context,
+    required SingleServiceStoreCubit cubit,
+    required List<BagItemModel> selectedItems,
+  }) async {
+    final authCubit = context.maybeRead<AuthCubit>();
+    if (!(authCubit?.state.status.isAuthorized ?? false)) {
+      LoginDialog().show(context);
+      return;
+    }
+    final currentStoreId = int.tryParse(arguments.store.id);
+    final cartStoreId = authCubit?.state.user.cartStoreId;
+
+    if (currentStoreId != null &&
+        cartStoreId != null &&
+        cartStoreId != currentStoreId) {
+      final bagResult = await sl<BagRepository>().getBag();
+      if (!context.mounted) return;
+
+      final hasItems = bagResult.fold(
+        (_) => true,
+        (response) => response.data?.items.isNotEmpty ?? false,
+      );
+
+      if (hasItems) {
+        AppDialog(
+          title: LocaleKeys.home_user_store_cart_conflict_title.tr(),
+          subtitle: LocaleKeys.home_user_store_cart_conflict_message.tr(),
+          confirmLabel: LocaleKeys.actions_clear.tr(),
+          cancelLabel: LocaleKeys.actions_cancel.tr(),
+          confirmDestructive: true,
+          onConfirm: () async {
+            await _replaceCartAndAddItems(
+              context: context,
+              cubit: cubit,
+              selectedItems: selectedItems,
+              currentStoreId: currentStoreId,
+            );
+          },
+          icon: Icon(
+            Icons.storefront_rounded,
+            color: context.onPrimary,
+            size: 28,
+          ),
+        ).show(context);
+        return;
+      }
+    }
+
+    await _addItemsToCart(
+      context: context,
+      cubit: cubit,
+      selectedItems: selectedItems,
+      currentStoreId: currentStoreId,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,25 +146,28 @@ class SingleServiceStoreScreen extends StatelessWidget {
         bottomNavigationBar:
             BlocBuilder<SingleServiceStoreCubit, SingleServiceStoreState>(
               builder: (context, state) {
+                final cubit = context.read<SingleServiceStoreCubit>();
+                final selectedItems = state.items
+                    .where((item) => state.quantityFor(item.id) > 0)
+                    .map(
+                      (item) => BagItemModel(
+                        id: item.id,
+                        productId: item.id,
+                        name: item.name,
+                        price: item.price,
+                        imagePath: item.imagePath,
+                        quantity: state.quantityFor(item.id),
+                      ),
+                    )
+                    .toList();
+
                 return SingleServiceStoreBottomBar(
                   totalPrice: state.totalPrice,
                   selectedItemsCount: state.selectedItemsCount,
-                  onTap: () => context.showBottomSheet(
-                    SingleServiceStoreCheckoutBottomSheet(
-                      authCubit: context.maybeRead(),
-                      selectedItems: state.items
-                          .where((item) => state.quantityFor(item.id) > 0)
-                          .map(
-                            (item) => BagItemModel(
-                              id: item.id,
-                              name: item.name,
-                              price: item.price,
-                              imagePath: item.imagePath,
-                              quantity: state.quantityFor(item.id),
-                            ),
-                          )
-                          .toList(),
-                    ),
+                  onTap: () => _handleAddToCart(
+                    context: context,
+                    cubit: cubit,
+                    selectedItems: selectedItems,
                   ),
                 ).visible(state.hasSelection);
               },

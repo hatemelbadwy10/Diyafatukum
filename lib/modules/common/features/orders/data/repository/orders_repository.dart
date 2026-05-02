@@ -6,7 +6,7 @@ import '../datasource/orders_remote_datasource.dart';
 import '../model/order_model.dart';
 
 abstract class OrdersRepository {
-  Result<List<OrderModel>> getOrders();
+  Result<List<OrderModel>> getOrders(OrderTabStatus status);
 }
 
 @LazySingleton(as: OrdersRepository)
@@ -16,7 +16,7 @@ class OrdersRepositoryImpl implements OrdersRepository {
   final OrdersRemoteDataSource remoteDataSource;
 
   @override
-  Result<List<OrderModel>> getOrders() async {
-    return remoteDataSource.getOrders().toResult(ordersFromJson);
+  Result<List<OrderModel>> getOrders(OrderTabStatus status) async {
+    return remoteDataSource.getOrders(status).toResult(ordersFromJson);
   }
 }

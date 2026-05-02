@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "deals.deals"
+    namespace = "com.daem.diyafatukum"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -22,13 +22,25 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "deals.deals"
+        applicationId = "com.daem.diyafatukum"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    flavorDimensions += "app"
+    productFlavors {
+        create("user") {
+            dimension = "app"
+            applicationId = "com.daem.diyafatukum"
+        }
+        create("provider") {
+            dimension = "app"
+            applicationId = "com.daem.diyafatukum.provider"
+        }
     }
 
     buildTypes {

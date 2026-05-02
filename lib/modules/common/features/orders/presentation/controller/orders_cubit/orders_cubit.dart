@@ -14,26 +14,35 @@ class OrdersCubit extends Cubit<OrdersState> {
 
   final OrdersRepository _repository;
 
-  Future<void> loadOrders() async {
-    emit(state.copyWith(status: CubitStatus.loading()));
+  Future<void> loadOrders([
+    OrderTabStatus status = OrderTabStatus.current,
+  ]) async {
+    emit(state.copyWith(status: CubitStatus.loading(), selectedStatus: status));
 
-    final result = await _repository.getOrders();
+    final result = await _repository.getOrders(status);
 
     result.fold(
       (failure) => emit(
         state.copyWith(
-          status: CubitStatus.failed(
-            message: failure.message,
-            error: failure,
+          status: CubitStatus.failed(message: failure.message, error: failure),
+          selectedStatus: status,
+        ),
+      ),
+      (response) {
+        final loadedOrders = response.data ?? const <OrderModel>[];
+        final orders = <OrderModel>[
+          ...state.orders.where((order) => order.tabStatus != status),
+          ...loadedOrders,
+        ];
+
+        emit(
+          state.copyWith(
+            status: CubitStatus.success(),
+            orders: orders,
+            selectedStatus: status,
           ),
-        ),
-      ),
-      (response) => emit(
-        state.copyWith(
-          status: CubitStatus.success(),
-          orders: response.data ?? const [],
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -480,6 +480,7 @@
       "title": "Guest",
       "subtitle": "You can continue without an account, but you won't be able to access your saved addresses, orders, or account settings.",
       "continue": "Continue as Guest",
+      "login_first": "Login First!",
       "login": "Login to Your Account",
       "register": "Create a New Account",
       "login_hint": "Login or create a new account to access your saved addresses, orders, and account settings.",
@@ -664,9 +665,17 @@
           "title": "Pending",
           "subtitle": "We've received your order and it's being reviewed"
         },
+        "accepted": {
+          "title": "Accepted",
+          "subtitle": "The store accepted your order and will start preparing it"
+        },
         "processing": {
           "title": "Processing",
           "subtitle": "Your order is being prepared/"
+        },
+        "preparing": {
+          "title": "Preparing",
+          "subtitle": "Your order is being prepared"
         },
         "ready_delivery": {
           "title": "Ready for Delivery",
@@ -679,6 +688,10 @@
         "transit": {
           "title": "In Transit",
           "subtitle": "Your order is on the way to your delivery address"
+        },
+        "on_the_way": {
+          "title": "On the way",
+          "subtitle": "Your order is heading to your delivery address"
         },
         "delivered": {
           "title": "Delivered",
@@ -770,7 +783,7 @@
     },
     "language": {
       "title": "Language",
-      "subtitle": "Choose your preferred language",
+      "subtitle": "Choose app language",
       "success": "Language changed successfully"
     }
   },
@@ -803,7 +816,9 @@
         "booking_title": "Complete booking details",
         "booking_notes_title": "Write your request and we will contact you",
         "booking_notes_hint": "Write your request here ...",
-        "booking_success": "Your request has been sent and we will contact you soon"
+        "booking_success": "Your request has been sent and we will contact you soon",
+        "cart_conflict_title": "Your cart contains items from another store",
+        "cart_conflict_message": "You can't add items from two stores in the same cart. Clear your current cart to continue."
       },
       "services": {
         "gifts": "Gifts",
@@ -847,6 +862,10 @@
     },
     "actions": {
       "remove": {
+        "item": {
+          "title": "Remove item from cart?",
+          "message": "This item will be removed from your cart."
+        },
         "printing": {
           "title": "Remove Printing Files",
           "message": "This will remove all printing files from your bag. You can find them in your uploaded files.",

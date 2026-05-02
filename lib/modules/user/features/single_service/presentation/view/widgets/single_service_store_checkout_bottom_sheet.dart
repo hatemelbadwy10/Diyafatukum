@@ -16,6 +16,7 @@ import '../../../../../../common/features/bag/data/model/bag_model.dart';
 import '../../../../../../common/features/bag/data/repository/bag_repository.dart';
 import '../../../../../../common/features/addresses/presentation/view/widgets/addresses_bottom_sheet.dart';
 import '../../../../../../common/features/auth/presentation/controller/auth_cubit/auth_cubit.dart';
+import '../../../../../../common/features/shared/presentation/view/widgets/login_dialog.dart';
 
 class SingleServiceStoreCheckoutBottomSheet extends StatefulWidget {
   const SingleServiceStoreCheckoutBottomSheet({
@@ -84,7 +85,7 @@ class _SingleServiceStoreCheckoutBottomSheetState
             24.gap,
             DatePickerField(
               title: LocaleKeys.details_date_time_date.tr(),
-              minDate: DateTime.now(),
+              minDate: DateTime.now().add(const Duration(days: 7)),
               initialValue: _selectedDate,
               onChanged: (value) => _selectedDate = value,
             ),
@@ -124,6 +125,10 @@ class _SingleServiceStoreCheckoutBottomSheetState
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+    if (!(widget.authCubit?.state.status.isAuthorized ?? false)) {
+      LoginDialog().show(context);
+      return;
+    }
 
     await sl<BagRepository>().addItems(widget.selectedItems);
     BaseRouter.pop();

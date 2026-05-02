@@ -1,56 +1,57 @@
 import 'package:injectable/injectable.dart';
 
-import '../datasource/bag_local_datasource.dart';
+import '../../../../../../core/data/error/error_handler.dart';
+import '../../../../../../core/data/models/base_response.dart';
+import '../../../../../../../core/resources/type_defs.dart';
+import '../datasource/bag_remote_datasource.dart';
 import '../model/bag_model.dart';
 
 abstract class BagRepository {
-  BagModel getBag();
-  Future<void> addItems(List<BagItemModel> items);
-  Future<void> removeItem(String itemId);
-  Future<void> clearBag();
+  Result<BagModel> getBag();
+  Result<BagModel> addItems(List<BagItemModel> items);
+  Result updateItemQuantity(String itemId, int quantity);
+  Result clearCart();
+  Result removeItem(String itemId);
+  Result checkout(BodyMap body);
 }
 
 @LazySingleton(as: BagRepository)
 class BagRepositoryImpl implements BagRepository {
-  const BagRepositoryImpl(this.localDataSource);
+  const BagRepositoryImpl(this.remoteDataSource);
 
-  final BagLocalDataSource localDataSource;
+  final BagRemoteDataSource remoteDataSource;
 
   @override
-  BagModel getBag() {
-    return BagModel(items: localDataSource.getBagItems());
+  Result<BagModel> getBag() {
+    return remoteDataSource.getBag().toResult(bagModelFromJson);
   }
 
   @override
-  Future<void> addItems(List<BagItemModel> items) async {
-    final currentItems = [...localDataSource.getBagItems()];
-
-    for (final item in items) {
-      final index = currentItems.indexWhere((current) => current.id == item.id);
-      if (index == -1) {
-        currentItems.add(item);
-      } else {
-        final current = currentItems[index];
-        currentItems[index] = current.copyWith(
-          quantity: current.quantity + item.quantity,
-        );
-      }
-    }
-
-    await localDataSource.saveBagItems(currentItems);
+  Result<BagModel> addItems(List<BagItemModel> items) {
+    return remoteDataSource
+        .addItems(items.map((item) => item.toCartItemRequest()).toList())
+        .toResult(bagModelFromJson);
   }
 
   @override
-  Future<void> removeItem(String itemId) async {
-    final currentItems = localDataSource
-        .getBagItems()
-        .where((item) => item.id != itemId)
-        .toList();
-    await localDataSource.saveBagItems(currentItems);
+  Result updateItemQuantity(String itemId, int quantity) {
+    return remoteDataSource
+        .updateItemQuantity(itemId, quantity)
+        .toResult(noDataFromJson);
   }
 
   @override
-  Future<void> clearBag() async {
-    await localDataSource.clearBag();
+  Result clearCart() {
+    return remoteDataSource.clearCart().toResult(noDataFromJson);
+  }
+
+  @override
+  Result removeItem(String itemId) {
+    return remoteDataSource.removeItem(itemId).toResult(noDataFromJson);
+  }
+
+  @override
+  Result checkout(BodyMap body) {
+    return remoteDataSource.checkout(body).toResult(noDataFromJson);
   }
 }

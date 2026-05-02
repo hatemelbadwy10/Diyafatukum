@@ -2,71 +2,70 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
-import '../../../../../../../core/resources/resources.dart';
 import '../../../data/model/order_model.dart';
+import 'order_timeline_status_style.dart';
 
 class OrdersProgressStep extends StatelessWidget {
-  const OrdersProgressStep({
-    super.key,
-    required this.stage,
-    required this.orderStatus,
-    required this.activeStage,
-  });
+  const OrdersProgressStep({super.key, required this.step});
 
-  final OrderProgressStage stage;
-  final OrderTabStatus orderStatus;
-  final OrderProgressStage activeStage;
+  final OrderTimelineStep step;
 
   @override
   Widget build(BuildContext context) {
+    final isActive = step.completed || step.current;
+    final statusColor = step.status.color(context);
+
     return Column(
       children: [
         Container(
-          width: 32,
-          height: 32,
+          width: 30,
+          height: 30,
           decoration: BoxDecoration(
-            color: _iconBackgroundColor(context),
+            color: step.current
+                ? statusColor
+                : isActive
+                ? step.status.softColor(context)
+                : context.greySwatch.shade100,
             shape: BoxShape.circle,
+            border: Border.all(
+              color: isActive ? statusColor : context.greySwatch.shade300,
+            ),
           ),
-          child: _buildIcon(context),
+          child: _buildIcon(context, isActive: isActive),
         ),
         10.gap,
         Text(
-          _label.tr(),
-          style: context.bodyMedium.regular.setColor(
-            context.colorScheme.onSurface,
+          step.status.titleKey.tr(),
+          style: context.bodySmall.medium.setColor(
+            step.status.textColor(context, isActive: isActive),
           ),
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     ).expand();
   }
 
-  Widget _buildIcon(BuildContext context) {
-    if (orderStatus == OrderTabStatus.cancelled) {
+  Widget _buildIcon(BuildContext context, {required bool isActive}) {
+    if (step.status == OrderTimelineStatus.cancelled ||
+        step.status == OrderTimelineStatus.rejected) {
       return Icon(
-        Icons.close_rounded,
-        size: 18,
-        color: context.colorScheme.onPrimary,
+        step.status.icon,
+        size: 17,
+        color: step.current
+            ? context.colorScheme.onPrimary
+            : step.status.color(context),
       ).center();
     }
 
-    if (orderStatus == OrderTabStatus.completed || stage.index < activeStage.index) {
+    if (isActive) {
       return Icon(
         Icons.check_rounded,
-        size: 18,
-        color: context.colorScheme.onPrimary,
-      ).center();
-    }
-
-    if (stage == activeStage) {
-      return SizedBox(
-        width: 16,
-        height: 16,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: context.colorScheme.onPrimary,
-        ),
+        size: 17,
+        color: step.current
+            ? context.colorScheme.onPrimary
+            : step.status.color(context),
       ).center();
     }
 
@@ -75,33 +74,10 @@ class OrdersProgressStep extends StatelessWidget {
       height: 14,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: context.scaffoldBackgroundColor,
+          color: context.greySwatch.shade400,
           shape: BoxShape.circle,
         ),
       ),
     ).center();
-  }
-
-  Color _iconBackgroundColor(BuildContext context) {
-    if (orderStatus == OrderTabStatus.cancelled) {
-      return context.errorColor;
-    }
-    if (orderStatus == OrderTabStatus.completed || stage.index <= activeStage.index) {
-      return context.primaryColor;
-    }
-    return context.greySwatch.shade100;
-  }
-
-  String get _label {
-    switch (stage) {
-      case OrderProgressStage.received:
-        return LocaleKeys.orders_card_steps_received;
-      case OrderProgressStage.processing:
-        return LocaleKeys.orders_details_status_processing_title;
-      case OrderProgressStage.transit:
-        return LocaleKeys.orders_details_status_transit_title;
-      case OrderProgressStage.delivered:
-        return LocaleKeys.orders_details_status_delivered_title;
-    }
   }
 }

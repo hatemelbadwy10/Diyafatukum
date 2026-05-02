@@ -120,17 +120,12 @@ class SingleOrderScreen extends StatelessWidget {
               ),
             ),
             20.gap,
-            ...OrderProgressStage.values.map(
-              (stage) => ProviderOrderStatusCard(
-                stage: stage,
-                activeStage: order.activeStage,
-              ).paddingBottom(16),
+            ...order.timeline.map(
+              (step) => ProviderOrderStatusCard(step: step).paddingBottom(16),
             ),
           ],
         ],
-      ).withListView(
-        padding: AppSize.screenPadding.edgeInsetsWithBottomNavBar,
-      ),
+      ).withListView(padding: AppSize.screenPadding.edgeInsetsWithBottomNavBar),
     );
   }
 }

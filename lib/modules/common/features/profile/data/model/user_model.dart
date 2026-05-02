@@ -23,6 +23,7 @@ class UserModel extends Equatable {
   final bool isPhoneVerified;
   final bool notificationEnabled;
   final String addressText;
+  final int? cartStoreId;
   final AddressModel? address;
 
   bool get hasDefaultAddress => address != null;
@@ -36,6 +37,7 @@ class UserModel extends Equatable {
     required this.isPhoneVerified,
     required this.notificationEnabled,
     required this.addressText,
+    required this.cartStoreId,
     this.address,
   });
 
@@ -63,6 +65,7 @@ class UserModel extends Equatable {
           json['notification_enabled'] == 1,
       avatar: json['avatar'] ?? '',
       addressText: addressText,
+      cartStoreId: json['cart_store_id'] as int?,
       address: hasStructuredAddress
           ? AddressModel.fromJson(addressJson)
           : _buildAddressModel(
@@ -83,6 +86,7 @@ class UserModel extends Equatable {
       'phone_verified': isPhoneVerified,
       'notification_enabled': notificationEnabled,
       'address_text': addressText,
+      'cart_store_id': cartStoreId,
       'address': address?.toJson(),
     };
   }
@@ -96,6 +100,7 @@ class UserModel extends Equatable {
     bool? isPhoneVerified,
     bool? notificationEnabled,
     String? addressText,
+    Object? cartStoreId = _noValue,
     Object? address = _noValue,
   }) {
     return UserModel(
@@ -107,6 +112,9 @@ class UserModel extends Equatable {
       isPhoneVerified: isPhoneVerified ?? this.isPhoneVerified,
       notificationEnabled: notificationEnabled ?? this.notificationEnabled,
       addressText: addressText ?? this.addressText,
+      cartStoreId: cartStoreId == _noValue
+          ? this.cartStoreId
+          : cartStoreId as int?,
       address: address == _noValue ? this.address : address as AddressModel?,
     );
   }
@@ -122,6 +130,7 @@ class UserModel extends Equatable {
       notificationEnabled = false,
       avatar = '',
       addressText = '',
+      cartStoreId = null,
       address = null;
 
   @override
@@ -134,6 +143,7 @@ class UserModel extends Equatable {
     notificationEnabled,
     avatar,
     addressText,
+    cartStoreId,
     address,
   ];
 }

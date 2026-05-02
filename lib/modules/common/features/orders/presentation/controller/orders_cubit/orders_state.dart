@@ -4,15 +4,18 @@ class OrdersState extends Equatable {
   const OrdersState({
     required this.status,
     required this.orders,
+    required this.selectedStatus,
   });
 
   final CubitStatus<void> status;
   final List<OrderModel> orders;
+  final OrderTabStatus selectedStatus;
 
   factory OrdersState.initial() {
     return OrdersState(
       status: CubitStatus.initial(),
       orders: const [],
+      selectedStatus: OrderTabStatus.current,
     );
   }
 
@@ -23,13 +26,15 @@ class OrdersState extends Equatable {
   OrdersState copyWith({
     CubitStatus<void>? status,
     List<OrderModel>? orders,
+    OrderTabStatus? selectedStatus,
   }) {
     return OrdersState(
       status: status ?? this.status,
       orders: orders ?? this.orders,
+      selectedStatus: selectedStatus ?? this.selectedStatus,
     );
   }
 
   @override
-  List<Object?> get props => [status, orders];
+  List<Object?> get props => [status, orders, selectedStatus];
 }

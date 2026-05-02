@@ -76,7 +76,9 @@ class VerificationRepositoryImpl implements VerificationRepository {
     return remoteDataSource
         .verify(body: body, type: VerificationType.forgetPassword)
         .toResult((json) {
-          return json['reset_token'] as String;
+          return json['identifier']?.toString() ??
+              body['identifier']?.toString() ??
+              '';
         });
   }
 }

@@ -44,6 +44,8 @@ import '../../../modules/common/features/auth/presentation/controller/register_c
     as _i685;
 import '../../../modules/common/features/bag/data/datasource/bag_local_datasource.dart'
     as _i370;
+import '../../../modules/common/features/bag/data/datasource/bag_remote_datasource.dart'
+    as _i422;
 import '../../../modules/common/features/bag/data/repository/bag_repository.dart'
     as _i217;
 import '../../../modules/common/features/bag/presentation/controller/bag_cubit/bag_cubit.dart'
@@ -157,6 +159,7 @@ Future<_i174.GetIt> $initGetIt(
     () => registerModule.pref,
     preResolve: true,
   );
+  gh.factory<_i853.LanguageCubit>(() => _i853.LanguageCubit());
   gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
   gh.lazySingleton<_i558.FlutterSecureStorage>(
     () => registerModule.secureStorage,
@@ -187,6 +190,9 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.lazySingleton<_i235.SharedRemoteDatasource>(
     () => _i235.SharedRemoteDatasourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i422.BagRemoteDataSource>(
+    () => _i422.BagRemoteDataSourceImpl(gh<_i897.ApiClient>()),
   );
   gh.lazySingleton<_i601.AddressesRepository>(
     () => _i601.AddressesRepositoryImpl(gh<_i514.AddressesRemoteDataSource>()),
@@ -244,7 +250,7 @@ Future<_i174.GetIt> $initGetIt(
     () => _i751.ProviderOnboardingRemoteDataSourceImpl(gh<_i897.ApiClient>()),
   );
   gh.lazySingleton<_i217.BagRepository>(
-    () => _i217.BagRepositoryImpl(gh<_i370.BagLocalDataSource>()),
+    () => _i217.BagRepositoryImpl(gh<_i422.BagRemoteDataSource>()),
   );
   gh.factory<_i216.ContactUsCubit>(
     () => _i216.ContactUsCubit(gh<_i633.SettingsRepository>()),
@@ -324,9 +330,6 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i775.OrdersCubit>(
     () => _i775.OrdersCubit(gh<_i1015.OrdersRepository>()),
   );
-  gh.factory<_i853.LanguageCubit>(
-    () => _i853.LanguageCubit(gh<_i633.SettingsRepository>()),
-  );
   gh.lazySingleton<_i665.SingleServiceRepository>(
     () => _i665.SingleServiceRepositoryImpl(
       gh<_i340.SingleServiceRemoteDataSource>(),
@@ -347,11 +350,11 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i32.ProviderStoreCubit>(
     () => _i32.ProviderStoreCubit(gh<_i731.ProviderStoreRepository>()),
   );
-  gh.factory<_i340.SingleServiceCubit>(
-    () => _i340.SingleServiceCubit(gh<_i665.SingleServiceRepository>()),
-  );
   gh.factory<_i965.SingleServiceStoreCubit>(
     () => _i965.SingleServiceStoreCubit(gh<_i665.SingleServiceRepository>()),
+  );
+  gh.factory<_i340.SingleServiceCubit>(
+    () => _i340.SingleServiceCubit(gh<_i665.SingleServiceRepository>()),
   );
   gh.factory<_i412.ProviderRegisterCubit>(
     () => _i412.ProviderRegisterCubit(gh<_i581.ProviderOnboardingRepository>()),

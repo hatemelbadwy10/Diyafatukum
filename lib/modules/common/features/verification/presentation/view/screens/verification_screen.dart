@@ -3,16 +3,17 @@ import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:deals/modules/common/features/auth/data/model/auth_model.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
+import '../../../../../../../core/config/router/route_manager.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/constants/hero_tags.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
 import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
 import '../../../../../../../core/widgets/custom_pin_field.dart';
+import '../../../../auth/data/model/auth_model.dart';
 import '../../../../auth/presentation/view/widgets/auth_background_scaffold.dart';
 import '../../../../auth/presentation/view/widgets/custom_timer.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
@@ -77,13 +78,19 @@ class _VerificationScreenState extends State<VerificationScreen> {
           'otp': _otpController.text.trim(),
           'register': true,
         };
+      case VerificationType.forgetPassword:
+        return {
+          'identifier': widget.identifier.trim(),
+          'otp': _otpController.text.trim(),
+          'register': false,
+        };
       case VerificationType.changePhone:
         return {
           'identifier': widget.identifier.trim(),
           'otp': _otpController.text.trim(),
           'is_phone': true,
         };
-      default:
+      case VerificationType.changeEmail:
         return {
           'code': _otpController.text.trim(),
           'username': widget.identifier.trim(),
@@ -127,6 +134,20 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 onChangePhone: () => widget.onVerificationSuccess?.call(),
                 onChangeEmail: () => widget.onVerificationSuccess?.call(),
               );
+
+              if (widget.type == VerificationType.changePhone) {
+                final authCubit = context.read<AuthCubit>();
+                authCubit.updateUserData(
+                  authCubit.state.user.copyWith(
+                    phone: widget.identifier,
+                    isPhoneVerified: true,
+                  ),
+                );
+                Toaster.showToast(state.status.message, isError: false);
+                BaseRouter.pop();
+                BaseRouter.pop();
+                return;
+              }
             },
           );
 

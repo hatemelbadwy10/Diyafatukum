@@ -1,11 +1,13 @@
 
-import 'package:deals/core/config/extensions/all_extensions.dart';
-import 'package:deals/core/widgets/buttons/custom_buttons.dart';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/config/extensions/theme_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/resources/resources.dart';
+import '../../../../../../../core/widgets/buttons/custom_button.dart';
 
 
 

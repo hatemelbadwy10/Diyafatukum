@@ -1,4 +1,3 @@
-import 'package:deals/modules/common/features/auth/presentation/view/widgets/auth_background_scaffold.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,11 +13,11 @@ import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
 import '../../../../../../../core/widgets/custom_input_field.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../../../core/widgets/success_dialog.dart';
+import '../../../../auth/presentation/view/widgets/auth_background_scaffold.dart';
 import '../../controller/reset_password_cubit/reset_password_cubit.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key, required this.token, required this.identifier});
-  final String token;
+  const ResetPasswordScreen({super.key, required this.identifier});
   final String identifier;
 
   @override
@@ -29,7 +28,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -101,7 +101,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           identifier: widget.identifier,
                           password: _passwordController.text,
                           confirmPassword: _confirmPasswordController.text,
-                          token: widget.token,
                         );
                       }
                     },

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
-import '../../../../../../../core/config/router/route_manager.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
@@ -42,23 +41,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
           onFailed: (failure) => Toaster.showToast(failure.message),
           onSuccess: (_) => AppRoutes.verification.push(
             queries: {'identifier': _phoneController.text},
-            extra: {
-              'type': VerificationType.changePhone,
-              'onVerificationSuccess': () {
-                context.read<AuthCubit>().updateUserData(
-                  user.copyWith(
-                    phone: _phoneController.text,
-                    isPhoneVerified: true,
-                  ),
-                );
-                Toaster.showToast(
-                  LocaleKeys.account_profile_change_phone_success.tr(),
-                  isError: false,
-                );
-                BaseRouter.pop();
-                BaseRouter.pop();
-              },
-            },
+            extra: {'type': VerificationType.changePhone},
           ),
         ),
         builder: (context, state) {

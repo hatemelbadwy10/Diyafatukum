@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import '../../../../../../../core/resources/constants/hero_tags.dart';
 import '../../../../../../../core/config/extensions/all_extensions.dart';
@@ -15,6 +17,7 @@ import '../../../../../../../core/widgets/custom_phone_field.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
+import '../../../data/model/user_model.dart';
 import '../../controller/profile_cubit/profile_cubit.dart';
 import '../widgets/change_password_bottom_sheet.dart';
 import '../widgets/delete_account_bottom_sheet.dart';
@@ -28,9 +31,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> with ProfileMixin {
+  bool _isSameUserData(UserModel user) =>
+      nameController.text == user.name &&
+      phoneController.text == user.phone &&
+      emailController.text == (user.email ?? '') &&
+      addressController.text == user.addressText;
+
   @override
   void initState() {
     final auth = context.read<AuthCubit>().state.auth;
+    log("Initializing profile screen with user data: ${auth.user.toJson()}");
+    nameController.text = auth.user.name;
+    phoneController.text = auth.user.phone;
+    emailController.text = auth.user.email ?? '';
+    addressController.text = auth.user.addressText;
     init(auth.user);
     super.initState();
   }
@@ -51,13 +65,23 @@ class _ProfileScreenState extends State<ProfileScreen> with ProfileMixin {
         builder: (context, state) {
           return BlocConsumer<AuthCubit, AuthState>(
             listener: (context, authState) {
-              init(authState.auth.user);
+              final authUser = authState.auth.user;
+              if (phoneController.text != authUser.phone) {
+                phoneController.text = authUser.phone;
+              }
+              if (!isEditingNotifier.value) {
+                init(authUser);
+              }
             },
             builder: (context, authState) {
               final auth = authState.auth;
+              final user = auth.user;
               return ValueListenableBuilder(
                 valueListenable: isEditingNotifier,
                 builder: (context, isEditing, _) {
+                  if (!isEditing && !_isSameUserData(user)) {
+                    init(user);
+                  }
                   return Scaffold(
                     appBar: CustomAppBar.build(
                       titleText: LocaleKeys.account_profile_title.tr(),

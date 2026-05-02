@@ -6,9 +6,10 @@ import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/resources.dart';
-import '../../../../../../../core/widgets/custom_dialog.dart';
+import '../../../../../../../core/widgets/app_dialog.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../../../notifications/presentation/controller/notifications_cubit/notifications_cubit.dart';
+import '../../../../shared/presentation/view/widgets/login_dialog.dart';
 import '../../../data/model/static_page_enum.dart';
 import '../widgets/language_bottom_sheet.dart';
 
@@ -24,6 +25,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final authCubit = context.maybeRead<AuthCubit>();
     final isAuthorized = authCubit?.state.status.isAuthorized ?? false;
+
+    void showGuestDialog() {
+      LoginDialog(message: LocaleKeys.auth_guest_login_hint.tr()).show(context);
+    }
 
     return BlocProvider(
       create: (_) => NotificationsCubit(
@@ -57,7 +62,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _SettingsActionTile(
                     title: LocaleKeys.settings_edit_profile.tr(),
                     icon: Assets.icons.iconoirProfileCircle.path,
-                    onTap: () => AppRoutes.profile.push(),
+                    onTap: isAuthorized
+                        ? () => AppRoutes.profile.push()
+                        : showGuestDialog,
                   ),
                   _SettingsToggleTile(
                     title: LocaleKeys.notifications_title.tr(),
@@ -68,6 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               .read<NotificationsCubit>()
                               .updateSettings(value)
                         : null,
+                    onTap: isAuthorized ? null : showGuestDialog,
                   ),
                   24.gap,
 
@@ -118,8 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       isDestructive: true,
                       showArrow: false,
                       onTap: () {
-                        CustomDialog.destructive(
-                          autoCloseOnAction: true,
+                        AppDialog(
                           onConfirm: () {
                             authCubit?.logout();
                             AppRoutes.onboarding.go();
@@ -127,6 +134,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           title: LocaleKeys.account_profile_logout_title.tr(),
                           subtitle: LocaleKeys.account_profile_logout_subtitle
                               .tr(),
+                          confirmLabel: LocaleKeys.actions_confirm.tr(),
+                          cancelLabel: LocaleKeys.actions_cancel.tr(),
+                          confirmDestructive: true,
+                          icon: Icon(
+                            Icons.logout_rounded,
+                            color: context.onPrimary,
+                            size: 28,
+                          ),
                         ).show(context);
                       },
                     ),
@@ -223,12 +238,14 @@ class _SettingsToggleTile extends StatelessWidget {
     required this.icon,
     required this.value,
     required this.onChanged,
+    this.onTap,
   });
 
   final String title;
   final String icon;
   final bool value;
   final ValueChanged<bool>? onChanged;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -265,6 +282,6 @@ class _SettingsToggleTile extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ).onTap(onTap, borderRadius: 12.borderRadius);
   }
 }

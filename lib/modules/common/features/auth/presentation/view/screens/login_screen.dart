@@ -1,9 +1,9 @@
-import 'package:deals/core/config/flavor/flavor_config.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/config/flavor/flavor_config.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/constants/hero_tags.dart';
@@ -15,6 +15,7 @@ import '../../../../../../../core/widgets/custom_input_field.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../shared/data/model/navigation_bar_items.dart';
 import '../../../../verification/data/model/verification_type_enum.dart';
+import '../../../data/model/auth_model.dart';
 import '../../controller/auth_cubit/auth_cubit.dart';
 import '../../controller/login_cubit/login_cubit.dart';
 import '../../controller/login_cubit/login_mixin.dart';
@@ -53,7 +54,10 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
 
             if (response.requiresVerification) {
               AppRoutes.verification.push(
-                extra: {"type": VerificationType.register, "onVerificationSuccess": widget.onLoginSuccess},
+                extra: {
+                  "type": VerificationType.register,
+                  "onVerificationSuccess": widget.onLoginSuccess,
+                },
                 queries: {
                   'identifier': response.identifier,
                   if (response.otp?.isNotEmpty ?? false) 'code': response.otp,
@@ -67,7 +71,10 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
               }
             } else if (auth != null) {
               AppRoutes.verification.push(
-                extra: {"type": VerificationType.register, "onVerificationSuccess": widget.onLoginSuccess},
+                extra: {
+                  "type": VerificationType.register,
+                  "onVerificationSuccess": widget.onLoginSuccess,
+                },
                 queries: {'identifier': auth.user.email ?? auth.user.phone},
               );
             }
@@ -111,10 +118,15 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomCheckBox(
-                        label: Text(LocaleKeys.auth_login_remember.tr(), style: context.bodyLarge.regular.s12),
+                        label: Text(
+                          LocaleKeys.auth_login_remember.tr(),
+                          style: context.bodyLarge.regular.s12,
+                        ),
                         onChanged: (_) {},
                       ),
-                      ForgetPasswordButton(onTap: () => AppRoutes.forgetPassword.push()),
+                      ForgetPasswordButton(
+                        onTap: () => AppRoutes.forgetPassword.push(),
+                      ),
                     ],
                   ),
                   28.gap,
@@ -129,13 +141,21 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                     },
                   ).setHero(HeroTags.mainButton),
                   20.gap,
-                  Text(LocaleKeys.auth_login_or.tr(), style: context.bodyLarge.regular.s12).center(),
+                  Text(
+                    LocaleKeys.auth_login_or.tr(),
+                    style: context.bodyLarge.regular.s12,
+                  ).center(),
                   20.gap,
                   // ...LoginType.values.map((type) {
                   //   return SocialLoginButton(type: type).paddingBottom(16);
                   // }),
                   16.gap,
-                  SignUpButton(isLogin: true, onTap: () => FlavorConfig.isProvider?AppRoutes.providerHome.push():AppRoutes.register.push()),
+                  SignUpButton(
+                    isLogin: true,
+                    onTap: () => FlavorConfig.isProvider
+                        ? AppRoutes.providerHome.push()
+                        : AppRoutes.register.push(),
+                  ),
                   8.gap,
                   CustomTextButton(
                     alignIconEnd: true,
@@ -143,6 +163,9 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                     label: LocaleKeys.auth_login_guest.tr(),
                     textStyle: context.titleLarge.s13.regular.underline,
                     onPressed: () {
+                      context.read<AuthCubit>().updateAuthData(
+                        const AuthModel.guest(),
+                      );
                       bottomNavNotifier.value = NavigationBarItems.home;
                       AppRoutes.home.go();
                     },
