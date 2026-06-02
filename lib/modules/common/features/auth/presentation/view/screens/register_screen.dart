@@ -52,6 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return AuthBackgroundScaffold(
       title: LocaleKeys.auth_register_title.tr(),
+      onBackPressed: () => AppRoutes.onboarding.go(),
       bottom: CustomButton.gradient(
         borderRadius: AppSize.buttonBorderRadius,
         label: LocaleKeys.actions_next.tr(),

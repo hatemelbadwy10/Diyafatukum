@@ -97,6 +97,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       valueListenable: _hasFocus,
       builder: (context, hasFocus, child) {
         return FormField(
+          initialValue: widget.controller?.text,
           validator: _getValidator(),
           autovalidateMode: widget.autovalidateMode,
           builder: (FormFieldState<String> formState) {
@@ -201,7 +202,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   String? Function(String?)? _getValidator() {
     if (widget.validator != null) {
-      return widget.validator;
+      return (_) => widget.validator!(widget.controller?.text);
     } else {
       switch (widget.inputType) {
         case InputType.name:

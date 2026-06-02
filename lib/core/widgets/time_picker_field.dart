@@ -79,7 +79,7 @@ class _TimePickerFieldState extends State<TimePickerField> {
                   readOnly: true,
                   suffixIcon: Assets.icons.clock.path,
                   onTap: () async {
-                    if (!context.isAndroid) {
+                    if (context.isAndroid) {
                       final time = await showTimePicker(context: context, initialTime: _time.value ?? TimeOfDay.now());
                       if (time != null) {
                         _time.value = time;

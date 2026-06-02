@@ -6,6 +6,7 @@ import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/widgets/custom_image.dart';
 import '../../../data/model/order_model.dart';
+import '../../controller/orders_cubit/orders_cubit.dart';
 import 'order_timeline_status_style.dart';
 import 'orders_progress_step.dart';
 import 'orders_status_badge.dart';
@@ -74,13 +75,23 @@ class OrderItemCard extends StatelessWidget {
           24.gap,
           Row(
             children: order.timeline
-                .map((step) => OrdersProgressStep(step: step))
+                .map(
+                  (step) => OrdersProgressStep(
+                    step: step,
+                    orderActiveStatus: order.activeStatus,
+                  ),
+                )
                 .toList(),
           ),
         ],
       ),
     ).onTap(
-      () => AppRoutes.orderDetails.push(extra: order),
+      () => AppRoutes.orderDetails.push(
+        extra: {
+          'order': order,
+          'ordersCubit': context.maybeRead<OrdersCubit>(),
+        },
+      ),
       borderRadius: 20.borderRadius,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,

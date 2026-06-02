@@ -252,6 +252,10 @@
         "accepted": "Order accepted",
         "rejected": "Order rejected"
       },
+      "empty": {
+        "title": "Don't have orders yet",
+        "subtitle": "You don't have any orders yet."
+      },
       "orders": {
         "next_step_hint": "Tap the next status to continue"
       }
@@ -269,6 +273,7 @@
         "about_hint": "Write a short description about your store",
         "category_name": "Category name",
         "product_name": "Product name",
+        "quantity": "Quantity",
         "price": "Price (SAR)",
         "product_category": "Category",
         "product_image": "Product image"
@@ -294,7 +299,12 @@
       "messages": {
         "saved": "Saved successfully",
         "category_added": "Category added successfully",
-        "product_added": "Product added successfully"
+        "product_added": "Product added successfully",
+        "product_deleted": "Product deleted successfully"
+      },
+      "dialogs": {
+        "delete_product_title": "Delete product",
+        "delete_product_subtitle": "Are you sure you want to delete this product?"
       }
     },
     "register": {
@@ -305,6 +315,8 @@
       "store_subtitle": "Help us showcase your services better",
       "store_name_ar": "Store Name in Arabic",
       "store_name_en": "Store Name in English",
+      "store_description_ar": "Store Description in Arabic",
+      "store_description_en": "Store Description in English",
       "store_category_title": "What is your store specialty?",
       "store_category_hint": "Choose specialty",
       "submit": "Create Account",
@@ -501,7 +513,7 @@
       "confirm_new": "Confirm New Password",
       "old": "Old Password",
       "forget": "Forgot Password?",
-      "forget_subtitle": "Please Enter Your Phone Number Below",
+      "forget_subtitle": "Please enter your email below.",
       "email_phone": "Email or Phone Number"
     },
     "otp": {
@@ -699,7 +711,8 @@
         },
         "cancelled": {
           "title": "Cancelled",
-          "subtitle": "This order has been cancelled"
+          "subtitle": "This order has been cancelled",
+          "reason_label": "Cancellation reason"
         },
         "rejected": {
           "title": "Rejected",
@@ -713,10 +726,45 @@
         }
       },
       "actions": {
+        "accept": {
+          "title": "Accept Order",
+          "success": "Order accepted successfully"
+        },
+        "reject": {
+          "title": "Reject Order",
+          "message": "Enter the rejection reason before declining this order.",
+          "confirm": "Confirm Rejection",
+          "reason_title": "Rejection Reason",
+          "reason_hint": "Enter the rejection reason",
+          "success": "Order rejected successfully"
+        },
+        "advance": {
+          "confirm": "Move to {}",
+          "success": "Order status updated successfully"
+        },
         "cancel": {
           "title": "Cancel Order",
-          "message": "Are you sure you want to cancel this order?",
-          "success": "Your order has been cancelled successfully"
+          "message": "Enter the cancellation reason and submit the request under the cancellation and refund policy.",
+          "success": "Your order has been cancelled successfully",
+          "confirm": "Confirm Cancellation",
+          "reason_title": "Cancellation Reason",
+          "reason_hint": "Enter the cancellation reason",
+          "reason_default": "Change of occasion date",
+          "policy": {
+            "title": "Cancellation and Refund Policy",
+            "estimate": {
+              "full": "Current expected refund: full amount if the free cancellation conditions apply.",
+              "half": "Current expected refund: 50% when cancelling 3 to 6 days before the occasion.",
+              "quarter": "Current expected refund: 25% when cancelling 48 to less than 72 hours before the occasion.",
+              "none": "Current expected refund: no refund when cancelling less than 48 hours before the occasion.",
+              "review": "The cancellation policy will be applied after reviewing the occasion time and execution status."
+            },
+            "full": "Full refund within 24 hours of booking confirmation if the occasion is more than 72 hours away, or when cancelling 7 days or more before the occasion.",
+            "half": "50% refund when cancelling 3 to 6 days before the occasion.",
+            "quarter": "25% refund when cancelling 48 to less than 72 hours before the occasion.",
+            "none": "No refund when cancelling less than 48 hours before the occasion.",
+            "execution": "Starting preparation, confirming attendance and beginning execution, or a fully customized service may reduce or remove the refund based on platform review."
+          }
         }
       },
       "delivery": "Delivery Method",
@@ -813,6 +861,7 @@
       "store": {
         "choose": "Choose",
         "add_to_cart": "Add to cart",
+        "update_cart": "Update cart",
         "booking_title": "Complete booking details",
         "booking_notes_title": "Write your request and we will contact you",
         "booking_notes_hint": "Write your request here ...",

@@ -3,10 +3,10 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../../../core/data/client/api_client.dart';
 import '../../../../../../core/resources/constants/remote_urls.dart';
-import '../../../../../../core/resources/type_defs.dart';
 
 abstract class ProviderOnboardingRemoteDataSource {
-  Future<Response> register(BodyMap body);
+  Future<Response> register(FormData body);
+  Future<Response> getSpecializations();
 }
 
 @LazySingleton(as: ProviderOnboardingRemoteDataSource)
@@ -17,7 +17,16 @@ class ProviderOnboardingRemoteDataSourceImpl
   final ApiClient client;
 
   @override
-  Future<Response> register(BodyMap body) {
-    return client.post(RemoteUrls.providerRegister, data: body);
+  Future<Response> register(FormData body) {
+    return client.post(
+      RemoteUrls.providerRegister,
+      data: body,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+  }
+
+  @override
+  Future<Response> getSpecializations() {
+    return client.get(RemoteUrls.specializations);
   }
 }

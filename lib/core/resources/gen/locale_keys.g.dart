@@ -260,6 +260,9 @@ abstract class LocaleKeys {
   static const provider_home_messages_rejected =
       'provider.home.messages.rejected';
   static const provider_home_messages = 'provider.home.messages';
+  static const provider_home_empty_title = 'provider.home.empty.title';
+  static const provider_home_empty_subtitle = 'provider.home.empty.subtitle';
+  static const provider_home_empty = 'provider.home.empty';
   static const provider_home_orders_next_step_hint =
       'provider.home.orders.next_step_hint';
   static const provider_home_orders = 'provider.home.orders';
@@ -280,6 +283,8 @@ abstract class LocaleKeys {
       'provider.store.fields.category_name';
   static const provider_store_fields_product_name =
       'provider.store.fields.product_name';
+  static const provider_store_fields_quantity =
+      'provider.store.fields.quantity';
   static const provider_store_fields_price = 'provider.store.fields.price';
   static const provider_store_fields_product_category =
       'provider.store.fields.product_category';
@@ -311,7 +316,14 @@ abstract class LocaleKeys {
       'provider.store.messages.category_added';
   static const provider_store_messages_product_added =
       'provider.store.messages.product_added';
+  static const provider_store_messages_product_deleted =
+      'provider.store.messages.product_deleted';
   static const provider_store_messages = 'provider.store.messages';
+  static const provider_store_dialogs_delete_product_title =
+      'provider.store.dialogs.delete_product_title';
+  static const provider_store_dialogs_delete_product_subtitle =
+      'provider.store.dialogs.delete_product_subtitle';
+  static const provider_store_dialogs = 'provider.store.dialogs';
   static const provider_store = 'provider.store';
   static const provider_register_title = 'provider.register.title';
   static const provider_register_subtitle = 'provider.register.subtitle';
@@ -324,6 +336,10 @@ abstract class LocaleKeys {
       'provider.register.store_name_ar';
   static const provider_register_store_name_en =
       'provider.register.store_name_en';
+  static const provider_register_store_description_ar =
+      'provider.register.store_description_ar';
+  static const provider_register_store_description_en =
+      'provider.register.store_description_en';
   static const provider_register_store_category_title =
       'provider.register.store_category_title';
   static const provider_register_store_category_hint =
@@ -634,6 +650,7 @@ abstract class LocaleKeys {
   static const home_user_shop_now = 'home.user.shop_now';
   static const home_user_store_choose = 'home.user.store.choose';
   static const home_user_store_add_to_cart = 'home.user.store.add_to_cart';
+  static const home_user_store_update_cart = 'home.user.store.update_cart';
   static const home_user_store_booking_title = 'home.user.store.booking_title';
   static const home_user_store_booking_notes_title =
       'home.user.store.booking_notes_title';
@@ -679,6 +696,10 @@ abstract class LocaleKeys {
   static const bag_guest_subtitle = 'bag.guest.subtitle';
   static const bag_guest_benefits = 'bag.guest.benefits';
   static const bag_guest = 'bag.guest';
+  static const bag_actions_remove_item_title = 'bag.actions.remove.item.title';
+  static const bag_actions_remove_item_message =
+      'bag.actions.remove.item.message';
+  static const bag_actions_remove_item = 'bag.actions.remove.item';
   static const bag_actions_remove_printing_title =
       'bag.actions.remove.printing.title';
   static const bag_actions_remove_printing_message =
@@ -692,10 +713,6 @@ abstract class LocaleKeys {
   static const bag_actions_remove_printing_undo =
       'bag.actions.remove.printing.undo';
   static const bag_actions_remove_printing = 'bag.actions.remove.printing';
-  static const bag_actions_remove_item_title = 'bag.actions.remove.item.title';
-  static const bag_actions_remove_item_message =
-      'bag.actions.remove.item.message';
-  static const bag_actions_remove_item = 'bag.actions.remove.item';
   static const bag_actions_remove = 'bag.actions.remove';
   static const bag_actions_checkout = 'bag.actions.checkout';
   static const bag_actions_continue_shopping = 'bag.actions.continue_shopping';
@@ -862,6 +879,8 @@ abstract class LocaleKeys {
       'orders.details.status.cancelled.title';
   static const orders_details_status_cancelled_subtitle =
       'orders.details.status.cancelled.subtitle';
+  static const orders_details_status_cancelled_reason_label =
+      'orders.details.status.cancelled.reason_label';
   static const orders_details_status_cancelled =
       'orders.details.status.cancelled';
   static const orders_details_status_rejected_title =
@@ -886,7 +905,65 @@ abstract class LocaleKeys {
       'orders.details.actions.cancel.message';
   static const orders_details_actions_cancel_success =
       'orders.details.actions.cancel.success';
+  static const orders_details_actions_cancel_confirm =
+      'orders.details.actions.cancel.confirm';
+  static const orders_details_actions_cancel_reason_title =
+      'orders.details.actions.cancel.reason_title';
+  static const orders_details_actions_cancel_reason_hint =
+      'orders.details.actions.cancel.reason_hint';
+  static const orders_details_actions_cancel_reason_default =
+      'orders.details.actions.cancel.reason_default';
+  static const orders_details_actions_cancel_policy_title =
+      'orders.details.actions.cancel.policy.title';
+  static const orders_details_actions_cancel_policy_estimate_full =
+      'orders.details.actions.cancel.policy.estimate.full';
+  static const orders_details_actions_cancel_policy_estimate_half =
+      'orders.details.actions.cancel.policy.estimate.half';
+  static const orders_details_actions_cancel_policy_estimate_quarter =
+      'orders.details.actions.cancel.policy.estimate.quarter';
+  static const orders_details_actions_cancel_policy_estimate_none =
+      'orders.details.actions.cancel.policy.estimate.none';
+  static const orders_details_actions_cancel_policy_estimate_review =
+      'orders.details.actions.cancel.policy.estimate.review';
+  static const orders_details_actions_cancel_policy_estimate =
+      'orders.details.actions.cancel.policy.estimate';
+  static const orders_details_actions_cancel_policy_full =
+      'orders.details.actions.cancel.policy.full';
+  static const orders_details_actions_cancel_policy_half =
+      'orders.details.actions.cancel.policy.half';
+  static const orders_details_actions_cancel_policy_quarter =
+      'orders.details.actions.cancel.policy.quarter';
+  static const orders_details_actions_cancel_policy_none =
+      'orders.details.actions.cancel.policy.none';
+  static const orders_details_actions_cancel_policy_execution =
+      'orders.details.actions.cancel.policy.execution';
+  static const orders_details_actions_cancel_policy =
+      'orders.details.actions.cancel.policy';
   static const orders_details_actions_cancel = 'orders.details.actions.cancel';
+  static const orders_details_actions_accept_title =
+      'orders.details.actions.accept.title';
+  static const orders_details_actions_accept_success =
+      'orders.details.actions.accept.success';
+  static const orders_details_actions_accept = 'orders.details.actions.accept';
+  static const orders_details_actions_reject_title =
+      'orders.details.actions.reject.title';
+  static const orders_details_actions_reject_message =
+      'orders.details.actions.reject.message';
+  static const orders_details_actions_reject_confirm =
+      'orders.details.actions.reject.confirm';
+  static const orders_details_actions_reject_reason_title =
+      'orders.details.actions.reject.reason_title';
+  static const orders_details_actions_reject_reason_hint =
+      'orders.details.actions.reject.reason_hint';
+  static const orders_details_actions_reject_success =
+      'orders.details.actions.reject.success';
+  static const orders_details_actions_reject = 'orders.details.actions.reject';
+  static const orders_details_actions_advance_confirm =
+      'orders.details.actions.advance.confirm';
+  static const orders_details_actions_advance_success =
+      'orders.details.actions.advance.success';
+  static const orders_details_actions_advance =
+      'orders.details.actions.advance';
   static const orders_details_actions = 'orders.details.actions';
   static const orders_details_delivery = 'orders.details.delivery';
   static const orders_details_address = 'orders.details.address';

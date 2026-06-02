@@ -1,21 +1,25 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/config/router/route_manager.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/resources.dart';
+import '../../../../../../../core/utils/geocoding_utils.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
 import '../../../../../../../core/widgets/buttons/custom_button.dart';
 import '../../../../../../../core/widgets/close_icon_button.dart';
 import '../../../../../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../../../core/widgets/date_picker_field.dart';
+import '../../../../addresses/presentation/view/screens/map_screen.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../controller/bag_cubit/bag_cubit.dart';
 import '../../../data/repository/bag_repository.dart';
-import '../../../../addresses/presentation/view/widgets/addresses_bottom_sheet.dart';
 
 class BagCheckoutBottomSheet extends StatefulWidget {
   const BagCheckoutBottomSheet({
@@ -37,12 +41,15 @@ class _BagCheckoutBottomSheetState extends State<BagCheckoutBottomSheet> {
   final TextEditingController _notesController = TextEditingController();
 
   DateTime? _selectedDate;
+  LatLng? _selectedLatLng;
+  Placemark? _selectedPlacemark;
 
   @override
   void initState() {
     super.initState();
-    _addressController.text =
-        widget.authCubit?.state.address?.fullAddress ?? '';
+    final address = widget.authCubit?.state.address;
+    _selectedLatLng = address?.latLng;
+    _addressController.text = address?.fullAddress ?? '';
   }
 
   @override
@@ -98,16 +105,9 @@ class _BagCheckoutBottomSheetState extends State<BagCheckoutBottomSheet> {
               controller: _addressController,
               title: LocaleKeys.bag_checkout_address_title.tr(),
               hint: LocaleKeys.bag_checkout_address_select.tr(),
-              readOnly: widget.authCubit != null,
+              readOnly: true,
               prefixIcon: Assets.icons.ionLocationSharp.path,
-              onTap: widget.authCubit == null
-                  ? null
-                  : () => context.showBottomSheet(
-                      BlocProvider.value(
-                        value: widget.authCubit!,
-                        child: const AddressesBottomSheet(),
-                      ),
-                    ),
+              onTap: _openLocationPicker,
             ),
             20.gap,
             CustomTextField(
@@ -134,9 +134,28 @@ class _BagCheckoutBottomSheetState extends State<BagCheckoutBottomSheet> {
     return BlocListener<AuthCubit, AuthState>(
       bloc: widget.authCubit,
       listener: (_, state) {
+        if (_selectedPlacemark != null) return;
+        _selectedLatLng = state.address?.latLng;
         _addressController.text = state.address?.fullAddress ?? '';
       },
       child: content,
+    );
+  }
+
+  Future<void> _openLocationPicker() async {
+    await AppRoutes.map.push(
+      extra: MapScreenArguments(
+        initialPosition: _selectedLatLng,
+        onLocationSelected: (LatLng position, Placemark placemark) {
+          _selectedLatLng = position;
+          _selectedPlacemark = placemark;
+          _addressController.text = placemark.toAddressString();
+          BaseRouter.pop();
+          if (mounted) {
+            setState(() {});
+          }
+        },
+      ),
     );
   }
 
@@ -145,11 +164,16 @@ class _BagCheckoutBottomSheetState extends State<BagCheckoutBottomSheet> {
 
     final selectedDate = _selectedDate;
     if (selectedDate == null) return;
+    if (_selectedLatLng == null ||
+        _addressController.text.trim().isEmpty) {
+      Toaster.showToast(LocaleKeys.validator_location.tr());
+      return;
+    }
 
     final result = await sl<BagRepository>().checkout({
       'delivery_address': _addressController.text.trim(),
-      'delivery_latitude': widget.authCubit?.state.address?.lat ?? 0,
-      'delivery_longitude': widget.authCubit?.state.address?.lng ?? 0,
+      'delivery_latitude': _selectedLatLng!.latitude,
+      'delivery_longitude': _selectedLatLng!.longitude,
       'occasion_date': selectedDate.format(
         format: 'yyyy-MM-dd HH:mm:ss',
         enableLocalization: false,

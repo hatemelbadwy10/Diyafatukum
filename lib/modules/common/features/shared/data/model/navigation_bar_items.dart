@@ -9,7 +9,8 @@ import '../../../../../../core/config/flavor/flavor_config.dart';
 import '../../../../../../core/config/router/app_route.dart';
 import '../../../../../../core/config/theme/light_theme.dart';
 
-final ValueNotifier<NavigationBarItems> bottomNavNotifier = ValueNotifier<NavigationBarItems>(NavigationBarItems.home);
+final ValueNotifier<NavigationBarItems> bottomNavNotifier =
+    ValueNotifier<NavigationBarItems>(NavigationBarItems.home);
 
 enum NavigationBarItems {
   home,

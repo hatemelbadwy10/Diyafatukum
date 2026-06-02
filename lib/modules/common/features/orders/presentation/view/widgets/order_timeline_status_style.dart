@@ -65,15 +65,15 @@ extension OrderTimelineStatusStyle on OrderTimelineStatus {
   Color color(BuildContext context) {
     switch (this) {
       case OrderTimelineStatus.pending:
-        return context.warningColor;
+        return const Color(0xFFA5A5A5);
       case OrderTimelineStatus.accepted:
-        return context.primaryColor;
+        return const Color(0xFFCF9D29);
       case OrderTimelineStatus.preparing:
-        return context.secondarySwatch.shade500;
+        return const Color(0xFFFFAF44);
       case OrderTimelineStatus.onTheWay:
-        return context.accentSwatch.shade500;
+        return const Color(0xFF694F15);
       case OrderTimelineStatus.delivered:
-        return context.successColor;
+        return const Color(0xFF00AF6C);
       case OrderTimelineStatus.cancelled:
       case OrderTimelineStatus.rejected:
         return context.errorColor;

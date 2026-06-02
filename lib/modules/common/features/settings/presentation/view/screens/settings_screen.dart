@@ -12,6 +12,7 @@ import '../../../../notifications/presentation/controller/notifications_cubit/no
 import '../../../../shared/presentation/view/widgets/login_dialog.dart';
 import '../../../data/model/static_page_enum.dart';
 import '../widgets/language_bottom_sheet.dart';
+import '../widgets/social_contacts_section.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -54,7 +55,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   64.gap,
                   Assets.images.logo.image(height: 100).center(),
                   24.gap,
-                  // if (isAuthorized)
                   _SectionTitle(
                     title: LocaleKeys.settings_sections_account.tr(),
                   ),
@@ -66,6 +66,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ? () => AppRoutes.profile.push()
                         : showGuestDialog,
                   ),
+                  // _SettingsActionTile(
+                  //   title: LocaleKeys.addresses_title.tr(),
+                  //   icon: Assets.icons.ionLocationSharp.path,
+                  //   onTap: isAuthorized
+                  //       ? () => AppRoutes.addresses.push()
+                  //       : showGuestDialog,
+                  // ),
+                  24.gap,
                   _SettingsToggleTile(
                     title: LocaleKeys.notifications_title.tr(),
                     icon: Assets.icons.cuidaNotificationBellOutline.path,
@@ -145,6 +153,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ).show(context);
                       },
                     ),
+                  24.gap,
+                  SocialContactsSection(),
                 ],
               ).withListView(
                 padding: AppSize.screenPadding.edgeInsetsWithBottomNavBar,
@@ -219,12 +229,10 @@ class _SettingsActionTile extends StatelessWidget {
             ),
           ).expand(),
           12.gap,
-          Transform.flip(
-            flipX: true,
-            child: Assets.icons.icon.svg(
-              height: 22,
-              colorFilter: context.greySwatch.shade400.colorFilter,
-            ),
+          Assets.icons.icon.svg(
+            height: 22,
+            matchTextDirection: true,
+            colorFilter: context.greySwatch.shade400.colorFilter,
           ),
         ],
       ),

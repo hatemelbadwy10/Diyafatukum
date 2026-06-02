@@ -11,7 +11,7 @@ enum FlavorType {
       case FlavorType.user:
         return "users";
       case FlavorType.provider:
-        return "providers";
+        return "provider";
     }
   }
 

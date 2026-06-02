@@ -87,6 +87,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                   ),
                 ],
               ).expand(),
+
             ],
           );
         },
@@ -130,6 +131,6 @@ class _OrdersTabView extends StatelessWidget {
       );
     }
 
-    return OrdersListView(orders: state.byStatus(status));
+    return OrdersListView(orders: state.byStatus(status)).paddingBottom(AppSize.bottomNavBarHeight);
   }
 }

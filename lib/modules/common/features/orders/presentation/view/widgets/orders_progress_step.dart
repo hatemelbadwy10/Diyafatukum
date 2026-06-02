@@ -6,12 +6,52 @@ import '../../../data/model/order_model.dart';
 import 'order_timeline_status_style.dart';
 
 class OrdersProgressStep extends StatelessWidget {
-  const OrdersProgressStep({super.key, required this.step});
+  const OrdersProgressStep({
+    super.key,
+    required this.step,
+    this.orderActiveStatus,
+  });
 
   final OrderTimelineStep step;
+  final OrderTimelineStatus? orderActiveStatus;
+
+  bool get _isOrderCancelled =>
+      orderActiveStatus == OrderTimelineStatus.cancelled ||
+      orderActiveStatus == OrderTimelineStatus.rejected;
 
   @override
   Widget build(BuildContext context) {
+    if (_isOrderCancelled) {
+      final cancelColor = orderActiveStatus!.color(context);
+      return Column(
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: cancelColor,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.close_rounded,
+              size: 18,
+              color: context.colorScheme.onPrimary,
+            ).center(),
+          ),
+          10.gap,
+          Text(
+            step.status.titleKey.tr(),
+            style: context.bodySmall.medium.setColor(
+              context.greySwatch.shade600,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ).expand();
+    }
+
     final isActive = step.completed || step.current;
     final statusColor = step.status.color(context);
 

@@ -16,19 +16,25 @@ class BagCubit extends Cubit<BagState> {
 
   final BagRepository _repository;
   final Map<String, Timer> _updateTimers = {};
-  final Map<String, BagItemModel> _previousItemStates = {};
+  final Map<String, BagModel> _previousBagStates = {};
   static const _updateDebounceDuration = Duration(milliseconds: 450);
 
+  void _emitIfOpen(BagState newState) {
+    if (isClosed) return;
+    emit(newState);
+  }
+
   Future<void> loadBag() async {
-    emit(state.copyWith(status: CubitStatus.loading()));
+    _emitIfOpen(state.copyWith(status: CubitStatus.loading()));
     final response = await _repository.getBag();
+    if (isClosed) return;
     response.fold(
-      (failure) => emit(
+      (failure) => _emitIfOpen(
         state.copyWith(
           status: CubitStatus.failed(message: failure.message, error: failure),
         ),
       ),
-      (data) => emit(
+      (data) => _emitIfOpen(
         state.copyWith(
           status: CubitStatus.success(),
           bag: data.data ?? const BagModel(items: []),
@@ -40,8 +46,9 @@ class BagCubit extends Cubit<BagState> {
   Future<void> removeItem(String itemId) async {
     _cancelPendingUpdate(itemId);
     final response = await _repository.removeItem(itemId);
+    if (isClosed) return;
     response.fold(
-      (failure) => emit(
+      (failure) => _emitIfOpen(
         state.copyWith(
           status: CubitStatus.failed(message: failure.message, error: failure),
         ),
@@ -67,17 +74,25 @@ class BagCubit extends Cubit<BagState> {
   void _updateItemQuantity(String itemId, {required int change}) {
     final item = _findItemById(itemId);
     if (item == null) return;
-    
-    // Store previous state for rollback
-    _previousItemStates[itemId] = item;
-    
+
+    _previousBagStates[itemId] = state.bag;
+
     final updatedItems = state.bag.items.map((item) {
       if (item.id != itemId) return item;
       return item.copyWith(quantity: item.quantity + change);
     }).toList();
-    emit(
+    final updatedSubtotal = updatedItems.fold<double>(
+      0,
+      (total, item) => total + item.totalPrice,
+    );
+    final updatedBag = state.bag.copyWith(
+      items: updatedItems,
+      subtotalValue: updatedSubtotal,
+      totalValue: updatedSubtotal - state.bag.discount,
+    );
+    _emitIfOpen(
       state.copyWith(
-        bag: state.bag.copyWith(items: updatedItems),
+        bag: updatedBag,
         status: CubitStatus.success(),
       ),
     );
@@ -88,6 +103,7 @@ class BagCubit extends Cubit<BagState> {
     _cancelPendingUpdate(itemId);
     _updateTimers[itemId] = Timer(_updateDebounceDuration, () async {
       _updateTimers.remove(itemId);
+      if (isClosed) return;
       final item = _findItemById(itemId);
       if (item == null) return;
 
@@ -95,37 +111,37 @@ class BagCubit extends Cubit<BagState> {
         item.id,
         item.quantity,
       );
+      if (isClosed) return;
       response.fold(
         (failure) {
-          // On failure, revert to previous state and show error
-          final previousItem = _previousItemStates[itemId];
-          _previousItemStates.remove(itemId);
-          
-          if (previousItem != null) {
-            final revertedItems = state.bag.items.map((currentItem) {
-              if (currentItem.id != itemId) return currentItem;
-              return previousItem;
-            }).toList();
-            
-            emit(
+          final previousBag = _previousBagStates.remove(itemId);
+
+          if (previousBag != null) {
+            _emitIfOpen(
               state.copyWith(
-                bag: state.bag.copyWith(items: revertedItems),
-                status: CubitStatus.failed(message: failure.message, error: failure),
+                bag: previousBag,
+                status: CubitStatus.failed(
+                  message: failure.message,
+                  error: failure,
+                ),
               ),
             );
           } else {
-            emit(
+            _emitIfOpen(
               state.copyWith(
-                status: CubitStatus.failed(message: failure.message, error: failure),
+                status: CubitStatus.failed(
+                  message: failure.message,
+                  error: failure,
+                ),
               ),
             );
           }
         },
-        (_) {
-          // On success, keep the optimistic update and emit success
-          _previousItemStates.remove(itemId);
-          emit(
+        (data) {
+          _previousBagStates.remove(itemId);
+          _emitIfOpen(
             state.copyWith(
+              bag: data.data ?? state.bag,
               status: CubitStatus.success(),
             ),
           );
@@ -150,6 +166,7 @@ class BagCubit extends Cubit<BagState> {
       timer.cancel();
     }
     _updateTimers.clear();
+    _previousBagStates.clear();
     return super.close();
   }
 }

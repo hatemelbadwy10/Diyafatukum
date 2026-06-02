@@ -73,7 +73,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
                   readOnly: true,
                   prefixIcon: Assets.icons.calendar.path,
                   onTap: () async {
-                    if (!context.isAndroid) {
+                    if (context.isAndroid) {
                       _date.value =
                           await showDatePicker(
                             context: context,

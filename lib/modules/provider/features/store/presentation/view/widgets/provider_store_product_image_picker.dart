@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../../core/resources/resources.dart';
+import '../../../../../../../../core/widgets/custom_image.dart';
 import '../../../../../../../../core/widgets/image_sources_bottom_sheet.dart';
 
 class ProviderStoreProductImagePicker extends StatefulWidget {
@@ -18,10 +19,12 @@ class ProviderStoreProductImagePicker extends StatefulWidget {
   final void Function(String imagePath) onChanged;
 
   @override
-  State<ProviderStoreProductImagePicker> createState() => _ProviderStoreProductImagePickerState();
+  State<ProviderStoreProductImagePicker> createState() =>
+      _ProviderStoreProductImagePickerState();
 }
 
-class _ProviderStoreProductImagePickerState extends State<ProviderStoreProductImagePicker> {
+class _ProviderStoreProductImagePickerState
+    extends State<ProviderStoreProductImagePicker> {
   File? _imageFile;
 
   @override
@@ -33,32 +36,49 @@ class _ProviderStoreProductImagePickerState extends State<ProviderStoreProductIm
           SizedBox(
             width: 94,
             height: 74,
-            child: (_imageFile != null
-                    ? Image.file(_imageFile!, fit: BoxFit.cover)
-                    : Image.asset(widget.initialImagePath!, fit: BoxFit.cover))
-                .clipRRect(8),
+            child:
+                (_imageFile != null
+                        ? Image.file(_imageFile!, fit: BoxFit.cover)
+                        : widget.initialImagePath!.startsWith('http')
+                        ? CustomImage(
+                            height: 74,
+                            width: 94,
+                            imageUrl: widget.initialImagePath!,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            widget.initialImagePath!,
+                            fit: BoxFit.cover,
+                          ))
+                    .clipRRect(8),
           ),
         if (preview) 12.gap,
         Expanded(
-          child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Assets.icons.uploadCloud.svg(
-                    width: 18,
-                    height: 18,
-                    colorFilter: context.greySwatch.shade500.colorFilter,
-                  ),
-                  8.gap,
-                  Text(
-                    LocaleKeys.provider_store_actions_upload_image.tr(),
-                    style: context.bodyMedium.regular.s14.setColor(context.greySwatch.shade600),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              )
-              .paddingVertical(16)
-              .withDottedBorder(color: context.greySwatch.shade300, radius: 8)
-              .onTap(_pickImage, borderRadius: 8.borderRadius),
+          child:
+              Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Assets.icons.uploadCloud.svg(
+                        width: 18,
+                        height: 18,
+                        colorFilter: context.greySwatch.shade500.colorFilter,
+                      ),
+                      8.gap,
+                      Text(
+                        LocaleKeys.provider_store_actions_upload_image.tr(),
+                        style: context.bodyMedium.regular.s14.setColor(
+                          context.greySwatch.shade600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  )
+                  .paddingVertical(16)
+                  .withDottedBorder(
+                    color: context.greySwatch.shade300,
+                    radius: 8,
+                  )
+                  .onTap(_pickImage, borderRadius: 8.borderRadius),
         ),
       ],
     );

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthCubit(sl(),sl()),
+      create: (context) => sl<AuthCubit>(),
       child: MaterialApp.router(
         locale: context.locale,
         title: FlavorConfig.displayName,

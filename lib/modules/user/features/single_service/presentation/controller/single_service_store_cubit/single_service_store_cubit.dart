@@ -37,6 +37,8 @@ class SingleServiceStoreCubit extends Cubit<SingleServiceStoreState> {
     _loadStore();
   }
 
+  void reloadStore() => _loadStore();
+
   Future<void> _loadStore() async {
     emit(state.copyWith(status: CubitStatus.loading(data: state.status.data)));
 
@@ -65,6 +67,7 @@ class SingleServiceStoreCubit extends Cubit<SingleServiceStoreState> {
           );
           return;
         }
+        final initialQuantities = _buildInitialQuantities(storeData.items);
         emit(
           state.copyWith(
             status: CubitStatus.success(data: _store.name),
@@ -73,6 +76,12 @@ class SingleServiceStoreCubit extends Cubit<SingleServiceStoreState> {
             selectedCategoryId: _allCategoryId,
             items: storeData.items,
             filteredItems: storeData.items,
+            initialQuantities: initialQuantities,
+            quantities: initialQuantities,
+            totalPrice: _calculateTotalPrice(
+              initialQuantities,
+              items: storeData.items,
+            ),
           ),
         );
       },
@@ -134,10 +143,26 @@ class SingleServiceStoreCubit extends Cubit<SingleServiceStoreState> {
     );
   }
 
-  double _calculateTotalPrice(Map<String, int> quantities) {
-    return state.items.fold(0, (total, item) {
+  double _calculateTotalPrice(
+    Map<String, int> quantities, {
+    List<SingleServiceStoreItemModel>? items,
+  }) {
+    final sourceItems = items ?? state.items;
+    return sourceItems.fold(0, (total, item) {
       return total + item.price * (quantities[item.id] ?? 0);
     });
+  }
+
+  Map<String, int> _buildInitialQuantities(
+    List<SingleServiceStoreItemModel> items,
+  ) {
+    final quantities = <String, int>{};
+    for (final item in items) {
+      if (item.cartQuantity > 0) {
+        quantities[item.id] = item.cartQuantity;
+      }
+    }
+    return quantities;
   }
 
   List<SingleServiceStoreCategoryModel> _buildCategories(

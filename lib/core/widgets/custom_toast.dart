@@ -18,6 +18,7 @@ class CustomToast extends StatelessWidget {
       type: MaterialType.transparency,
       child: Container(
         margin: AppSize.screenPadding.edgeInsetsHorizontal,
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 12, 12),
         constraints: BoxConstraints(maxHeight: 100),
         decoration: BoxDecoration(
           color: type.backgroundColor,
@@ -51,7 +52,6 @@ class CustomToast extends StatelessWidget {
                 // ),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Text(text, style: TextStylesManager.font.s13.regular.setColor(Colors.black)),
                   ),
                 ),

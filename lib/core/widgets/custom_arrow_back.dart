@@ -19,7 +19,7 @@ class CustomArrowBack extends StatelessWidget {
         matchTextDirection: true,
         size: 20,
         foregroundColor: iconColor?? context.greySwatch.shade900,
-        onPressed: onPressed ?? () => context.pop(context),
+        onPressed: onPressed ?? () => context.pop(),
       ).setContainerToView(
         width: 40,
         height: 40,

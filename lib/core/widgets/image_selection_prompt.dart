@@ -117,7 +117,8 @@ class _ImageSelectionPromptState extends State<ImageSelectionPrompt> {
   @override
   void didUpdateWidget(ImageSelectionPrompt oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.allowMultiple == true && oldWidget.initialImagesUrls != widget.initialImagesUrls) {
+    if (widget.allowMultiple == true &&
+        oldWidget.initialImagesUrls != widget.initialImagesUrls) {
       _imagesUrls.value = widget.initialImagesUrls;
     }
   }
@@ -128,34 +129,43 @@ class _ImageSelectionPromptState extends State<ImageSelectionPrompt> {
       valueListenable: _imagesUrls,
       builder: (context, urls, child) {
         return ValueListenableBuilder(
-            valueListenable: _images,
-            builder: (context, files, child) {
-              return Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  if (urls.isNotEmpty) ...urls.map((url) => _buildNetworkImage(url)),
-                  if (files.isNotEmpty) ...files.map((file) => _buildFileImage(file)),
-                  if ((files.length + urls.length) < widget.maxImages) _buildAddImageField()
-                ],
-              );
-            });
+          valueListenable: _images,
+          builder: (context, files, child) {
+            return Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                if (urls.isNotEmpty)
+                  ...urls.map((url) => _buildNetworkImage(url)),
+                if (files.isNotEmpty)
+                  ...files.map((file) => _buildFileImage(file)),
+                if ((files.length + urls.length) < widget.maxImages)
+                  _buildAddImageField(),
+              ],
+            );
+          },
+        );
       },
     ).setTitle(
-        title: widget.title,
-        titleStyle: context.bodyMedium.s12.regular,
-        titleIcon: widget.isLoading ? const CupertinoActivityIndicator(radius: 8) : null);
+      title: widget.title,
+      titleStyle: context.bodyMedium.s12.regular,
+      titleIcon: widget.isLoading
+          ? const CupertinoActivityIndicator(radius: 8)
+          : null,
+    );
   }
 
   Widget _buildNetworkImage(String url) {
     return Stack(
       children: [
         CustomImage(
-          imageUrl: url,
-          fit: BoxFit.cover,
-          width: widget.height ?? _width,
-          height: widget.width ?? _width,
-        ).clipRRect(widget.borderRadius - 4).withDottedBorder(
+              imageUrl: url,
+              fit: BoxFit.cover,
+              width: widget.height ?? _width,
+              height: widget.width ?? _width,
+            )
+            .clipRRect(widget.borderRadius - 4)
+            .withDottedBorder(
               padding: 4.edgeInsetsAll,
               radius: widget.borderRadius,
               color: context.iconInactiveColor,
@@ -224,28 +234,43 @@ class _ImageSelectionPromptState extends State<ImageSelectionPrompt> {
         isRequired: widget.isRequired,
       ),
       builder: (FormFieldState formState) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            widget.icon ??
-                Assets.icons.plus
-                    .svg(height: 32, colorFilter: context.iconInactiveColor.colorFilter)
-                    .center()
-                    .withDottedBorder(
-                      padding: 4.edgeInsetsAll,
-                      radius: widget.borderRadius,
-                      color: formState.hasError ? context.errorColor : context.iconInactiveColor,
-                    )
-                    .withSize((widget.width ?? _width) + 8, (widget.height ?? _width) + 8)
-                    .onTap(() async {
+        final addField =
+            (widget.icon ??
+                    Assets.icons.plus
+                        .svg(
+                          height: 32,
+                          colorFilter: context.iconInactiveColor.colorFilter,
+                        )
+                        .center()
+                        .withDottedBorder(
+                          padding: 4.edgeInsetsAll,
+                          radius: widget.borderRadius,
+                          color: formState.hasError
+                              ? context.errorColor
+                              : context.iconInactiveColor,
+                        )
+                        .withSize(
+                          (widget.width ?? _width) + 8,
+                          (widget.height ?? _width) + 8,
+                        ))
+                .onTap(() async {
                   if (widget.isLoading) return;
                   if (widget.allowMultiple) {
                     _onMultipleSelection();
                   } else {
                     onSingleSelection(formState);
                   }
-                }, borderRadius: widget.borderRadius.borderRadius),
-            if (formState.hasError) Text(formState.errorText!, style: context.errorStyle).paddingTop(4),
+                }, borderRadius: widget.borderRadius.borderRadius);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            addField,
+            if (formState.hasError)
+              Text(
+                formState.errorText!,
+                style: context.errorStyle,
+              ).paddingTop(4),
           ],
         );
       },
@@ -255,7 +280,11 @@ class _ImageSelectionPromptState extends State<ImageSelectionPrompt> {
   Widget _buildDeleteButton(void Function() onDelete) {
     return Assets.icons.trash
         .svg(height: 16, colorFilter: context.errorColor.colorFilter)
-        .setContainerToView(color: context.scaffoldBackgroundColor, padding: 4, radius: 1000)
+        .setContainerToView(
+          color: context.scaffoldBackgroundColor,
+          padding: 4,
+          radius: 1000,
+        )
         .onTap(onDelete, borderRadius: 1000.borderRadius)
         .paddingAll(8);
   }
@@ -263,14 +292,18 @@ class _ImageSelectionPromptState extends State<ImageSelectionPrompt> {
   void _onMultipleSelection() async {
     final maxImagesCount = widget.maxImages;
     final imagesLength = _images.value.length;
-    final images = await MediaServices.pickMultipleImages(maxImages: maxImagesCount - imagesLength);
+    final images = await MediaServices.pickMultipleImages(
+      maxImages: maxImagesCount - imagesLength,
+    );
     List<XFile> validImages = [];
     for (final image in images) {
       final size = (await image.length()).bytesToMegaBytes;
       if (size <= 2) {
         validImages.add(image);
       } else {
-        Toaster.showToast(LocaleKeys.validator_images_limited_size.tr(args: ["2"]));
+        Toaster.showToast(
+          LocaleKeys.validator_images_limited_size.tr(args: ["2"]),
+        );
       }
     }
     if (validImages.isEmpty) return;
@@ -279,24 +312,26 @@ class _ImageSelectionPromptState extends State<ImageSelectionPrompt> {
   }
 
   void onSingleSelection(FormFieldState formState) async {
-    context.showBottomSheet(ImageSourcesBottomSheet(
-      onMediaPicked: widget.allowVideos
-          ? (xFile) {
-              if (xFile == null) return;
-              final video = File(xFile.path);
-              _images.value = [..._images.value, video];
-              formState.didChange(video);
-              widget.onImagesSelected?.call(_images.value);
-            }
-          : null,
-      onImagePicked: (xFile) {
-        if (xFile == null) return;
-        final image = File(xFile.path);
-        _images.value = [..._images.value, image];
-        formState.didChange(image);
-        widget.onImagesSelected?.call(_images.value);
-      },
-    ));
+    context.showBottomSheet(
+      ImageSourcesBottomSheet(
+        onMediaPicked: widget.allowVideos
+            ? (xFile) {
+                if (xFile == null) return;
+                final video = File(xFile.path);
+                _images.value = [..._images.value, video];
+                formState.didChange(video);
+                widget.onImagesSelected?.call(_images.value);
+              }
+            : null,
+        onImagePicked: (xFile) {
+          if (xFile == null) return;
+          final image = File(xFile.path);
+          _images.value = [..._images.value, image];
+          formState.didChange(image);
+          widget.onImagesSelected?.call(_images.value);
+        },
+      ),
+    );
   }
 }
 

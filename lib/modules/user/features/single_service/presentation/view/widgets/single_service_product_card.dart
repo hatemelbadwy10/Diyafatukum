@@ -57,7 +57,6 @@ class SingleServiceProductCard extends StatelessWidget {
         6.gap,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Assets.icons.locationPinDisabled.path.toSvg(
               width: 14,
@@ -71,7 +70,7 @@ class SingleServiceProductCard extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-            ),
+            ).flexible(),
           ],
         ),
       ],

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../../../core/resources/type_defs.dart';
 import '../../../../../../core/utils/compress_util.dart';
 
 class ProviderRegisterRequestModel extends Equatable {
@@ -13,14 +12,16 @@ class ProviderRegisterRequestModel extends Equatable {
     required this.commercialRegister,
     required this.password,
     required this.confirmPassword,
+    this.specializationId,
     this.storeNameAr,
     this.storeNameEn,
-    this.storeCategory,
+    this.storeDescriptionAr,
+    this.storeDescriptionEn,
     this.whatsapp,
     this.logo,
     this.address,
-    this.lat,
-    this.long,
+    this.latitude,
+    this.longitude,
   });
 
   final String name;
@@ -28,14 +29,16 @@ class ProviderRegisterRequestModel extends Equatable {
   final String commercialRegister;
   final String password;
   final String confirmPassword;
+  final String? specializationId;
   final String? storeNameAr;
   final String? storeNameEn;
-  final String? storeCategory;
+  final String? storeDescriptionAr;
+  final String? storeDescriptionEn;
   final String? whatsapp;
   final File? logo;
   final String? address;
-  final double? lat;
-  final double? long;
+  final double? latitude;
+  final double? longitude;
 
   ProviderRegisterRequestModel copyWith({
     String? name,
@@ -43,14 +46,16 @@ class ProviderRegisterRequestModel extends Equatable {
     String? commercialRegister,
     String? password,
     String? confirmPassword,
+    String? specializationId,
     String? storeNameAr,
     String? storeNameEn,
-    String? storeCategory,
+    String? storeDescriptionAr,
+    String? storeDescriptionEn,
     String? whatsapp,
     File? logo,
     String? address,
-    double? lat,
-    double? long,
+    double? latitude,
+    double? longitude,
   }) {
     return ProviderRegisterRequestModel(
       name: name ?? this.name,
@@ -58,53 +63,57 @@ class ProviderRegisterRequestModel extends Equatable {
       commercialRegister: commercialRegister ?? this.commercialRegister,
       password: password ?? this.password,
       confirmPassword: confirmPassword ?? this.confirmPassword,
+      specializationId: specializationId ?? this.specializationId,
       storeNameAr: storeNameAr ?? this.storeNameAr,
       storeNameEn: storeNameEn ?? this.storeNameEn,
-      storeCategory: storeCategory ?? this.storeCategory,
+      storeDescriptionAr: storeDescriptionAr ?? this.storeDescriptionAr,
+      storeDescriptionEn: storeDescriptionEn ?? this.storeDescriptionEn,
       whatsapp: whatsapp ?? this.whatsapp,
       logo: logo ?? this.logo,
       address: address ?? this.address,
-      lat: lat ?? this.lat,
-      long: long ?? this.long,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 
-  Future<BodyMap> toBody(String preferredLocale) async {
+  Future<FormData> toBody() async {
     final MultipartFile? logoFile = await CompressUtil.compress(logo);
-    return {
-      'username_type': 'phone',
+    return FormData.fromMap({
       'name': name,
-      'username': phone,
-      'commercial_register': commercialRegister,
-      'store_name_ar': storeNameAr,
-      'store_name_en': storeNameEn,
-      'store_category': storeCategory,
+      'phone': phone,
+      'commercial_registration_number': commercialRegister,
+      'specialization_id': specializationId,
       'address': address,
+      'latitude': latitude?.toString(),
+      'longitude': longitude?.toString(),
       'whatsapp': whatsapp,
-      'lat': lat?.toString(),
-      'long': long?.toString(),
+      'ar[store_name]': storeNameAr,
+      'ar[store_description]': storeDescriptionAr,
+      'en[store_name]': storeNameEn,
+      'en[store_description]': storeDescriptionEn,
       'password': password,
       'password_confirmation': confirmPassword,
+      'accept_terms': '1',
       'logo': logoFile,
-      'device_token': 'test',
-      'preferred_locale': preferredLocale,
-    };
+    });
   }
 
   @override
   List<Object?> get props => [
-        name,
-        phone,
-        commercialRegister,
-        password,
-        confirmPassword,
-        storeNameAr,
-        storeNameEn,
-        storeCategory,
-        whatsapp,
-        logo?.path,
-        address,
-        lat,
-        long,
-      ];
+    name,
+    phone,
+    commercialRegister,
+    password,
+    confirmPassword,
+    specializationId,
+    storeNameAr,
+    storeNameEn,
+    storeDescriptionAr,
+    storeDescriptionEn,
+    whatsapp,
+    logo?.path,
+    address,
+    latitude,
+    longitude,
+  ];
 }

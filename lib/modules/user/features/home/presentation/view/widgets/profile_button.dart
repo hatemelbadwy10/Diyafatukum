@@ -8,7 +8,7 @@ class ProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Assets.icons.person.path
+    return Assets.icons.solarUserBold.path
         .toSvg(color: context.onPrimary, width: 26, height: 26)
         .onTap(() {}, borderRadius: 18.borderRadius)
         .setContainerToView(

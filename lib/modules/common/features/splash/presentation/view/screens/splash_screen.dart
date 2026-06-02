@@ -126,7 +126,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             // RemoteNotificationServices.handleInitialNotification();
           },
           onGuest: () {
-            _setPendingNavigation(() => AppRoutes.home.go());
+            _setPendingNavigation(() => AppRoutes.login.go());
           },
           onUnauthorized: () {
             _setPendingNavigation(() => AppRoutes.onboarding.go());

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../../core/resources/resources.dart';
+import '../../../../../../../../core/widgets/custom_image.dart';
 import '../../../../../../../../core/widgets/image_sources_bottom_sheet.dart';
 
 class ProviderStoreImagePicker extends StatefulWidget {
@@ -17,7 +18,8 @@ class ProviderStoreImagePicker extends StatefulWidget {
   final void Function(String imagePath) onChanged;
 
   @override
-  State<ProviderStoreImagePicker> createState() => _ProviderStoreImagePickerState();
+  State<ProviderStoreImagePicker> createState() =>
+      _ProviderStoreImagePickerState();
 }
 
 class _ProviderStoreImagePickerState extends State<ProviderStoreImagePicker> {
@@ -27,16 +29,19 @@ class _ProviderStoreImagePickerState extends State<ProviderStoreImagePicker> {
   Widget build(BuildContext context) {
     final imageWidget = _imageFile != null
         ? Image.file(_imageFile!, fit: BoxFit.cover)
+        : widget.initialImagePath.startsWith('http')
+        ? CustomImage(
+            height: 108,
+            width: 108,
+            imageUrl: widget.initialImagePath,
+            fit: BoxFit.cover,
+          )
         : Image.asset(widget.initialImagePath, fit: BoxFit.cover);
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        SizedBox(
-          width: 108,
-          height: 108,
-          child: imageWidget.clipRRect(54),
-        ),
+        SizedBox(width: 108, height: 108, child: imageWidget.clipRRect(54)),
         PositionedDirectional(
           end: -2,
           bottom: -2,
@@ -46,13 +51,18 @@ class _ProviderStoreImagePickerState extends State<ProviderStoreImagePicker> {
             decoration: BoxDecoration(
               color: context.primaryColor,
               shape: BoxShape.circle,
-              border: Border.all(color: context.scaffoldBackgroundColor, width: 3),
+              border: Border.all(
+                color: context.scaffoldBackgroundColor,
+                width: 3,
+              ),
             ),
-            child: Assets.icons.cameraAddFill.svg(
-              width: 18,
-              height: 18,
-              colorFilter: context.scaffoldBackgroundColor.colorFilter,
-            ).center(),
+            child: Assets.icons.cameraAddFill
+                .svg(
+                  width: 18,
+                  height: 18,
+                  colorFilter: context.scaffoldBackgroundColor.colorFilter,
+                )
+                .center(),
           ).onTap(_pickImage, borderRadius: 17.borderRadius),
         ),
       ],

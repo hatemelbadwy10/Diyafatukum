@@ -1,7 +1,7 @@
-package deals.deals
+package com.daem.diyafatukum
 
-import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
@@ -10,7 +10,7 @@ class MainActivity : FlutterActivity() {
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            "com.bonus.app/config"
+            "com.bonus.app/config",
         ).setMethodCallHandler { call, result ->
             when (call.method) {
                 "setGoogleMapsApiKey" -> result.success(null)

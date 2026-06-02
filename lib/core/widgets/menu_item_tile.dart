@@ -83,10 +83,12 @@ class MenuItemTile extends StatelessWidget {
                         item.title.tr(),
                         style: isDestructive ? context.errorStyle.s14.regular : context.bodyLarge.s14.regular,
                       ).expand(),
-                      trailing ??
-                          Assets.icons.arrowLeft
-                              .svg(height: iconSize, colorFilter: context.iconColor.colorFilter)
-                              .flipHorizontal(enable: !context.isRTL),
+                      // trailing ??
+                      //     Assets.icons.arrowRightAlt.svg(
+                      //       height: iconSize,
+                      //       matchTextDirection: true,
+                      //       colorFilter: context.iconColor.colorFilter,
+                      //     ),
                     ],
                   ),
                 )

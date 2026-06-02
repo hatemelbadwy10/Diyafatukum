@@ -18,6 +18,7 @@ import '../../common/features/notifications/presentation/view/screens/notificati
 import '../../common/features/profile/presentation/view/screens/profile_screen.dart';
 import '../../common/features/profile/presentation/view/screens/phone_screen.dart';
 import '../../common/features/auth/presentation/controller/auth_cubit/auth_cubit.dart';
+import '../../common/features/addresses/presentation/view/screens/addresses_screen.dart';
 import '../../common/features/shared/presentation/view/screens/scaffold_with_nav_bar_screen.dart';
 import '../../common/features/settings/data/model/static_page_enum.dart';
 import '../../common/features/settings/presentation/view/screens/contact_us_screen.dart';
@@ -45,6 +46,14 @@ class UserRoutes extends BaseRouter {
         StatefulShellBranch(routes: _bagRoutes),
         StatefulShellBranch(routes: _settingsRoutes),
       ],
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.addresses.path,
+      name: AppRoutes.addresses.name,
+      pageBuilder: (context, state) => const AddressesScreen().buildPage(
+        transition: PageTransitions.cupertino,
+      ),
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
@@ -103,12 +112,20 @@ class UserRoutes extends BaseRouter {
       path: AppRoutes.orderDetails.path,
       name: AppRoutes.orderDetails.name,
       pageBuilder: (context, state) {
-        final order = state.extra as OrderModel?;
+        final extra = state.extra;
+        final extraMap = extra is Map<String, dynamic>
+            ? extra
+            : extra is Map
+            ? Map<String, dynamic>.from(extra)
+            : null;
+        final order = extraMap?['order'] as OrderModel? ?? extra as OrderModel?;
+        final ordersCubit = extraMap?['ordersCubit'] as OrdersCubit?;
         if (order == null) {
           return const Scaffold().buildPage();
         }
         return SingleOrderScreen(
           order: order,
+          ordersCubit: ordersCubit,
         ).buildPage(transition: PageTransitions.cupertino);
       },
     ),

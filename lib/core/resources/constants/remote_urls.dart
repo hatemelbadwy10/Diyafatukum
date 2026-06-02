@@ -14,8 +14,9 @@ class RemoteUrls {
   /// Auth
   static String login = 'auth/login';
   static String register = 'auth/register-user';
-  static String providerRegister = '$flavor/register';
+  static String providerRegister = 'auth/register-provider';
   static String logout = 'auth/logout';
+  static String specializations = 'specializations';
 
   /// Forget Password
   static String forgetPassword = 'auth/forgot-password';
@@ -31,10 +32,13 @@ class RemoteUrls {
   static String resendPhoneCode = 'user/phone';
 
   /// Profile
-  static String profile = 'user/profile';
+  static String get profile =>
+      FlavorConfig.isParent ? 'user/profile' : '$flavor/profile';
   static String changePhone = 'user/phone';
   static String changeEmail = 'user/email';
-  static String changePassword = 'user/profile/password';
+  static String get changePassword => FlavorConfig.isParent
+      ? 'user/profile/password'
+      : '$flavor/profile/password';
   static String deleteAccount = '$flavor/delete';
 
   /// Notifications
@@ -51,11 +55,19 @@ class RemoteUrls {
   static String cancelOrder(String id) => FlavorConfig.isParent
       ? 'user/orders/$id/cancel'
       : '$flavor/orders/$id/cancel';
+  static String providerAcceptOrder(String id) => '$flavor/orders/$id/accept';
+  static String providerRejectOrder(String id) => '$flavor/orders/$id/reject';
+  static String providerAdvanceOrderStatus(String id) =>
+      '$flavor/orders/$id/status';
   static String trackOrder(String id) => FlavorConfig.isParent
       ? 'user/orders/$id/track'
       : '$flavor/orders/$id/track';
   static String providerDashboard = '$flavor/home';
   static String providerStore = '$flavor/store';
+  static String providerCategories = '$flavor/categories';
+  static String providerProducts = '$flavor/products';
+  static String providerProduct(String id) => '$flavor/products/$id';
+  static String providerStoreDescription = '$flavor/store/description';
 
   /// User Home
   static String userHome = 'home';

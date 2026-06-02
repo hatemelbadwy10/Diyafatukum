@@ -22,15 +22,15 @@ import '../../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../../../../core/widgets/image_selection_prompt.dart';
 import '../../../../../../common/features/addresses/presentation/view/screens/map_screen.dart';
 import '../../../../../../common/features/auth/presentation/view/widgets/auth_background_scaffold.dart';
+import '../../../../../../common/features/auth/data/model/register_response_model.dart';
 import '../../../../../../common/features/settings/data/model/static_page_enum.dart';
+import '../../../../../../common/features/verification/data/model/verification_type_enum.dart';
 import '../../../data/model/provider_register_request_model.dart';
+import '../../../data/model/provider_specialization_model.dart';
 import '../../controller/provider_register_cubit/provider_register_cubit.dart';
 
 class ProviderRegisterLocationScreen extends StatefulWidget {
-  const ProviderRegisterLocationScreen({
-    super.key,
-    required this.arguments,
-  });
+  const ProviderRegisterLocationScreen({super.key, required this.arguments});
 
   final ProviderRegisterLocationArguments arguments;
 
@@ -44,35 +44,36 @@ class _ProviderRegisterLocationScreenState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _storeNameArController = TextEditingController();
   final TextEditingController _storeNameEnController = TextEditingController();
+  final TextEditingController _storeDescriptionArController =
+      TextEditingController();
+  final TextEditingController _storeDescriptionEnController =
+      TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _whatsAppController = TextEditingController();
   final ValueNotifier<bool> _isTermsAccepted = ValueNotifier<bool>(false);
 
-  String? _selectedCategory;
+  ProviderSpecializationModel? _selectedSpecialization;
   File? _selectedLogo;
   LatLng? _selectedLatLng;
   Placemark? _selectedPlacemark;
-
-  static const List<String> _categories = [
-    'provider.register.categories.cakes',
-    'provider.register.categories.flowers',
-    'provider.register.categories.coffee',
-  ];
 
   @override
   void initState() {
     super.initState();
     _storeNameArController.text = widget.arguments.request.storeNameAr ?? '';
     _storeNameEnController.text = widget.arguments.request.storeNameEn ?? '';
+    _storeDescriptionArController.text =
+        widget.arguments.request.storeDescriptionAr ?? '';
+    _storeDescriptionEnController.text =
+        widget.arguments.request.storeDescriptionEn ?? '';
     _addressController.text = widget.arguments.request.address ?? '';
     _whatsAppController.text = widget.arguments.request.whatsapp ?? '';
-    _selectedCategory = widget.arguments.request.storeCategory;
     _selectedLogo = widget.arguments.request.logo;
-    if (widget.arguments.request.lat != null &&
-        widget.arguments.request.long != null) {
+    if (widget.arguments.request.latitude != null &&
+        widget.arguments.request.longitude != null) {
       _selectedLatLng = LatLng(
-        widget.arguments.request.lat!,
-        widget.arguments.request.long!,
+        widget.arguments.request.latitude!,
+        widget.arguments.request.longitude!,
       );
     }
   }
@@ -81,6 +82,8 @@ class _ProviderRegisterLocationScreenState
   void dispose() {
     _storeNameArController.dispose();
     _storeNameEnController.dispose();
+    _storeDescriptionArController.dispose();
+    _storeDescriptionEnController.dispose();
     _addressController.dispose();
     _whatsAppController.dispose();
     _isTermsAccepted.dispose();
@@ -104,7 +107,7 @@ class _ProviderRegisterLocationScreenState
     );
   }
 
-  Future<void> _submit() async {
+  Future<void> _submit(BuildContext context) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_selectedLatLng == null || _selectedPlacemark == null) {
       Toaster.showToast(LocaleKeys.validator_location.tr());
@@ -120,43 +123,68 @@ class _ProviderRegisterLocationScreenState
     }
 
     final request = widget.arguments.request.copyWith(
+      specializationId: _selectedSpecialization?.id,
       storeNameAr: _storeNameArController.text.trim(),
       storeNameEn: _storeNameEnController.text.trim(),
-      storeCategory: _selectedCategory,
+      storeDescriptionAr: _storeDescriptionArController.text.trim(),
+      storeDescriptionEn: _storeDescriptionEnController.text.trim(),
       whatsapp: _whatsAppController.text.trim().neglectStartingZero,
       logo: _selectedLogo,
       address: _addressController.text.trim(),
-      lat: _selectedLatLng!.latitude,
-      long: _selectedLatLng!.longitude,
+      latitude: _selectedLatLng!.latitude,
+      longitude: _selectedLatLng!.longitude,
     );
 
-    final locale = rootNavigatorKey.currentContext?.locale.languageCode ?? 'en';
-    context.read<ProviderRegisterCubit>().register(await request.toBody(locale));
+    context.read<ProviderRegisterCubit>().register(await request.toBody());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<ProviderRegisterCubit>(),
+      create: (_) => sl<ProviderRegisterCubit>()..loadSpecializations(),
       child: BlocConsumer<ProviderRegisterCubit, ProviderRegisterState>(
-        listener: (context, state) => state.status.listen(
-          onSuccess: (_) {
-            Toaster.showToast(
-              LocaleKeys.provider_register_success.tr(),
-              isError: false,
-            );
-            BaseRouter.popUntilPath(AppRoutes.providerHome.path);
-          },
-          onFailed: (failure) => Toaster.showToast(failure.message),
-        ),
+        listener: (context, state) {
+          state.specializationsStatus.listen(
+            onFailed: (failure) => Toaster.showToast(failure.message),
+          );
+          state.status.listen(
+            onSuccess: (data) {
+              final registerResponse = data is RegisterResponseModel
+                  ? data
+                  : null;
+              final identifier =
+                  registerResponse?.identifier ??
+                  widget.arguments.request.phone;
+              final otp = registerResponse?.otp;
+              AppRoutes.verification.push(
+                extra: const {'type': VerificationType.register},
+                queries: {
+                  'identifier': identifier,
+                  if (otp?.isNotEmpty ?? false) 'code': otp,
+                },
+              );
+            },
+            onFailed: (failure) => Toaster.showToast(failure.message),
+          );
+        },
         builder: (context, state) {
+          if (_selectedSpecialization == null &&
+              widget.arguments.request.specializationId != null) {
+            for (final specialization in state.specializations) {
+              if (specialization.id ==
+                  widget.arguments.request.specializationId) {
+                _selectedSpecialization = specialization;
+                break;
+              }
+            }
+          }
           return AuthBackgroundScaffold(
             title: LocaleKeys.provider_register_store_title.tr(),
             bottom: CustomButton.gradient(
               borderRadius: AppSize.buttonBorderRadius,
               isLoading: state.status.isLoading,
               label: LocaleKeys.provider_register_submit.tr(),
-              onPressed: _submit,
+              onPressed: () => _submit(context),
             ).setHero(HeroTags.mainButton),
             child: Form(
               key: _formKey,
@@ -189,7 +217,8 @@ class _ProviderRegisterLocationScreenState
                         controller: _storeNameArController,
                         showRequiredIndicator: false,
                         title: LocaleKeys.provider_register_store_name_ar.tr(),
-                        hint: LocaleKeys.provider_register_store_name_ar.tr()
+                        hint: LocaleKeys.provider_register_store_name_ar
+                            .tr()
                             .enterHint,
                         prefixIcon: Assets.icons.stashShopSolid.path,
                         inputType: InputType.textAr,
@@ -199,7 +228,8 @@ class _ProviderRegisterLocationScreenState
                         controller: _storeNameEnController,
                         showRequiredIndicator: false,
                         title: LocaleKeys.provider_register_store_name_en.tr(),
-                        hint: LocaleKeys.provider_register_store_name_en.tr()
+                        hint: LocaleKeys.provider_register_store_name_en
+                            .tr()
                             .enterHint,
                         prefixIcon: Assets.icons.stashShopSolid.path,
                         inputType: InputType.textEn,
@@ -207,13 +237,46 @@ class _ProviderRegisterLocationScreenState
                     ],
                   ),
                   16.gap,
-                  CustomSelectionField<String>(
-                    title: LocaleKeys.provider_register_store_category_title.tr(),
+                  Row(
+                    children: [
+                      CustomTextField(
+                        controller: _storeDescriptionArController,
+                        showRequiredIndicator: false,
+                        title: LocaleKeys.provider_register_store_description_ar
+                            .tr(),
+                        hint: LocaleKeys.provider_register_store_description_ar
+                            .tr()
+                            .enterHint,
+                        prefixIcon: Assets.icons.stashShopSolid.path,
+                        inputType: InputType.textAr,
+                        maxLines: 3,
+                      ).expand(),
+                      12.gap,
+                      CustomTextField(
+                        controller: _storeDescriptionEnController,
+                        showRequiredIndicator: false,
+                        title: LocaleKeys.provider_register_store_description_en
+                            .tr(),
+                        hint: LocaleKeys.provider_register_store_description_en
+                            .tr()
+                            .enterHint,
+                        prefixIcon: Assets.icons.stashShopSolid.path,
+                        inputType: InputType.textEn,
+                        maxLines: 3,
+                      ).expand(),
+                    ],
+                  ),
+                  16.gap,
+                  CustomSelectionField<ProviderSpecializationModel>(
+                    title: LocaleKeys.provider_register_store_category_title
+                        .tr(),
                     hint: LocaleKeys.provider_register_store_category_hint.tr(),
-                    initialValue: _selectedCategory,
-                    futureRequest: () async => _categories,
-                    itemToString: (item) => item?.tr() ?? '',
-                    onChanged: (value) => _selectedCategory = value,
+                    initialValue: _selectedSpecialization,
+                    futureRequest: () => context
+                        .read<ProviderRegisterCubit>()
+                        .loadSpecializations(),
+                    itemToString: (item) => item?.name ?? '',
+                    onChanged: (value) => _selectedSpecialization = value,
                     validator: (value) => value == null
                         ? LocaleKeys.actions_select.tr(
                             args: [
@@ -242,7 +305,8 @@ class _ProviderRegisterLocationScreenState
                     controller: _whatsAppController,
                     showRequiredIndicator: false,
                     title: LocaleKeys.details_contact_social_whatsapp.tr(),
-                    hint: LocaleKeys.details_contact_social_whatsapp.tr()
+                    hint: LocaleKeys.details_contact_social_whatsapp
+                        .tr()
                         .enterHint,
                     prefixIcon: Assets.icons.mdiPhoneOutline.path,
                     inputType: InputType.phone,

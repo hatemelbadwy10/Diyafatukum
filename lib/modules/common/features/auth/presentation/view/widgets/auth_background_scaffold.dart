@@ -1,9 +1,8 @@
+import 'package:diyafatukum/core/widgets/custom_arrow_back.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/resources/resources.dart';
-import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
 
 class AuthBackgroundScaffold extends StatelessWidget {
   const AuthBackgroundScaffold({
@@ -122,21 +121,8 @@ class _AuthHeader extends StatelessWidget {
             alignment: context.isRTL
                 ? Alignment.centerRight
                 : Alignment.centerLeft,
-            child: Transform.flip(
-              flipX: !context.isRTL,
-              child: Transform.rotate(
-                angle: 180 * 3.1415926535 / 180,
-                child: CustomIconButton.svg(
-                  svg: Assets.icons.icon,
-                  onPressed: onBackPressed ?? () => context.pop(context),
-                  matchTextDirection: true,
-                  backgroundColor: const Color(0xFFF3F4F6),
-                  foregroundColor: context.titleMedium.color,
-                  size: 18,
-                  padding: 10.edgeInsetsAll,
-                  borderRadius: 999,
-                ),
-              ),
+            child: CustomArrowBack(
+              onPressed: onBackPressed,
             ),
           ),
         ],

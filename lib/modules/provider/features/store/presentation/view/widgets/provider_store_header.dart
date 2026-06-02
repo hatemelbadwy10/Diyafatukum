@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../../core/resources/resources.dart';
 import '../../../../../../../../core/widgets/custom_arrow_back.dart';
+import '../../../../../../../../core/widgets/custom_image.dart';
 import '../../../data/model/provider_store_model.dart';
 
 class ProviderStoreHeader extends StatelessWidget {
@@ -26,25 +27,28 @@ class ProviderStoreHeader extends StatelessWidget {
         SizedBox(
           height: 305,
           width: double.infinity,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(store.coverImagePath),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CustomImage(
+                height: 305,
+                width: double.infinity,
+                imageUrl: store.coverImagePath,
                 fit: BoxFit.cover,
               ),
-            ),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.18),
-                    Colors.black.withValues(alpha: 0.62),
-                  ],
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.18),
+                      Colors.black.withValues(alpha: 0.62),
+                    ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
         PositionedDirectional(
@@ -69,7 +73,9 @@ class ProviderStoreHeader extends StatelessWidget {
                       8.gap,
                       Text(
                         LocaleKeys.provider_store_edit.tr(),
-                        style: context.titleSmall.bold.setColor(context.onPrimary),
+                        style: context.titleSmall.bold.setColor(
+                          context.onPrimary,
+                        ),
                       ),
                     ],
                   )
@@ -89,7 +95,6 @@ class ProviderStoreHeader extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-           
               16.gap,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +108,9 @@ class ProviderStoreHeader extends StatelessWidget {
                   4.gap,
                   Text(
                     store.name,
-                    style: context.titleLarge.bold.setFontSize(30).setColor(context.scaffoldBackgroundColor),
+                    style: context.titleLarge.bold
+                        .setFontSize(30)
+                        .setColor(context.scaffoldBackgroundColor),
                   ),
                   6.gap,
                   Row(
@@ -111,29 +118,34 @@ class ProviderStoreHeader extends StatelessWidget {
                       Assets.icons.ionLocationSharp.svg(
                         width: 16,
                         height: 16,
-                        colorFilter: context.scaffoldBackgroundColor.colorFilter,
+                        colorFilter:
+                            context.scaffoldBackgroundColor.colorFilter,
                       ),
                       6.gap,
                       Text(
                         store.location,
-                        style: context.bodyMedium.regular.s16.setColor(context.scaffoldBackgroundColor),
+                        style: context.bodyMedium.regular.s16.setColor(
+                          context.scaffoldBackgroundColor,
+                        ),
                       ),
                     ],
                   ),
                 ],
               ).expand(),
-                 Container(
+              Container(
                 width: 50,
                 height: 50,
                 decoration: const BoxDecoration(
                   color: Color(0xFF25D366),
                   shape: BoxShape.circle,
                 ),
-                child: Assets.icons.whats.svg(
-                  width: 24,
-                  height: 24,
-                  colorFilter: Colors.white.colorFilter,
-                ).center(),
+                child: Assets.icons.whats
+                    .svg(
+                      width: 24,
+                      height: 24,
+                      colorFilter: Colors.white.colorFilter,
+                    )
+                    .center(),
               ),
             ],
           ),

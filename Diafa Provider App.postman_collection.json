@@ -1,0 +1,1742 @@
+{
+  "info": {
+    "_postman_id": "e9cc8908-1400-4d02-a0dc-66f915705200",
+    "name": "Diafa Provider App",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9896032"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Login provider",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"+966501234567\",\n    \"password\": \"password123\",\n    \"user_role\": \"provider\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"+3474653243523\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/forgot-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"+3474653243523\",\n    \"otp\": \"1234\",\n    \"register\": true // only for register or verify account\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/verify-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "verify-otp"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"+3474653243523\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/reset-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Provider",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": " محمد التاجر",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "+9665550000025",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": " password123",
+                  "type": "text"
+                },
+                {
+                  "key": "password_confirmation",
+                  "value": " password123",
+                  "type": "text"
+                },
+                {
+                  "key": "commercial_registration_number",
+                  "value": " CR-9090905",
+                  "type": "text"
+                },
+                {
+                  "key": "specialization_id",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "address",
+                  "value": "حي الياسمين، الرياض",
+                  "type": "text"
+                },
+                {
+                  "key": "latitude",
+                  "value": "24.8103",
+                  "type": "text"
+                },
+                {
+                  "key": "longitude",
+                  "value": "46.671",
+                  "type": "text"
+                },
+                {
+                  "key": "whatsapp",
+                  "value": "+9665550000025",
+                  "type": "text"
+                },
+                {
+                  "key": "ar[store_name]",
+                  "value": " متجر التاجر",
+                  "type": "text"
+                },
+                {
+                  "key": "ar[store_description]",
+                  "value": " وصف عربي للمتجر",
+                  "type": "text"
+                },
+                {
+                  "key": "en[store_name]",
+                  "value": " Merchant Store",
+                  "type": "text"
+                },
+                {
+                  "key": "en[store_description]",
+                  "value": " English store description",
+                  "type": "text"
+                },
+                {
+                  "key": "accept_terms",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "2590411e-389e-4fae-887b-b4248d5318bf"
+                },
+                {
+                  "key": "logo",
+                  "type": "file",
+                  "src": "/Users/abdallah_ali/Downloads/WhatsApp Image 2026-05-04 at 11.21.52 (1).jpeg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register-provider",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register-provider"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "settings",
+      "item": [
+        {
+          "name": "Get Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/provider/notifications",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "notifications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Notification Read",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/provider/notifications/7/read",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "notifications",
+                "7",
+                "read"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Notification Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"enabled\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/provider/notifications/settings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "notifications",
+                "settings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Support Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"Ahmed Ali\",\n    \"phone\":\"736547238\",\n    \"message\": \"أحتاج مساعدة بخصوص تتبع الطلب\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/provider/support",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "support"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "About Page",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/pages/about",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pages",
+                "about"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Privacy Page",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/pages/privacy",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pages",
+                "privacy"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Terms Page",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/pages/terms",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pages",
+                "terms"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancellation & Refund Page",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/pages/cancellation-refund",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pages",
+                "cancellation-refund"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/provider/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"عبد الله علي\",\n    \"phone\": \"+966503456789\",\n    \"commercial_registration_number\" :\"632786\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/provider/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"current_password\": \"password123\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/provider/profile/password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "profile",
+                "password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "change phone",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"phone\": \"+3474653243523\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/provider/phone",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "phone"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify  Phone by otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"identifier\": \"+3474653243523\",\n    \"otp\": \"1234\",\n    \"is_phone\":true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/verify-otp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "verify-otp"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "lang",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Home",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/provider/home?day=today",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "home"
+          ],
+          "query": [
+            {
+              "key": "day",
+              "value": "today",
+              "description": "today,yesterday or date like 2026-04-25"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Advance Order Status",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"status\": \"preparing\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/orders/1/status",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "orders",
+            "1",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Accept Order",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/orders/1/accept",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "orders",
+            "1",
+            "accept"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reject Order",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"reason\": \"لا يمكن تنفيذ الطلب حالياً\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/orders/1/reject",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "orders",
+            "1",
+            "reject"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Categories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/provider/categories",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Products",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/provider/products?cat_id",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "cat_id",
+              "value": null,
+              "description": "if empty get all"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "store_category_id",
+              "value": "1",
+              "type": "text",
+              "uuid": "c59a777d-1df0-4cb6-a116-4f01f0c80bdc"
+            },
+            {
+              "key": "price",
+              "value": "99",
+              "type": "text",
+              "uuid": "0847d51d-a6de-4fb3-90bb-23503c58efdc"
+            },
+            {
+              "key": "quantity",
+              "value": "10",
+              "type": "text",
+              "uuid": "b421620d-a47a-4f6d-b0ad-88ca42679f6d"
+            },
+            {
+              "key": "ar[name]",
+              "value": "منتج جديد",
+              "type": "text",
+              "uuid": "b0930792-bc94-44de-aa98-26594c16add4"
+            },
+            {
+              "key": "ar[description]",
+              "value": "وصف عربي للمنتج",
+              "type": "text",
+              "uuid": "a8de6374-069d-425c-a4a3-f457fcac8057"
+            },
+            {
+              "key": "en[name]",
+              "value": "New Product",
+              "type": "text",
+              "uuid": "45139868-1ceb-48a0-9600-14e8d96c9e66"
+            },
+            {
+              "key": "en[description]",
+              "value": "New Product description",
+              "type": "text",
+              "uuid": "dc9e5d84-ec4d-4af8-b646-5cf1db4bdfe2"
+            },
+            {
+              "key": "image",
+              "type": "file",
+              "uuid": "25cb52f6-649d-40d9-a68f-f8e04635ce60",
+              "src": "/Users/abdallah_ali/Downloads/Message.jpg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/products",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "store_category_id",
+              "value": "1",
+              "type": "text",
+              "uuid": "c59a777d-1df0-4cb6-a116-4f01f0c80bdc"
+            },
+            {
+              "key": "price",
+              "value": "99",
+              "type": "text",
+              "uuid": "0847d51d-a6de-4fb3-90bb-23503c58efdc"
+            },
+            {
+              "key": "quantity",
+              "value": "10",
+              "type": "text",
+              "uuid": "b421620d-a47a-4f6d-b0ad-88ca42679f6d"
+            },
+            {
+              "key": "ar[name]",
+              "value": "منتج جديد",
+              "type": "text",
+              "uuid": "b0930792-bc94-44de-aa98-26594c16add4"
+            },
+            {
+              "key": "ar[description]",
+              "value": "وصف عربي للمنتج",
+              "type": "text",
+              "uuid": "a8de6374-069d-425c-a4a3-f457fcac8057"
+            },
+            {
+              "key": "en[name]",
+              "value": "New Product",
+              "type": "text",
+              "uuid": "45139868-1ceb-48a0-9600-14e8d96c9e66"
+            },
+            {
+              "key": "en[description]",
+              "value": "New Product description",
+              "type": "text",
+              "uuid": "dc9e5d84-ec4d-4af8-b646-5cf1db4bdfe2"
+            },
+            {
+              "key": "image",
+              "type": "file",
+              "uuid": "25cb52f6-649d-40d9-a68f-f8e04635ce60",
+              "src": "/Users/abdallah_ali/Downloads/Message.jpg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/products/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "store_category_id",
+              "value": "1",
+              "type": "text",
+              "uuid": "c59a777d-1df0-4cb6-a116-4f01f0c80bdc"
+            },
+            {
+              "key": "price",
+              "value": "99",
+              "type": "text",
+              "uuid": "0847d51d-a6de-4fb3-90bb-23503c58efdc"
+            },
+            {
+              "key": "quantity",
+              "value": "10",
+              "type": "text",
+              "uuid": "b421620d-a47a-4f6d-b0ad-88ca42679f6d"
+            },
+            {
+              "key": "ar[name]",
+              "value": "منتج جديد",
+              "type": "text",
+              "uuid": "b0930792-bc94-44de-aa98-26594c16add4"
+            },
+            {
+              "key": "ar[description]",
+              "value": "وصف عربي للمنتج",
+              "type": "text",
+              "uuid": "a8de6374-069d-425c-a4a3-f457fcac8057"
+            },
+            {
+              "key": "en[name]",
+              "value": "New Product",
+              "type": "text",
+              "uuid": "45139868-1ceb-48a0-9600-14e8d96c9e66"
+            },
+            {
+              "key": "en[description]",
+              "value": "New Product description",
+              "type": "text",
+              "uuid": "dc9e5d84-ec4d-4af8-b646-5cf1db4bdfe2"
+            },
+            {
+              "key": "image",
+              "type": "file",
+              "uuid": "25cb52f6-649d-40d9-a68f-f8e04635ce60",
+              "src": "/Users/abdallah_ali/Downloads/Message.jpg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/products/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Category",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"sort_order\": 3,\n    \"active\": true,\n    \"ar\": {\n        \"name\": \"ضيافة\",\n        \"description\": \"منتجات الضيافة والاستقبال\"\n    },\n    \"en\": {\n        \"name\": \"Hospitality\",\n        \"description\": \"Hospitality and reception products\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/categories",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update Provider Store",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "phone",
+              "value": " +966555000002",
+              "type": "text"
+            },
+            {
+              "key": "commercial_registration_number",
+              "value": " CR-909090",
+              "type": "text"
+            },
+            {
+              "key": "specialization_id",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "address",
+              "value": "حي الياسمين، الرياض",
+              "type": "text"
+            },
+            {
+              "key": "latitude",
+              "value": "24.8103",
+              "type": "text"
+            },
+            {
+              "key": "longitude",
+              "value": "46.671",
+              "type": "text"
+            },
+            {
+              "key": "whatsapp",
+              "value": "+966555000002",
+              "type": "text"
+            },
+            {
+              "key": "ar[name]",
+              "value": " متجر التاجر",
+              "type": "text"
+            },
+            {
+              "key": "ar[description]",
+              "value": " وصف عربي للمتجر",
+              "type": "text"
+            },
+            {
+              "key": "en[name]",
+              "value": " Merchant Store",
+              "type": "text"
+            },
+            {
+              "key": "en[description]",
+              "value": " English store description",
+              "type": "text"
+            },
+            {
+              "key": "logo",
+              "type": "file",
+              "uuid": "01a710e2-baaa-4878-8102-ed5cda0154c8",
+              "src": "/Users/abdallah_ali/Downloads/Modal.png"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/store",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "store"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update Provider Store Description",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "ar[description]",
+              "value": " وصف عربي للمتجر حاجا",
+              "type": "text"
+            },
+            {
+              "key": "en[description]",
+              "value": " English store description tata",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/provider/store/description",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "store",
+            "description"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Provider Store",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/provider/store",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "store"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Orders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/provider/orders?tab=current",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "orders"
+          ],
+          "query": [
+            {
+              "key": "tab",
+              "value": "current",
+              "description": "current,completed,cancelled"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order Detail",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/provider/orders/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "orders",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "lang",
+            "value": "ar"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{provider_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/provider/orders/1/history",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "provider",
+            "orders",
+            "1",
+            "history"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url_local",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "user_token",
+      "value": "30|vTPVHcIP2J9mxDZmALiCO9rkkU8mxd4QnGbVsOOJ87d7c98a"
+    },
+    {
+      "key": "base_url",
+      "value": "https://dyaftkm.com/back"
+    },
+    {
+      "key": "user_token_local",
+      "value": "5|ZI3UOjr8ZgSxE6xMZ8d4iQv1pdzOy99u5Tdr4mGt7bdae630"
+    },
+    {
+      "key": "provider_token",
+      "value": "30|vTPVHcIP2J9mxDZmALiCO9rkkU8mxd4QnGbVsOOJ87d7c98a"
+    }
+  ]
+}

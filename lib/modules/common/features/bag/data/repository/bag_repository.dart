@@ -9,7 +9,7 @@ import '../model/bag_model.dart';
 abstract class BagRepository {
   Result<BagModel> getBag();
   Result<BagModel> addItems(List<BagItemModel> items);
-  Result updateItemQuantity(String itemId, int quantity);
+  Result<BagModel> updateItemQuantity(String itemId, int quantity);
   Result clearCart();
   Result removeItem(String itemId);
   Result checkout(BodyMap body);
@@ -34,10 +34,10 @@ class BagRepositoryImpl implements BagRepository {
   }
 
   @override
-  Result updateItemQuantity(String itemId, int quantity) {
+  Result<BagModel> updateItemQuantity(String itemId, int quantity) {
     return remoteDataSource
         .updateItemQuantity(itemId, quantity)
-        .toResult(noDataFromJson);
+        .toResult(bagModelFromJson);
   }
 
   @override

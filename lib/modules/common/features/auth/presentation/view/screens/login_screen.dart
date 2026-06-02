@@ -12,6 +12,7 @@ import '../../../../../../../core/utils/toaster_utils.dart';
 import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
 import '../../../../../../../core/widgets/custom_check_box.dart';
 import '../../../../../../../core/widgets/custom_input_field.dart';
+import '../../../../../../../core/widgets/custom_phone_field.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../shared/data/model/navigation_bar_items.dart';
 import '../../../../verification/data/model/verification_type_enum.dart';
@@ -95,14 +96,20 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                     style: context.bodyLarge.regular.s13.setHeight(1.6),
                   ),
                   24.gap,
-                  CustomTextField(
-                    controller: identifierController,
-                    showRequiredIndicator: false,
-                    inputType: InputType.email,
-                    title: LocaleKeys.details_contact_email.tr(),
-                    hint: LocaleKeys.details_contact_email.tr().enterHint,
-                    prefixIcon: Assets.icons.mail.path,
-                  ),
+                  if (FlavorConfig.isProvider)
+                    CustomPhoneField(
+                      controller: identifierController,
+                      showRequiredIndicator: false,
+                    )
+                  else
+                    CustomTextField(
+                      controller: identifierController,
+                      showRequiredIndicator: false,
+                      inputType: InputType.email,
+                      title: LocaleKeys.details_contact_email.tr(),
+                      hint: LocaleKeys.details_contact_email.tr().enterHint,
+                      prefixIcon: Assets.icons.mail.path,
+                    ),
                   16.gap,
                   CustomTextField(
                     isRequired: true,
@@ -157,19 +164,20 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                         : AppRoutes.register.push(),
                   ),
                   8.gap,
-                  CustomTextButton(
-                    alignIconEnd: true,
-                    matchTextDirection: !context.isRTL,
-                    label: LocaleKeys.auth_login_guest.tr(),
-                    textStyle: context.titleLarge.s13.regular.underline,
-                    onPressed: () {
-                      context.read<AuthCubit>().updateAuthData(
-                        const AuthModel.guest(),
-                      );
-                      bottomNavNotifier.value = NavigationBarItems.home;
-                      AppRoutes.home.go();
-                    },
-                  ).center(),
+                  if (!FlavorConfig.isProvider)
+                    CustomTextButton(
+                      alignIconEnd: true,
+                      matchTextDirection: !context.isRTL,
+                      label: LocaleKeys.auth_login_guest.tr(),
+                      textStyle: context.titleLarge.s13.regular.underline,
+                      onPressed: () {
+                        context.read<AuthCubit>().updateAuthData(
+                          const AuthModel.guest(),
+                        );
+                        bottomNavNotifier.value = NavigationBarItems.home;
+                        AppRoutes.home.go();
+                      },
+                    ).center(),
                 ],
               ),
             ),

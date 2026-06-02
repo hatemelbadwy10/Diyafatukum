@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/config/flavor/flavor_config.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/constants/hero_tags.dart';
@@ -10,6 +11,7 @@ import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
 import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
 import '../../../../../../../core/widgets/custom_input_field.dart';
+import '../../../../../../../core/widgets/custom_phone_field.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../auth/presentation/view/widgets/auth_background_scaffold.dart';
 import '../../../../verification/data/model/verification_type_enum.dart';
@@ -41,9 +43,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           onFailed: (failure) => Toaster.showToast(failure.message),
           onSuccess: (identifier) => AppRoutes.verification.push(
             extra: {'type': VerificationType.forgetPassword},
-            queries: {
-              'identifier': identifier,
-            },
+            queries: {'identifier': identifier},
           ),
         ),
         builder: (context, state) {
@@ -55,18 +55,28 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    LocaleKeys.auth_password_forget_subtitle.tr(),
+                    FlavorConfig.isProvider
+                        ? LocaleKeys.actions_enter.tr(
+                            args: [LocaleKeys.details_contact_phone.tr()],
+                          )
+                        : LocaleKeys.auth_password_forget_subtitle.tr(),
                     style: context.bodyLarge.regular.s13.setHeight(1.6),
                   ),
                   24.gap,
-                  CustomTextField(
-                    controller: _valueController,
-                    showRequiredIndicator: false,
-                    inputType: InputType.email,
-                    title: LocaleKeys.details_contact_email.tr(),
-                    hint: LocaleKeys.details_contact_email.tr().enterHint,
-                    prefixIcon: Assets.icons.mail.path,
-                  ),
+                  if (FlavorConfig.isProvider)
+                    CustomPhoneField(
+                      controller: _valueController,
+                      showRequiredIndicator: false,
+                    )
+                  else
+                    CustomTextField(
+                      controller: _valueController,
+                      showRequiredIndicator: false,
+                      inputType: InputType.email,
+                      title: LocaleKeys.details_contact_email.tr(),
+                      hint: LocaleKeys.details_contact_email.tr().enterHint,
+                      prefixIcon: Assets.icons.mail.path,
+                    ),
                   28.gap,
                   CustomButton.gradient(
                     borderRadius: AppSize.buttonBorderRadius,

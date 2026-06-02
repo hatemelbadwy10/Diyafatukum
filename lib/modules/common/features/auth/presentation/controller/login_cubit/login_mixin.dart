@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/flavor/flavor_config.dart';
 
 mixin LoginMixin {
@@ -10,10 +11,12 @@ mixin LoginMixin {
   final TextEditingController passwordController = TextEditingController();
 
   Future<Map<String, dynamic>> get body async => {
-        'identifier': identifierController.text.trim(),
-        'password': passwordController.text,
-        'user_role': FlavorConfig.isProvider ? 'provider' : 'user',
-      };
+    'identifier': FlavorConfig.isProvider
+        ? '+966${identifierController.text.trim().neglectStartingZero}'
+        : identifierController.text.trim(),
+    'password': passwordController.text,
+    'user_role': FlavorConfig.isProvider ? 'provider' : 'user',
+  };
 
   void disposeVariables() {
     identifierController.dispose();

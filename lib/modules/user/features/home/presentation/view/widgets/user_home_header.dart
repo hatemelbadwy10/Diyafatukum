@@ -52,11 +52,7 @@ class UserHomeHeader extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ).flexible(),
                   4.gap,
-                  Assets.icons.dropdownArrow.path.toSvg(
-                    color: context.titleSmall.color,
-                    width: 14,
-                    height: 14,
-                  ),
+               
                 ],
               ),
             ],

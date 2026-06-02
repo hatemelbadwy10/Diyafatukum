@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/resources/type_defs.dart';
+import '../../../../profile/data/model/user_model.dart';
 
 mixin ContactUsMixin {
   final TextEditingController nameController = TextEditingController();
@@ -9,9 +10,10 @@ mixin ContactUsMixin {
   final TextEditingController messageController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  BodyMap get body => {
-    'name': nameController.text,
-    'phone': phoneController.text,
+  BodyMap buildBody({UserModel? user, required bool isGuest}) => {
+    'name': isGuest ? nameController.text : user?.name ?? '',
+    'phone': isGuest ? phoneController.text : user?.phone ?? '',
+    'email': isGuest ? emailController.text : user?.email ?? '',
     'message': messageController.text,
   };
 

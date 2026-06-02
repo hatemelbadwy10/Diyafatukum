@@ -66,6 +66,8 @@ enum OrderTimelineStatus {
       case 'delivery':
         return OrderTimelineStatus.onTheWay;
       case 'delivered':
+      case 'arrived':
+      case 'arrive':
       case 'completed':
       case 'complete':
         return OrderTimelineStatus.delivered;
@@ -135,6 +137,7 @@ class OrderTimelineStep extends Equatable {
 
 class OrderModel extends Equatable {
   const OrderModel({
+    required this.backendId,
     required this.id,
     required this.storeName,
     required this.storeImagePath,
@@ -147,8 +150,12 @@ class OrderModel extends Equatable {
     required this.tabStatus,
     required this.activeStatus,
     required this.timeline,
+    required this.cancellationReason,
+    required this.createdAt,
+    required this.scheduledAt,
   });
 
+  final String backendId;
   final String id;
   final String storeName;
   final String storeImagePath;
@@ -161,6 +168,9 @@ class OrderModel extends Equatable {
   final OrderTabStatus tabStatus;
   final OrderTimelineStatus activeStatus;
   final List<OrderTimelineStep> timeline;
+  final String cancellationReason;
+  final DateTime? createdAt;
+  final DateTime? scheduledAt;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     final store = json['store'] as Map<String, dynamic>?;
@@ -182,6 +192,13 @@ class OrderModel extends Equatable {
     );
 
     return OrderModel(
+      backendId:
+          (json['id'] ??
+                  json['order_id'] ??
+                  json['orderId'] ??
+                  json['order_number'] ??
+                  '')
+              .toString(),
       id: (json['order_number'] ?? json['id'] ?? '').toString(),
       storeName:
           (store?['name'] ??
@@ -225,11 +242,27 @@ class OrderModel extends Equatable {
       tabStatus: _resolveTabStatus(statusValue),
       activeStatus: activeStatus,
       timeline: _normalizeTimeline(parsedTimeline, activeStatus),
+      cancellationReason:
+          (json['cancellation_reason'] ??
+                  json['cancel_reason'] ??
+                  json['cancelled_reason'] ??
+                  '')
+              .toString(),
+      createdAt: _parseNullableDateTime(
+        json['created_at'] ?? json['createdAt'],
+      ),
+      scheduledAt: _parseNullableDateTime(
+        json['occasion_date'] ??
+            json['delivery_date'] ??
+            json['scheduled_at'] ??
+            json['event_date'],
+      ),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'backend_id': backendId,
       'id': id,
       'store_name': storeName,
       'store_image_path': storeImagePath,
@@ -242,11 +275,118 @@ class OrderModel extends Equatable {
       'tab_status': tabStatus.name,
       'active_status': activeStatus.value,
       'timeline': timeline.map((step) => step.toJson()).toList(),
+      'cancellation_reason': cancellationReason,
+      'created_at': createdAt?.toIso8601String(),
+      'scheduled_at': scheduledAt?.toIso8601String(),
     };
+  }
+
+  bool get hasExecutionStarted =>
+      activeStatus == OrderTimelineStatus.preparing ||
+      activeStatus == OrderTimelineStatus.onTheWay ||
+      activeStatus == OrderTimelineStatus.delivered;
+
+  bool get canRequestCancellation =>
+      tabStatus == OrderTabStatus.current &&
+      activeStatus != OrderTimelineStatus.cancelled &&
+      activeStatus != OrderTimelineStatus.rejected &&
+      !hasExecutionStarted;
+
+  bool get canProviderAccept =>
+      tabStatus == OrderTabStatus.current &&
+      activeStatus == OrderTimelineStatus.pending;
+
+  bool get canProviderReject =>
+      tabStatus == OrderTabStatus.current &&
+      activeStatus == OrderTimelineStatus.pending;
+
+  OrderTimelineStatus? get nextProviderStatus {
+    switch (activeStatus) {
+      case OrderTimelineStatus.accepted:
+        return OrderTimelineStatus.preparing;
+      case OrderTimelineStatus.preparing:
+        return OrderTimelineStatus.onTheWay;
+      case OrderTimelineStatus.onTheWay:
+        return OrderTimelineStatus.delivered;
+      default:
+        return null;
+    }
+  }
+
+  bool get canProviderAdvanceStatus =>
+      tabStatus == OrderTabStatus.current && nextProviderStatus != null;
+
+  OrderCancellationPolicy get cancellationPolicy {
+    if (scheduledAt == null) return OrderCancellationPolicy.review;
+
+    final now = DateTime.now();
+    final durationUntilEvent = scheduledAt!.difference(now);
+
+    if (durationUntilEvent.inHours < 48) {
+      return OrderCancellationPolicy.none;
+    }
+
+    if (durationUntilEvent.inHours < 72) {
+      return OrderCancellationPolicy.quarter;
+    }
+
+    final hasRecentConfirmation =
+        createdAt != null &&
+        now.difference(createdAt!).inHours <= 24 &&
+        durationUntilEvent.inHours > 72;
+
+    if (hasRecentConfirmation || durationUntilEvent.inHours >= 168) {
+      return OrderCancellationPolicy.full;
+    }
+
+    if (durationUntilEvent.inHours >= 72) {
+      return OrderCancellationPolicy.half;
+    }
+
+    return OrderCancellationPolicy.review;
+  }
+
+  OrderModel copyWith({
+    String? backendId,
+    String? id,
+    String? storeName,
+    String? storeImagePath,
+    String? storePhone,
+    List<String>? itemsSummary,
+    String? dateLabel,
+    String? address,
+    String? notes,
+    double? totalPaid,
+    OrderTabStatus? tabStatus,
+    OrderTimelineStatus? activeStatus,
+    List<OrderTimelineStep>? timeline,
+    String? cancellationReason,
+    DateTime? createdAt,
+    DateTime? scheduledAt,
+  }) {
+    return OrderModel(
+      backendId: backendId ?? this.backendId,
+      id: id ?? this.id,
+      storeName: storeName ?? this.storeName,
+      storeImagePath: storeImagePath ?? this.storeImagePath,
+      storePhone: storePhone ?? this.storePhone,
+      itemsSummary: itemsSummary ?? this.itemsSummary,
+      dateLabel: dateLabel ?? this.dateLabel,
+      address: address ?? this.address,
+      notes: notes ?? this.notes,
+      totalPaid: totalPaid ?? this.totalPaid,
+      tabStatus: tabStatus ?? this.tabStatus,
+      activeStatus: activeStatus ?? this.activeStatus,
+      timeline: timeline ?? this.timeline,
+      cancellationReason: cancellationReason ?? this.cancellationReason,
+      createdAt: createdAt ?? this.createdAt,
+      scheduledAt: scheduledAt ?? this.scheduledAt,
+    );
   }
 
   @override
   List<Object?> get props => [
+    backendId,
     id,
     storeName,
     storeImagePath,
@@ -259,8 +399,50 @@ class OrderModel extends Equatable {
     tabStatus,
     activeStatus,
     timeline,
+    cancellationReason,
+    createdAt,
+    scheduledAt,
   ];
+
+  OrderModel markProviderAccepted() {
+    return copyWith(
+      tabStatus: OrderTabStatus.current,
+      activeStatus: OrderTimelineStatus.accepted,
+      timeline: _normalizeTimeline(
+        const [],
+        OrderTimelineStatus.accepted,
+      ),
+    );
+  }
+
+  OrderModel markProviderRejected(String reason) {
+    return copyWith(
+      tabStatus: OrderTabStatus.cancelled,
+      activeStatus: OrderTimelineStatus.rejected,
+      cancellationReason: reason,
+      timeline: const [
+        OrderTimelineStep(
+          status: OrderTimelineStatus.rejected,
+          label: '',
+          completed: true,
+          current: true,
+        ),
+      ],
+    );
+  }
+
+  OrderModel markProviderAdvanced(OrderTimelineStatus status) {
+    return copyWith(
+      tabStatus: status == OrderTimelineStatus.delivered
+          ? OrderTabStatus.completed
+          : OrderTabStatus.current,
+      activeStatus: status,
+      timeline: _normalizeTimeline(const [], status),
+    );
+  }
 }
+
+enum OrderCancellationPolicy { full, half, quarter, none, review }
 
 List<String> _parseItemsSummary({dynamic rawItemsSummary, List? items}) {
   if (rawItemsSummary is List) {
@@ -291,6 +473,15 @@ List<String> _parseItemsSummary({dynamic rawItemsSummary, List? items}) {
 double _parseDouble(dynamic value) {
   if (value is num) return value.toDouble();
   return double.tryParse(value?.toString() ?? '') ?? 0;
+}
+
+DateTime? _parseNullableDateTime(dynamic value) {
+  final rawValue = value?.toString();
+  if (rawValue == null || rawValue.isEmpty || rawValue == 'null') {
+    return null;
+  }
+
+  return DateTime.tryParse(rawValue);
 }
 
 String _parseOrderDateLabel(dynamic value) {
@@ -350,53 +541,71 @@ List<OrderTimelineStep> _normalizeTimeline(
 ) {
   if (timeline.isEmpty) return _fallbackTimeline(activeStatus);
 
-  final hasCurrent = timeline.any((step) => step.current);
-  if (hasCurrent) return timeline;
+  final stepsByStatus = {for (final step in timeline) step.status: step};
+  final isTerminalStatus =
+      activeStatus == OrderTimelineStatus.delivered ||
+      activeStatus == OrderTimelineStatus.cancelled ||
+      activeStatus == OrderTimelineStatus.rejected;
+  final activeIndex = _progressStatuses.indexOf(
+    activeStatus == OrderTimelineStatus.cancelled ||
+            activeStatus == OrderTimelineStatus.rejected
+        ? OrderTimelineStatus.delivered
+        : activeStatus,
+  );
 
-  return timeline
-      .map(
-        (step) => step.status == activeStatus
-            ? step.copyWith(completed: true, current: true)
-            : step,
-      )
-      .toList();
-}
+  return _progressStatuses.map((status) {
+    final baseStep =
+        stepsByStatus[status] ??
+        OrderTimelineStep(
+          status: status,
+          label: '',
+          completed: false,
+          current: false,
+        );
+    final index = _progressStatuses.indexOf(status);
 
-List<OrderTimelineStep> _fallbackTimeline(OrderTimelineStatus activeStatus) {
-  if (activeStatus == OrderTimelineStatus.cancelled ||
-      activeStatus == OrderTimelineStatus.rejected) {
-    return [
-      const OrderTimelineStep(
-        status: OrderTimelineStatus.pending,
-        label: '',
-        completed: true,
-        current: false,
-      ),
-      OrderTimelineStep(
-        status: activeStatus,
-        label: '',
-        completed: true,
-        current: true,
-      ),
-    ];
-  }
+    if (isTerminalStatus) {
+      return baseStep.copyWith(completed: true, current: false);
+    }
 
-  const statuses = [
-    OrderTimelineStatus.pending,
-    OrderTimelineStatus.accepted,
-    OrderTimelineStatus.preparing,
-    OrderTimelineStatus.onTheWay,
-    OrderTimelineStatus.delivered,
-  ];
-  final activeIndex = statuses.indexOf(activeStatus);
-
-  return statuses.map((status) {
-    final index = statuses.indexOf(status);
-    return OrderTimelineStep(
-      status: status,
-      label: '',
-      completed: activeIndex >= 0 && index <= activeIndex,
+    return baseStep.copyWith(
+      completed: index <= activeIndex,
       current: status == activeStatus,
     );
   }).toList();
 }
+
+List<OrderTimelineStep> _fallbackTimeline(OrderTimelineStatus activeStatus) {
+  final isTerminalStatus =
+      activeStatus == OrderTimelineStatus.delivered ||
+      activeStatus == OrderTimelineStatus.cancelled ||
+      activeStatus == OrderTimelineStatus.rejected;
+  final activeIndex = _progressStatuses.indexOf(
+    activeStatus == OrderTimelineStatus.cancelled ||
+            activeStatus == OrderTimelineStatus.rejected
+        ? OrderTimelineStatus.delivered
+        : activeStatus,
+  );
+
+  return _progressStatuses.map((status) {
+    final index = _progressStatuses.indexOf(status);
+    return OrderTimelineStep(
+      status: status,
+      label: '',
+      completed: isTerminalStatus || (activeIndex >= 0 && index <= activeIndex),
+      current:
+          !isTerminalStatus &&
+          activeStatus != OrderTimelineStatus.cancelled &&
+          activeStatus != OrderTimelineStatus.rejected &&
+          status == activeStatus,
+    );
+  }).toList();
+}
+
+const List<OrderTimelineStatus> _progressStatuses = [
+  OrderTimelineStatus.pending,
+  OrderTimelineStatus.accepted,
+  OrderTimelineStatus.preparing,
+  OrderTimelineStatus.onTheWay,
+  OrderTimelineStatus.delivered,
+];

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../../core/config/flavor/flavor_config.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../../data/model/navigation_bar_items.dart';
 import '../widgets/login_dialog.dart';
@@ -34,9 +35,10 @@ class _ScaffoldWithNavBarScreenState extends State<ScaffoldWithNavBarScreen> {
 
   void _onTap(NavigationBarItems item) {
     final isGuest = context.read<AuthCubit>().state.status.isGuest;
-    final isProtectedItem =
-        item == NavigationBarItems.stores ||
-        item == NavigationBarItems.auctions;
+    final isProtectedItem = FlavorConfig.isProvider
+        ? false
+        : item == NavigationBarItems.stores ||
+              item == NavigationBarItems.auctions;
     if (isGuest && isProtectedItem) {
       LoginDialog().show(context);
       return;

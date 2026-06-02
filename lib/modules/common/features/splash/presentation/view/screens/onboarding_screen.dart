@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/config/flavor/flavor_config.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/config/theme/light_theme.dart';
 import '../../../../../../../core/resources/resources.dart';
@@ -105,6 +106,7 @@ class OnboardingScreen extends StatelessWidget {
                     fontSize: 17,
                   ),
                   24.gap,
+                  if (!FlavorConfig.isProvider)
                   TextButton(
                     onPressed: () => _continueAsGuest(context),
                     style: TextButton.styleFrom(

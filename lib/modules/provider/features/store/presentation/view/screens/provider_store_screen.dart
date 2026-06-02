@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
+import '../../../../../../../core/widgets/custom_dialog.dart';
 import '../../../../../../../core/widgets/custom_fallback_view.dart';
 import '../../../../../../../core/widgets/custom_loading.dart';
 import '../../controller/provider_store_cubit/provider_store_cubit.dart';
@@ -79,9 +80,11 @@ class ProviderStoreScreen extends StatelessWidget {
                             ...store.categories.map(
                               (category) => ProviderStoreCategoryChip(
                                 label: category.id == 'all'
-                                    ? LocaleKeys.provider_store_categories_all.tr()
+                                    ? LocaleKeys.provider_store_categories_all
+                                          .tr()
                                     : category.name,
-                                isSelected: state.selectedCategoryId == category.id,
+                                isSelected:
+                                    state.selectedCategoryId == category.id,
                                 onTap: () => cubit.selectCategory(category.id),
                               ).paddingEnd(10),
                             ),
@@ -89,7 +92,8 @@ class ProviderStoreScreen extends StatelessWidget {
                               onTap: () => context.showBottomSheet(
                                 BlocProvider.value(
                                   value: cubit,
-                                  child: const ProviderStoreAddCategoryBottomSheet(),
+                                  child:
+                                      const ProviderStoreAddCategoryBottomSheet(),
                                 ),
                               ),
                             ),
@@ -101,7 +105,9 @@ class ProviderStoreScreen extends StatelessWidget {
                           onAddProductTap: () => context.showBottomSheet(
                             BlocProvider.value(
                               value: cubit,
-                              child: ProviderStoreAddProductBottomSheet(store: store),
+                              child: ProviderStoreAddProductBottomSheet(
+                                store: store,
+                              ),
                             ),
                           ),
                         )
@@ -112,10 +118,42 @@ class ProviderStoreScreen extends StatelessWidget {
                             ...state.visibleProducts.map(
                               (product) => ProviderStoreProductCard(
                                 product: product,
-                                onDeleteTap: () => cubit.deleteProduct(product.id),
-                                onEditTap: () => Toaster.showToast(
-                                  LocaleKeys.provider_store_edit.tr(),
-                                  isError: false,
+                                onDeleteTap: () => context.showDialog(
+                                  CustomDialog.destructive(
+                                    title: LocaleKeys
+                                        .provider_store_dialogs_delete_product_title
+                                        .tr(),
+                                    subtitle: LocaleKeys
+                                        .provider_store_dialogs_delete_product_subtitle
+                                        .tr(),
+                                    confirmLabel: LocaleKeys.actions_delete
+                                        .tr(),
+                                    autoCloseOnAction: true,
+                                    onConfirm: () async {
+                                      final failure = await cubit.deleteProduct(
+                                        product.id,
+                                      );
+                                      if (failure != null) {
+                                        Toaster.showToast(failure.message);
+                                        return;
+                                      }
+                                      Toaster.showToast(
+                                        LocaleKeys
+                                            .provider_store_messages_product_deleted
+                                            .tr(),
+                                        isError: false,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                onEditTap: () => context.showBottomSheet(
+                                  BlocProvider.value(
+                                    value: cubit,
+                                    child: ProviderStoreAddProductBottomSheet(
+                                      store: store,
+                                      product: product,
+                                    ),
+                                  ),
                                 ),
                               ).paddingBottom(18),
                             ),
@@ -123,11 +161,13 @@ class ProviderStoreScreen extends StatelessWidget {
                           ],
                         ),
                       24.gap,
-                       if (!state.isEmpty) ...[
+                      if (!state.isEmpty) ...[
                         24.gap,
                         Text(
                               '+ ${LocaleKeys.provider_store_actions_add_product.tr()}',
-                              style: context.titleMedium.bold.s18.setColor(context.primaryColor),
+                              style: context.titleMedium.bold.s18.setColor(
+                                context.primaryColor,
+                              ),
                               textAlign: TextAlign.center,
                             )
                             .center()
@@ -136,12 +176,17 @@ class ProviderStoreScreen extends StatelessWidget {
                               width: double.infinity,
                               alignment: Alignment.center,
                             )
-                            .withDottedBorder(color: context.primaryColor, radius: 12)
+                            .withDottedBorder(
+                              color: context.primaryColor,
+                              radius: 12,
+                            )
                             .onTap(
                               () => context.showBottomSheet(
                                 BlocProvider.value(
                                   value: cubit,
-                                  child: ProviderStoreAddProductBottomSheet(store: store),
+                                  child: ProviderStoreAddProductBottomSheet(
+                                    store: store,
+                                  ),
                                 ),
                               ),
                               borderRadius: 12.borderRadius,
@@ -151,7 +196,7 @@ class ProviderStoreScreen extends StatelessWidget {
 
                       32.gap,
                     ],
-                  ).toSliver(),
+                  ).paddingHorizontal(16).toSliver(),
                 ],
               );
             },

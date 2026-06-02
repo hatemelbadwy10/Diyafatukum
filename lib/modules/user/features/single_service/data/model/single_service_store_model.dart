@@ -147,6 +147,9 @@ class SingleServiceStoreItemModel extends Equatable {
     required this.categoryName,
     required this.quantity,
     required this.inStock,
+    required this.isInCart,
+    this.cartItemId,
+    required this.cartQuantity,
   });
 
   final String id;
@@ -158,10 +161,14 @@ class SingleServiceStoreItemModel extends Equatable {
   final String categoryName;
   final int quantity;
   final bool inStock;
+  final bool isInCart;
+  final String? cartItemId;
+  final int cartQuantity;
 
   bool get isAvailable => inStock && quantity > 0;
 
   factory SingleServiceStoreItemModel.fromJson(Map<String, dynamic> json) {
+    final inCart = json['in_cart'] as Map<String, dynamic>? ?? {};
     return SingleServiceStoreItemModel(
       id: json['id']?.toString() ?? '',
       name: json['name'] ?? '',
@@ -172,6 +179,9 @@ class SingleServiceStoreItemModel extends Equatable {
       categoryName: json['category_name'] ?? '',
       quantity: json['quantity'] ?? 0,
       inStock: json['in_stock'] == true || json['in_stock'] == 1,
+      isInCart: inCart['in_cart'] == true || inCart['in_cart'] == 1,
+      cartItemId: inCart['cart_item_id']?.toString(),
+      cartQuantity: _parseIntOrZero(inCart['quantity']),
     );
   }
 
@@ -186,7 +196,15 @@ class SingleServiceStoreItemModel extends Equatable {
     categoryName,
     quantity,
     inStock,
+    isInCart,
+    cartItemId,
+    cartQuantity,
   ];
+}
+
+int _parseIntOrZero(dynamic value) {
+  if (value is int) return value;
+  return int.tryParse(value?.toString() ?? '') ?? 0;
 }
 
 class SingleServiceStoreScreenArguments extends Equatable {

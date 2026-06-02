@@ -14,6 +14,7 @@ import '../../../../../../../core/widgets/custom_input_field.dart';
 import '../../../../../../../core/widgets/custom_phone_field.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../../../core/widgets/buttons/custom_buttons.dart';
+import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../controller/contact_us_cubit/contact_us_cubit.dart';
 import '../../controller/contact_us_cubit/contact_us_mixin.dart';
 
@@ -26,7 +27,17 @@ class ContactUsScreen extends StatefulWidget {
 
 class _ContactUsScreenState extends State<ContactUsScreen> with ContactUsMixin {
   @override
+  void dispose() {
+    disposeControllers();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final authState = context.read<AuthCubit>().state;
+    final isGuest = authState.status.isGuest;
+    final user = authState.user;
+
     return BlocProvider(
       create: (context) => sl<ContactUsCubit>(),
       child: BlocConsumer<ContactUsCubit, ContactUsState>(
@@ -46,7 +57,9 @@ class _ContactUsScreenState extends State<ContactUsScreen> with ContactUsMixin {
               label: LocaleKeys.actions_send.tr(),
               onPressed: () {
                 if (validateForm()) {
-                  context.read<ContactUsCubit>().contactUs(body);
+                  context.read<ContactUsCubit>().contactUs(
+                    buildBody(user: user, isGuest: isGuest),
+                  );
                 }
               },
             ).toBottomNavBar(bottom: context.keyboardPadding + 16),
@@ -56,24 +69,27 @@ class _ContactUsScreenState extends State<ContactUsScreen> with ContactUsMixin {
                 spacing: 16,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomTextField(
-                    controller: nameController,
-                    title: LocaleKeys.details_name.tr(),
-                    hint: LocaleKeys.details_name.tr().enterHint,
-                    autovalidateMode: AutovalidateMode.disabled,
-                  ),
-                  CustomPhoneField(
-                    showPrefixIcon: false,
-                    controller: phoneController,
-                    autovalidateMode: AutovalidateMode.disabled,
-                  ),
-                  CustomTextField(
-                    inputType: InputType.email,
-                    controller: emailController,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    title: LocaleKeys.details_contact_email.tr(),
-                    hint: LocaleKeys.details_contact_email.tr().enterHint,
-                  ),
+                  if (isGuest) ...[
+                    CustomTextField(
+                      controller: nameController,
+                      inputType: InputType.name,
+                      title: LocaleKeys.details_name.tr(),
+                      hint: LocaleKeys.details_name.tr().enterHint,
+                      autovalidateMode: AutovalidateMode.disabled,
+                    ),
+                    CustomPhoneField(
+                      showPrefixIcon: false,
+                      controller: phoneController,
+                      autovalidateMode: AutovalidateMode.disabled,
+                    ),
+                    CustomTextField(
+                      inputType: InputType.email,
+                      controller: emailController,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      title: LocaleKeys.details_contact_email.tr(),
+                      hint: LocaleKeys.details_contact_email.tr().enterHint,
+                    ),
+                  ],
                   CustomTextField(
                     maxLines: 5,
                     controller: messageController,

@@ -39,18 +39,26 @@ class ProviderHomeScreen extends StatelessWidget {
                   28.gap,
                   _ProviderHomeDayHeader(),
                   20.gap,
-                  VerticalListView(
-                    itemCount: state.orders.length,
-                    padding: AppSize.screenPadding.edgeInsetsHorizontal,
-                    itemBuilder: (context, index) {
-                      final order = state.orders[index];
-                      return ProviderHomeOrderCard(
-                        order: order,
-                        onAccept: () => cubit.acceptOrder(order.id),
-                        onReject: () => cubit.rejectOrder(order.id),
-                      );
-                    },
-                  ).expand(),
+                  if (state.orders.isEmpty)
+                    CustomFallbackView(
+                      title: LocaleKeys.provider_home_empty_title.tr(),
+                      subtitle: LocaleKeys.provider_home_empty_subtitle.tr(),
+                      buttonLabel: LocaleKeys.actions_retry.tr(),
+                      onButtonPressed: cubit.loadHome,
+                    ).expand()
+                  else
+                    VerticalListView(
+                      itemCount: state.orders.length,
+                      padding: AppSize.screenPadding.edgeInsetsHorizontal,
+                      itemBuilder: (context, index) {
+                        final order = state.orders[index];
+                        return ProviderHomeOrderCard(
+                          order: order,
+                          onAccept: () => cubit.acceptOrder(order.id),
+                          onReject: () => cubit.rejectOrder(order.id),
+                        );
+                      },
+                    ).expand(),
                 ],
               ),
             );

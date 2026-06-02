@@ -27,6 +27,27 @@ class SingleServiceStoreScreen extends StatelessWidget {
 
   final SingleServiceStoreScreenArguments arguments;
 
+  Future<bool> _runCartOperation({
+    required Future<dynamic> Function() action,
+    void Function(String message)? onSuccess,
+  }) async {
+    final result = await action();
+
+    return result.fold(
+      (failure) {
+        Toaster.showToast(failure.message);
+        return false;
+      },
+      (response) {
+        final message = response.message?.trim() ?? '';
+        if (message.isNotEmpty) {
+          onSuccess?.call(message);
+        }
+        return true;
+      },
+    );
+  }
+
   Future<void> _addItemsToCart({
     required BuildContext context,
     required SingleServiceStoreCubit cubit,
@@ -46,6 +67,83 @@ class SingleServiceStoreScreen extends StatelessWidget {
         isError: false,
       );
     });
+  }
+
+  Future<void> _syncCartItems({
+    required BuildContext context,
+    required SingleServiceStoreCubit cubit,
+    required SingleServiceStoreState state,
+  }) async {
+    final repository = sl<BagRepository>();
+    final currentStoreId = int.tryParse(arguments.store.id);
+    final itemsToAdd = <BagItemModel>[];
+    final itemIdsToRemove = <String>[];
+    final itemQuantitiesToUpdate = <MapEntry<String, int>>[];
+    var successMessage = '';
+
+    for (final item in state.items) {
+      final quantity = state.quantityFor(item.id);
+      final hasCartItemId = item.cartItemId?.isNotEmpty == true;
+
+      if (hasCartItemId) {
+        if (quantity == 0) {
+          itemIdsToRemove.add(item.cartItemId!);
+        } else {
+          itemQuantitiesToUpdate.add(MapEntry(item.cartItemId!, quantity));
+        }
+        continue;
+      }
+
+      if (quantity > 0) {
+        itemsToAdd.add(
+          BagItemModel(
+            id: item.id,
+            productId: item.id,
+            name: item.name,
+            price: item.price,
+            imagePath: item.imagePath,
+            quantity: quantity,
+          ),
+        );
+      }
+    }
+
+    for (final itemId in itemIdsToRemove) {
+      final didSucceed = await _runCartOperation(
+        action: () => repository.removeItem(itemId),
+        onSuccess: (message) => successMessage = message,
+      );
+      if (!didSucceed) return;
+    }
+
+    for (final update in itemQuantitiesToUpdate) {
+      final didSucceed = await _runCartOperation(
+        action: () => repository.updateItemQuantity(update.key, update.value),
+        onSuccess: (message) => successMessage = message,
+      );
+      if (!didSucceed) return;
+    }
+
+    if (itemsToAdd.isNotEmpty) {
+      final didSucceed = await _runCartOperation(
+        action: () => repository.addItems(itemsToAdd),
+        onSuccess: (message) => successMessage = message,
+      );
+      if (!didSucceed) return;
+    }
+
+    if (!context.mounted) return;
+
+    context.maybeRead<AuthCubit>()?.updateUserCartStoreId(
+      state.quantities.isNotEmpty ? currentStoreId : null,
+    );
+    cubit.reloadStore();
+    Toaster.showToast(
+      successMessage.isNotEmpty
+          ? successMessage
+          : LocaleKeys.bag_notifications_quantity_updated.tr(),
+      isError: false,
+    );
   }
 
   Future<void> _replaceCartAndAddItems({
@@ -74,15 +172,33 @@ class SingleServiceStoreScreen extends StatelessWidget {
   Future<void> _handleAddToCart({
     required BuildContext context,
     required SingleServiceStoreCubit cubit,
-    required List<BagItemModel> selectedItems,
+    required SingleServiceStoreState state,
   }) async {
     final authCubit = context.maybeRead<AuthCubit>();
     if (!(authCubit?.state.status.isAuthorized ?? false)) {
       LoginDialog().show(context);
       return;
     }
+    final selectedItems = state.items
+        .where((item) => state.quantityFor(item.id) > 0 && !item.isInCart)
+        .map(
+          (item) => BagItemModel(
+            id: item.id,
+            productId: item.id,
+            name: item.name,
+            price: item.price,
+            imagePath: item.imagePath,
+            quantity: state.quantityFor(item.id),
+          ),
+        )
+        .toList();
     final currentStoreId = int.tryParse(arguments.store.id);
     final cartStoreId = authCubit?.state.user.cartStoreId;
+
+    if (state.hasExistingCartItems) {
+      await _syncCartItems(context: context, cubit: cubit, state: state);
+      return;
+    }
 
     if (currentStoreId != null &&
         cartStoreId != null &&
@@ -147,29 +263,18 @@ class SingleServiceStoreScreen extends StatelessWidget {
             BlocBuilder<SingleServiceStoreCubit, SingleServiceStoreState>(
               builder: (context, state) {
                 final cubit = context.read<SingleServiceStoreCubit>();
-                final selectedItems = state.items
-                    .where((item) => state.quantityFor(item.id) > 0)
-                    .map(
-                      (item) => BagItemModel(
-                        id: item.id,
-                        productId: item.id,
-                        name: item.name,
-                        price: item.price,
-                        imagePath: item.imagePath,
-                        quantity: state.quantityFor(item.id),
-                      ),
-                    )
-                    .toList();
-
                 return SingleServiceStoreBottomBar(
                   totalPrice: state.totalPrice,
                   selectedItemsCount: state.selectedItemsCount,
+                  label: state.hasExistingCartItems
+                      ? LocaleKeys.home_user_store_update_cart.tr()
+                      : LocaleKeys.home_user_store_add_to_cart.tr(),
                   onTap: () => _handleAddToCart(
                     context: context,
                     cubit: cubit,
-                    selectedItems: selectedItems,
+                    state: state,
                   ),
-                ).visible(state.hasSelection);
+                ).visible(state.shouldShowCartAction);
               },
             ),
         body: BlocBuilder<SingleServiceStoreCubit, SingleServiceStoreState>(

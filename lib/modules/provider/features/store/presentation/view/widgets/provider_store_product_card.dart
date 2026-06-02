@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../../core/resources/resources.dart';
+import '../../../../../../../../core/widgets/custom_image.dart';
 import '../../../data/model/provider_store_model.dart';
 
 class ProviderStoreProductCard extends StatelessWidget {
@@ -24,47 +25,51 @@ class ProviderStoreProductCard extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              children: [
-                Assets.icons.deleteIcon.svg(
-                  width: 20,
-                  height: 20,
-                  colorFilter: context.errorColor.colorFilter,
-                ).onTap(onDeleteTap),
-                20.gap,
-                Assets.icons.tablerEdit.svg(
-                  width: 20,
-                  height: 20,
-                  colorFilter: context.primaryColor.colorFilter,
-                ).onTap(onEditTap),
-              ],
+          SizedBox(
+              width: 92,
+              height: 92,
+              child:
+                  (product.imagePath.startsWith('http')
+                          ? CustomImage(
+                              height: 92,
+                              width: 92,
+                              imageUrl: product.imagePath,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(product.imagePath, fit: BoxFit.cover))
+                      .clipRRect(18),
             ),
             16.gap,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  product.name,
-                  style: context.titleMedium.medium.s20,
-                ),
+                Text(product.name, style: context.titleMedium.medium.s20),
                 8.gap,
                 Text(
                   '${product.price.toStringAsFixed(product.price.truncateToDouble() == product.price ? 0 : 2)} ${LocaleKeys.currency_sar.tr()}',
-                  style: context.titleSmall.medium.s18.setColor(context.primaryColor),
+                  style: context.titleSmall.medium.s18.setColor(
+                    context.primaryColor,
+                  ),
                 ),
               ],
             ).expand(),
             14.gap,
-            DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: 18.borderRadius,
-                image: DecorationImage(
-                  image: AssetImage(product.imagePath),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: const SizedBox(width: 92, height: 92),
-            ),
+           
+               Assets.icons.deleteIcon
+                .svg(
+                  width: 20,
+                  height: 20,
+                  colorFilter: context.errorColor.colorFilter,
+                )
+                .onTap(onDeleteTap),
+            20.gap,
+            Assets.icons.tablerEdit
+                .svg(
+                  width: 20,
+                  height: 20,
+                  colorFilter: context.primaryColor.colorFilter,
+                )
+                .onTap(onEditTap),
           ],
         ),
         18.gap,

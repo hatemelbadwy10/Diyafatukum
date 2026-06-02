@@ -3,49 +3,86 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../../../core/data/client/api_client.dart';
 import '../../../../../../core/resources/constants/remote_urls.dart';
+import '../../../../../../core/resources/type_defs.dart';
 
 abstract class ProviderStoreRemoteDataSource {
   Future<Response> getStore();
+  Future<Response> getCategories();
+  Future<Response> getProducts({String? categoryId});
+  Future<Response> createProduct(FormData body);
+  Future<Response> updateProduct(String productId, FormData body);
+  Future<Response> deleteProduct(String productId);
+  Future<Response> createCategory(Map<String, dynamic> body);
+  Future<Response> updateStore(FormData body);
+  Future<Response> updateStoreDescription(FormData body);
 }
 
 @LazySingleton(as: ProviderStoreRemoteDataSource)
-class ProviderStoreRemoteDataSourceImpl implements ProviderStoreRemoteDataSource {
+class ProviderStoreRemoteDataSourceImpl
+    implements ProviderStoreRemoteDataSource {
   const ProviderStoreRemoteDataSourceImpl(this.client);
 
   final ApiClient client;
 
   @override
   Future<Response> getStore() async {
-    try {
-      return await client.get(RemoteUrls.providerStore);
-    } catch (_) {
-      return Response(
-        requestOptions: RequestOptions(path: RemoteUrls.providerStore),
-        statusCode: 200,
-        data: _fallbackResponse,
-      );
-    }
+    return client.get(RemoteUrls.profile);
+  }
+
+  @override
+  Future<Response> getCategories() {
+    return client.get(RemoteUrls.providerCategories);
+  }
+
+  @override
+  Future<Response> getProducts({String? categoryId}) {
+    final ParamsMap params = categoryId == null ? null : {'cat_id': categoryId};
+    return client.get(RemoteUrls.providerProducts, queryParameters: params);
+  }
+
+  @override
+  Future<Response> createProduct(FormData body) {
+    return client.post(
+      RemoteUrls.providerProducts,
+      data: body,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+  }
+
+  @override
+  Future<Response> updateProduct(String productId, FormData body) {
+    return client.post(
+      RemoteUrls.providerProduct(productId),
+      data: body,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+  }
+
+  @override
+  Future<Response> deleteProduct(String productId) {
+    return client.delete(RemoteUrls.providerProduct(productId));
+  }
+
+  @override
+  Future<Response> createCategory(Map<String, dynamic> body) {
+    return client.post(RemoteUrls.providerCategories, data: body);
+  }
+
+  @override
+  Future<Response> updateStore(FormData body) {
+    return client.post(
+      RemoteUrls.providerStore,
+      data: body,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+  }
+
+  @override
+  Future<Response> updateStoreDescription(FormData body) {
+    return client.post(
+      RemoteUrls.providerStoreDescription,
+      data: body,
+      options: Options(contentType: 'multipart/form-data'),
+    );
   }
 }
-
-const Map<String, dynamic> _fallbackResponse = {
-  'success': true,
-  'message': '',
-  'data': {
-    'id': 'miilagry-store',
-    'name': 'Miilagry Cake Shop',
-    'name_en': 'Cake Shop',
-    'category': 'حلويات',
-    'location': 'الرياض',
-    'cover_image_path': 'assets/images/home_banner.png',
-    'about_description':
-        'متجرنا على يقدم خدمات ومنتجات متجرنا على يقدم خدمات ومنتجات متجرنا على يقدم خدمات ومنتجات ..',
-    'about_highlights': [],
-    'whatsapp': '+966500000000',
-    'categories': [
-      {'id': 'all', 'name': 'All'},
-      {'id': 'cake', 'name': 'كيك'},
-    ],
-    'products': [],
-  },
-};

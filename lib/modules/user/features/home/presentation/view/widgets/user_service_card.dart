@@ -54,7 +54,7 @@ class UserServiceCard extends StatelessWidget {
                             Text(
                               service.name,
                               style: context.labelSmall.medium.s16,
-                              maxLines: 1,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ).flexible(),
                           ],

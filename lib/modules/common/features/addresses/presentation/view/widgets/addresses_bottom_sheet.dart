@@ -1,9 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/config/router/route_manager.dart';
@@ -17,12 +14,9 @@ import '../../../../../../../core/widgets/custom_fallback_view.dart';
 import '../../../../../../../core/widgets/custom_loading.dart';
 import '../../../../../../../core/widgets/vertical_list_view.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
-import '../../../data/model/address_model.dart';
 import '../../controller/add_address_cubit/add_address_cubit.dart';
 import '../../controller/addresses_cubit/addresses_cubit.dart';
 import '../../controller/default_address_cubit/default_address_cubit.dart';
-import '../screens/address_details_screen.dart';
-import '../screens/map_screen.dart';
 import 'add_address_button.dart';
 import 'address_selection_indicator.dart';
 import 'address_tile.dart';
@@ -121,28 +115,10 @@ class AddressesBottomSheet extends StatelessWidget {
                     title: LocaleKeys.addresses_empty_title.tr(),
                     subtitle: LocaleKeys.addresses_empty_subtitle.tr(),
                     buttonLabel: LocaleKeys.addresses_add.tr(),
-                    onButtonPressed: () => AppRoutes.map.push(
-                      extra: MapScreenArguments(
-                        onLocationSelected: (LatLng position, Placemark placemark) {
-                          AppRoutes.addressDetails.pushReplacement(
-                            extra: AddressDetailsScreenArguments(
-                              initialPosition: position,
-                              placemark: placemark,
-                              onAddressUpdated: (AddressModel address) {
-                                if (BaseRouter.contains(AppRoutes.checkout.name)) {
-                                  BaseRouter.pop();
-                                  BaseRouter.pop();
-                                  return;
-                                }
-                                AppRoutes.home.go();
-                                BaseRouter.pop();
-                                context.read<AddressesCubit>().addAddress(address);
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                    onButtonPressed: () {
+                      BaseRouter.pop();
+                      AppRoutes.addresses.push();
+                    },
                   ).paddingBottom(140).withHeight(context.height * 0.75),
                 );
               },

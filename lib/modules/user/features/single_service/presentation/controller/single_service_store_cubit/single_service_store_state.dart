@@ -7,6 +7,7 @@ class SingleServiceStoreState extends Equatable {
     required this.filteredItems,
     required this.categories,
     required this.quantities,
+    required this.initialQuantities,
     required this.totalPrice,
     this.selectedCategoryId,
     this.storeDetails,
@@ -23,6 +24,7 @@ class SingleServiceStoreState extends Equatable {
   final List<SingleServiceStoreCategoryModel> categories;
   final String? selectedCategoryId;
   final Map<String, int> quantities;
+  final Map<String, int> initialQuantities;
   final double totalPrice;
 
   factory SingleServiceStoreState.initial() {
@@ -32,6 +34,7 @@ class SingleServiceStoreState extends Equatable {
       filteredItems: const [],
       categories: const [],
       quantities: const {},
+      initialQuantities: const {},
       totalPrice: 0,
     );
   }
@@ -43,6 +46,20 @@ class SingleServiceStoreState extends Equatable {
 
   bool get hasSelection => quantities.isNotEmpty;
 
+  bool get hasPendingCartChanges {
+    if (quantities.length != initialQuantities.length) return true;
+
+    for (final entry in initialQuantities.entries) {
+      if (quantities[entry.key] != entry.value) return true;
+    }
+
+    return false;
+  }
+
+  bool get shouldShowCartAction => hasSelection || hasPendingCartChanges;
+
+  bool get hasExistingCartItems => initialQuantities.isNotEmpty;
+
   SingleServiceStoreState copyWith({
     CubitStatus<String>? status,
     SingleServiceStoreDetailsModel? storeDetails,
@@ -53,6 +70,7 @@ class SingleServiceStoreState extends Equatable {
     List<SingleServiceStoreCategoryModel>? categories,
     String? selectedCategoryId,
     Map<String, int>? quantities,
+    Map<String, int>? initialQuantities,
     double? totalPrice,
   }) {
     return SingleServiceStoreState(
@@ -65,6 +83,7 @@ class SingleServiceStoreState extends Equatable {
       categories: categories ?? this.categories,
       selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
       quantities: quantities ?? this.quantities,
+      initialQuantities: initialQuantities ?? this.initialQuantities,
       totalPrice: totalPrice ?? this.totalPrice,
     );
   }
@@ -80,6 +99,7 @@ class SingleServiceStoreState extends Equatable {
     categories,
     selectedCategoryId,
     quantities,
+    initialQuantities,
     totalPrice,
   ];
 }
