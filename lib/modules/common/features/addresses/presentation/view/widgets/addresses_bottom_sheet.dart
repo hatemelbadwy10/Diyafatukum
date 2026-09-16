@@ -14,6 +14,7 @@ import '../../../../../../../core/widgets/custom_fallback_view.dart';
 import '../../../../../../../core/widgets/custom_loading.dart';
 import '../../../../../../../core/widgets/vertical_list_view.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
+import '../../../data/model/address_model.dart';
 import '../../controller/add_address_cubit/add_address_cubit.dart';
 import '../../controller/addresses_cubit/addresses_cubit.dart';
 import '../../controller/default_address_cubit/default_address_cubit.dart';
@@ -22,7 +23,18 @@ import 'address_selection_indicator.dart';
 import 'address_tile.dart';
 
 class AddressesBottomSheet extends StatelessWidget {
-  const AddressesBottomSheet({super.key});
+  const AddressesBottomSheet({
+    super.key,
+    this.selectedAddressId,
+    this.onAddressSelected,
+    this.onNewAddressSelected,
+  });
+
+  final int? selectedAddressId;
+  final ValueChanged<AddressModel>? onAddressSelected;
+  final VoidCallback? onNewAddressSelected;
+
+  bool get isCheckoutSelection => onAddressSelected != null;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +61,10 @@ class AddressesBottomSheet extends StatelessWidget {
                         onFailed: (error) => Toaster.showToast(error.message),
                         onSuccess: (address) {
                           context.read<AuthCubit>().updateUserAddress(address);
-                          Toaster.showToast(LocaleKeys.addresses_success_default.tr(), isError: false);
+                          Toaster.showToast(
+                            LocaleKeys.addresses_success_default.tr(),
+                            isError: false,
+                          );
                         },
                       );
                     },
@@ -58,8 +73,14 @@ class AddressesBottomSheet extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Text(LocaleKeys.addresses_select.tr(), style: context.bodyLarge.regular.s14).expand(),
-                              CustomTextButton(label: LocaleKeys.actions_done.tr(), onPressed: () => BaseRouter.pop()),
+                              Text(
+                                LocaleKeys.addresses_select.tr(),
+                                style: context.bodyLarge.regular.s14,
+                              ).expand(),
+                              CustomTextButton(
+                                label: LocaleKeys.actions_done.tr(),
+                                onPressed: () => BaseRouter.pop(),
+                              ),
                             ],
                           ).paddingHorizontal(AppSize.screenPadding),
                           4.gap,
@@ -78,14 +99,37 @@ class AddressesBottomSheet extends StatelessWidget {
                                   return AddressTile(
                                     address: address,
                                     padding: AppSize.screenPadding,
-                                    backgroundColor: context.scaffoldBackgroundColor,
-                                    trailing: AddressSelectionIndicator(address: address),
+                                    backgroundColor:
+                                        context.scaffoldBackgroundColor,
+                                    trailing: isCheckoutSelection
+                                        ? Assets.icons.icon
+                                              .svg(height: 16)
+                                              .setContainerToView(
+                                                color: context.secondaryColor,
+                                                radius: 100,
+                                              )
+                                              .visible(
+                                                selectedAddressId == address.id,
+                                              )
+                                        : AddressSelectionIndicator(
+                                            address: address,
+                                          ),
                                     onTap: () {
+                                      if (isCheckoutSelection) {
+                                        BaseRouter.pop();
+                                        onAddressSelected?.call(address);
+                                        return;
+                                      }
                                       if (addState.status.isLoading ||
-                                          authState.address?.isDefault == true && authState.address?.id == address.id) {
+                                          authState.address?.isDefault ==
+                                                  true &&
+                                              authState.address?.id ==
+                                                  address.id) {
                                         return;
                                       } else {
-                                        context.read<DefaultAddressCubit>().setDefaultAddress(address);
+                                        context
+                                            .read<DefaultAddressCubit>()
+                                            .setDefaultAddress(address);
                                       }
                                     },
                                   );
@@ -93,17 +137,33 @@ class AddressesBottomSheet extends StatelessWidget {
                               ).expand();
                             },
                           ),
-                          AddAddressButton(
-                            onAddressUpdated: () {
-                              if (BaseRouter.contains(AppRoutes.checkout.name)) {
-                                BaseRouter.pop();
-                                BaseRouter.pop();
-                                return;
-                              }
-                              AppRoutes.home.go();
-                              BaseRouter.pop();
-                            },
-                          ).paddingHorizontal(AppSize.screenPadding).paddingTop(8),
+                          if (isCheckoutSelection)
+                            CustomButton(
+                                  label: LocaleKeys.bag_checkout_address_use_new
+                                      .tr(),
+                                  onPressed: () {
+                                    BaseRouter.pop();
+                                    onNewAddressSelected?.call();
+                                  },
+                                )
+                                .paddingHorizontal(AppSize.screenPadding)
+                                .paddingTop(8)
+                          else
+                            AddAddressButton(
+                                  onAddressUpdated: () {
+                                    if (BaseRouter.contains(
+                                      AppRoutes.checkout.name,
+                                    )) {
+                                      BaseRouter.pop();
+                                      BaseRouter.pop();
+                                      return;
+                                    }
+                                    AppRoutes.home.go();
+                                    BaseRouter.pop();
+                                  },
+                                )
+                                .paddingHorizontal(AppSize.screenPadding)
+                                .paddingTop(8),
                         ],
                       ).withHeight(context.height * 0.75);
                     },
@@ -117,7 +177,11 @@ class AddressesBottomSheet extends StatelessWidget {
                     buttonLabel: LocaleKeys.addresses_add.tr(),
                     onButtonPressed: () {
                       BaseRouter.pop();
-                      AppRoutes.addresses.push();
+                      if (isCheckoutSelection) {
+                        onNewAddressSelected?.call();
+                      } else {
+                        AppRoutes.addresses.push();
+                      }
                     },
                   ).paddingBottom(140).withHeight(context.height * 0.75),
                 );

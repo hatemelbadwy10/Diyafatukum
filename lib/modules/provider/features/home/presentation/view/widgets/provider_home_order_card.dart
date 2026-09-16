@@ -147,6 +147,8 @@ class _OrderStatusPill extends StatelessWidget {
     switch (status) {
       case ProviderHomeOrderStatus.accepted:
         return LocaleKeys.provider_home_card_status_accepted;
+      case ProviderHomeOrderStatus.paymentReceived:
+        return LocaleKeys.provider_home_card_status_payment_received;
       case ProviderHomeOrderStatus.rejected:
         return LocaleKeys.provider_home_card_status_rejected;
       case ProviderHomeOrderStatus.pending:
@@ -157,6 +159,7 @@ class _OrderStatusPill extends StatelessWidget {
   Color _background(BuildContext context) {
     switch (status) {
       case ProviderHomeOrderStatus.accepted:
+      case ProviderHomeOrderStatus.paymentReceived:
         return context.successColor.withValues(alpha: 0.14);
       case ProviderHomeOrderStatus.rejected:
         return context.errorColor.withValues(alpha: 0.12);
@@ -168,6 +171,7 @@ class _OrderStatusPill extends StatelessWidget {
   Color _foreground(BuildContext context) {
     switch (status) {
       case ProviderHomeOrderStatus.accepted:
+      case ProviderHomeOrderStatus.paymentReceived:
         return context.successColor;
       case ProviderHomeOrderStatus.rejected:
         return context.errorColor;

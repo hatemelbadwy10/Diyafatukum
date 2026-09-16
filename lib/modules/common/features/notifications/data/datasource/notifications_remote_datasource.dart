@@ -9,6 +9,7 @@ abstract class NotificationsRemoteDataSource {
   Future<Response> getNotifications();
   Future<Response> markAsRead(String id);
   Future<Response> updateSettings(BodyMap body);
+  Future<Response> updateDeviceToken(BodyMap body);
 }
 
 @LazySingleton(as: NotificationsRemoteDataSource)
@@ -27,4 +28,8 @@ class NotificationsRemoteDataSourceImpl
   @override
   Future<Response> updateSettings(BodyMap body) async =>
       client.put(RemoteUrls.notificationSettings, data: body);
+
+  @override
+  Future<Response> updateDeviceToken(BodyMap body) =>
+      client.post(RemoteUrls.deviceToken, data: body);
 }

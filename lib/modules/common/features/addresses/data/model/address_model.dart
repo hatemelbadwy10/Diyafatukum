@@ -5,7 +5,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 AddressModel addressFromJson(dynamic json) => AddressModel.fromJson(json);
 
 List<AddressModel> addressesFromJson(dynamic json) {
-  return List<AddressModel>.from(json.map((x) => AddressModel.fromJson(x)));
+  final source = json is Map<String, dynamic>
+      ? json['addresses'] ?? json['data'] ?? const []
+      : json;
+  return List<AddressModel>.from(
+    (source as List).map((x) => AddressModel.fromJson(x)),
+  );
 }
 
 class AddressModel extends Equatable {
@@ -25,9 +30,18 @@ class AddressModel extends Equatable {
 
   LatLng get latLng => LatLng(lat, lng);
 
-  String get fullAddress {
-    if (label.isNotEmpty) return label;
+  String get detailedAddress {
+    return [
+      if (buildingNumber.isNotEmpty) buildingNumber,
+      if (apartmentNumber.isNotEmpty) apartmentNumber,
+      if (floorNumber.isNotEmpty) floorNumber,
+      if (streetName.isNotEmpty) streetName,
+      if (area.isNotEmpty) area,
+      if (landmark.isNotEmpty) landmark,
+    ].join(', ');
+  }
 
+  String get fullAddress {
     final addressParts = [
       // if (buildingNumber.isNotEmpty) buildingNumber,
       // if (apartmentNumber.isNotEmpty) apartmentNumber,
@@ -37,7 +51,38 @@ class AddressModel extends Equatable {
       // if (landmark.isNotEmpty) landmark,
     ].where((part) => part.isNotEmpty);
 
-    return addressParts.isEmpty ? 'Address not available' : addressParts.join(', ');
+    if (addressParts.isNotEmpty) return addressParts.join(', ');
+    if (label.isNotEmpty) return label;
+    return 'Address not available';
+  }
+
+  factory AddressModel.fromForm({
+    required String buildingNumber,
+    required String apartmentNumber,
+    required String floorNumber,
+    required String streetName,
+    required String landmark,
+    required String area,
+    required double lat,
+    required double lng,
+    required AddressType type,
+    required String label,
+  }) {
+    return AddressModel(
+      id: 0,
+      buildingNumber: buildingNumber,
+      apartmentNumber: apartmentNumber,
+      floorNumber: floorNumber,
+      streetName: streetName,
+      landmark: landmark,
+      area: area,
+      lat: lat,
+      lng: lng,
+      type: type,
+      label: label,
+      isDefault: false,
+      deliveryFees: 0,
+    );
   }
 
   const AddressModel({
@@ -57,17 +102,45 @@ class AddressModel extends Equatable {
   });
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
-    id: json["id"],
-    buildingNumber: json["building_number"] ?? '',
-    apartmentNumber: json["appartement_number"] ?? '',
-    floorNumber: json["floor_number"] ?? '',
-    streetName: json["street_name"] ?? '',
-    landmark: json["landmark"] ?? '',
-    area: json["area"] ?? '',
-    lat: double.parse(json["lat"].toString()),
-    lng: double.parse(json["long"].toString()),
-    type: AddressType.fromValue(json["type"]),
-    label: json["address"] ?? '',
+    id: int.tryParse(json["id"].toString()) ?? 0,
+    buildingNumber: _stringValue(json, const [
+      'building_number',
+      'building_no',
+      'building',
+    ]),
+    apartmentNumber: _stringValue(json, const [
+      'appartement_number',
+      'apartment_number',
+      'apartment_no',
+      'apartment',
+    ]),
+    floorNumber: _stringValue(json, const [
+      'floor_number',
+      'floor_no',
+      'floor',
+    ]),
+    streetName: _stringValue(json, const [
+      'street_name',
+      'street',
+      'address_line',
+      'address',
+    ]),
+    landmark: _stringValue(json, const [
+      'landmark',
+      'additional_directions',
+      'additional_info',
+    ]),
+    area: _stringValue(json, const ['area', 'district', 'city']),
+    lat: double.tryParse((json["latitude"] ?? json["lat"]).toString()) ?? 0,
+    lng:
+        double.tryParse(
+          (json["longitude"] ?? json["long"] ?? json["lng"]).toString(),
+        ) ??
+        0,
+    type: AddressType.fromValue(
+      (json["type"] ?? json["label"] ?? '').toString().toLowerCase(),
+    ),
+    label: (json["label"] ?? json["address"] ?? '').toString(),
     isDefault: json["is_default"] ?? false,
     deliveryFees: num.tryParse(json["delivery_price"].toString()) ?? 0,
   );
@@ -153,4 +226,14 @@ class AddressModel extends Equatable {
     isDefault,
     deliveryFees,
   ];
+}
+
+String _stringValue(Map<String, dynamic> json, List<String> keys) {
+  for (final key in keys) {
+    final value = json[key]?.toString().trim();
+    if (value != null && value.isNotEmpty && value != 'null') {
+      return value;
+    }
+  }
+  return '';
 }

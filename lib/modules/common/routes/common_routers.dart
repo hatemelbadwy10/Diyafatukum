@@ -7,6 +7,7 @@ import '../../../core/config/router/app_route.dart';
 import '../../../core/config/router/page_transition.dart';
 import '../../../core/config/router/route_manager.dart';
 import '../../../core/config/service_locator/injection.dart';
+import '../features/addresses/presentation/view/screens/address_details_screen.dart';
 import '../features/addresses/presentation/view/screens/map_screen.dart';
 import '../features/auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../features/auth/presentation/view/screens/login_screen.dart';
@@ -51,9 +52,10 @@ List<RouteBase> get _authRoutes => [
     name: AppRoutes.login.name,
     path: AppRoutes.login.path,
     pageBuilder: (context, state) {
+      final onLoginSuccess = state.extra as void Function()?;
       return BlocProvider<AuthCubit>.value(
         value: sl<AuthCubit>(),
-        child: const LoginScreen(),
+        child: LoginScreen(onLoginSuccess: onLoginSuccess),
       ).buildPage();
     },
   ),
@@ -61,7 +63,9 @@ List<RouteBase> get _authRoutes => [
     name: AppRoutes.register.name,
     path: AppRoutes.register.path,
     pageBuilder: (context, state) {
-      return RegisterScreen().buildPage();
+      return RegisterScreen(
+        onRegisterSuccess: state.extra as void Function()?,
+      ).buildPage();
     },
   ),
   GoRoute(
@@ -108,6 +112,13 @@ List<RouteBase> get _authRoutes => [
     path: AppRoutes.map.path,
     pageBuilder: (context, state) => MapScreen(
       arguments: state.extra as MapScreenArguments?,
+    ).buildPage(transition: PageTransitions.cupertino),
+  ),
+  GoRoute(
+    name: AppRoutes.addressDetails.name,
+    path: AppRoutes.addressDetails.path,
+    pageBuilder: (context, state) => AddressDetailsScreen(
+      arguments: state.extra as AddressDetailsScreenArguments?,
     ).buildPage(transition: PageTransitions.cupertino),
   ),
   GoRoute(

@@ -9,10 +9,7 @@ List<ProviderHomeOrderModel> providerHomeOrdersFromJson(dynamic json) {
 }
 
 class ProviderHomeModel extends Equatable {
-  const ProviderHomeModel({
-    required this.providerName,
-    required this.orders,
-  });
+  const ProviderHomeModel({required this.providerName, required this.orders});
 
   final String providerName;
   final List<ProviderHomeOrderModel> orders;
@@ -41,12 +38,15 @@ class ProviderHomeModel extends Equatable {
 enum ProviderHomeOrderStatus {
   pending,
   accepted,
+  paymentReceived,
   rejected;
 
   factory ProviderHomeOrderStatus.fromJson(String value) {
     switch (value) {
       case 'accepted':
         return ProviderHomeOrderStatus.accepted;
+      case 'payment_received':
+        return ProviderHomeOrderStatus.paymentReceived;
       case 'rejected':
         return ProviderHomeOrderStatus.rejected;
       default:

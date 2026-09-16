@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/config/flavor/flavor_config.dart';
 import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/config/theme/light_theme.dart';
 import '../../../../../../../core/resources/resources.dart';
+import '../../../../../../../core/utils/notifications.dart';
 
+import '../../../../auth/data/model/auth_model.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../../../shared/data/model/navigation_bar_items.dart';
 
@@ -16,7 +21,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Alignment> _alignmentAnimation;
   late Animation<double> _scaleAnimation;
@@ -36,57 +42,57 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 2150),
     );
 
-    _alignmentAnimation = AlignmentTween(
-      begin: const Alignment(0, -1.2),
-      end: Alignment.center,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.46, curve: Curves.easeInOutCubic),
-      ),
-    );
+    _alignmentAnimation =
+        AlignmentTween(
+          begin: const Alignment(0, -1.2),
+          end: Alignment.center,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.0, 0.46, curve: Curves.easeInOutCubic),
+          ),
+        );
 
     _scaleAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: ConstantTween<double>(0.86), weight: 46),
       TweenSequenceItem(
-        tween: ConstantTween<double>(0.86),
-        weight: 46,
-      ),
-      TweenSequenceItem(
-        tween: Tween<double>(begin: 0.86, end: 0.98)
-            .chain(CurveTween(curve: Curves.easeInOutCubic)),
+        tween: Tween<double>(
+          begin: 0.86,
+          end: 0.98,
+        ).chain(CurveTween(curve: Curves.easeInOutCubic)),
         weight: 18,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 0.98, end: 1.12)
-            .chain(CurveTween(curve: Curves.easeInOutCubic)),
+        tween: Tween<double>(
+          begin: 0.98,
+          end: 1.12,
+        ).chain(CurveTween(curve: Curves.easeInOutCubic)),
         weight: 14,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.12, end: 1.18)
-            .chain(CurveTween(curve: Curves.easeInOutCubic)),
+        tween: Tween<double>(
+          begin: 1.12,
+          end: 1.18,
+        ).chain(CurveTween(curve: Curves.easeInOutCubic)),
         weight: 22,
       ),
     ]).animate(_controller);
 
-    _backgroundAnimation = ColorTween(
-      begin: Colors.white,
-      end: LightThemeColors.primary,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.7, 1.0, curve: Curves.easeInOutCubic),
-      ),
-    );
+    _backgroundAnimation =
+        ColorTween(begin: Colors.white, end: LightThemeColors.primary).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.7, 1.0, curve: Curves.easeInOutCubic),
+          ),
+        );
 
-    _logoColorAnimation = ColorTween(
-      begin: LightThemeColors.primary,
-      end: Colors.white,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.7, 1.0, curve: Curves.easeInOutCubic),
-      ),
-    );
+    _logoColorAnimation =
+        ColorTween(begin: LightThemeColors.primary, end: Colors.white).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.7, 1.0, curve: Curves.easeInOutCubic),
+          ),
+        );
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -122,14 +128,25 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       listener: (context, state) {
         state.status.listen(
           onAuthorized: () {
-            _setPendingNavigation(() => AppRoutes.home.go());
-            // RemoteNotificationServices.handleInitialNotification();
+            _setPendingNavigation(() {
+              AppRoutes.home.go();
+              unawaited(RemoteNotificationServices.handleInitialNotification());
+            });
           },
           onGuest: () {
-            _setPendingNavigation(() => AppRoutes.login.go());
+            _setPendingNavigation(
+              () => FlavorConfig.isProvider
+                  ? AppRoutes.login.go()
+                  : AppRoutes.home.go(),
+            );
           },
           onUnauthorized: () {
-            _setPendingNavigation(() => AppRoutes.onboarding.go());
+            if (FlavorConfig.isProvider) {
+              _setPendingNavigation(() => AppRoutes.onboarding.go());
+              return;
+            }
+            context.read<AuthCubit>().updateAuthData(const AuthModel.guest());
+            _setPendingNavigation(() => AppRoutes.home.go());
           },
         );
       },
@@ -139,8 +156,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         return AnimatedBuilder(
           animation: _controller,
           builder: (context, _) {
-            final Color backgroundColor = _backgroundAnimation.value ?? Colors.white;
-            final Color logoColor = _logoColorAnimation.value ?? LightThemeColors.primary;
+            final Color backgroundColor =
+                _backgroundAnimation.value ?? Colors.white;
+            final Color logoColor =
+                _logoColorAnimation.value ?? LightThemeColors.primary;
 
             return Scaffold(
               backgroundColor: backgroundColor,

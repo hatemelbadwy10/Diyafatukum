@@ -251,6 +251,8 @@ abstract class LocaleKeys {
       'provider.home.card.status.pending';
   static const provider_home_card_status_accepted =
       'provider.home.card.status.accepted';
+  static const provider_home_card_status_payment_received =
+      'provider.home.card.status.payment_received';
   static const provider_home_card_status_rejected =
       'provider.home.card.status.rejected';
   static const provider_home_card_status = 'provider.home.card.status';
@@ -734,6 +736,12 @@ abstract class LocaleKeys {
   static const bag_checkout_address_title = 'bag.checkout.address.title';
   static const bag_checkout_address_select = 'bag.checkout.address.select';
   static const bag_checkout_address_change = 'bag.checkout.address.change';
+  static const bag_checkout_address_use_new = 'bag.checkout.address.use_new';
+  static const bag_checkout_address_label_title =
+      'bag.checkout.address.label.title';
+  static const bag_checkout_address_label_hint =
+      'bag.checkout.address.label.hint';
+  static const bag_checkout_address_label = 'bag.checkout.address.label';
   static const bag_checkout_address_required_title =
       'bag.checkout.address.required.title';
   static const bag_checkout_address_required_message =
@@ -834,6 +842,12 @@ abstract class LocaleKeys {
       'orders.details.status.accepted.subtitle';
   static const orders_details_status_accepted =
       'orders.details.status.accepted';
+  static const orders_details_status_payment_received_title =
+      'orders.details.status.payment_received.title';
+  static const orders_details_status_payment_received_subtitle =
+      'orders.details.status.payment_received.subtitle';
+  static const orders_details_status_payment_received =
+      'orders.details.status.payment_received';
   static const orders_details_status_processing_title =
       'orders.details.status.processing.title';
   static const orders_details_status_processing_subtitle =
@@ -899,6 +913,30 @@ abstract class LocaleKeys {
       'orders.details.status.filter.past';
   static const orders_details_status_filter = 'orders.details.status.filter';
   static const orders_details_status = 'orders.details.status';
+  static const orders_details_actions_accept_title =
+      'orders.details.actions.accept.title';
+  static const orders_details_actions_accept_success =
+      'orders.details.actions.accept.success';
+  static const orders_details_actions_accept = 'orders.details.actions.accept';
+  static const orders_details_actions_reject_title =
+      'orders.details.actions.reject.title';
+  static const orders_details_actions_reject_message =
+      'orders.details.actions.reject.message';
+  static const orders_details_actions_reject_confirm =
+      'orders.details.actions.reject.confirm';
+  static const orders_details_actions_reject_reason_title =
+      'orders.details.actions.reject.reason_title';
+  static const orders_details_actions_reject_reason_hint =
+      'orders.details.actions.reject.reason_hint';
+  static const orders_details_actions_reject_success =
+      'orders.details.actions.reject.success';
+  static const orders_details_actions_reject = 'orders.details.actions.reject';
+  static const orders_details_actions_advance_confirm =
+      'orders.details.actions.advance.confirm';
+  static const orders_details_actions_advance_success =
+      'orders.details.actions.advance.success';
+  static const orders_details_actions_advance =
+      'orders.details.actions.advance';
   static const orders_details_actions_cancel_title =
       'orders.details.actions.cancel.title';
   static const orders_details_actions_cancel_message =
@@ -940,30 +978,6 @@ abstract class LocaleKeys {
   static const orders_details_actions_cancel_policy =
       'orders.details.actions.cancel.policy';
   static const orders_details_actions_cancel = 'orders.details.actions.cancel';
-  static const orders_details_actions_accept_title =
-      'orders.details.actions.accept.title';
-  static const orders_details_actions_accept_success =
-      'orders.details.actions.accept.success';
-  static const orders_details_actions_accept = 'orders.details.actions.accept';
-  static const orders_details_actions_reject_title =
-      'orders.details.actions.reject.title';
-  static const orders_details_actions_reject_message =
-      'orders.details.actions.reject.message';
-  static const orders_details_actions_reject_confirm =
-      'orders.details.actions.reject.confirm';
-  static const orders_details_actions_reject_reason_title =
-      'orders.details.actions.reject.reason_title';
-  static const orders_details_actions_reject_reason_hint =
-      'orders.details.actions.reject.reason_hint';
-  static const orders_details_actions_reject_success =
-      'orders.details.actions.reject.success';
-  static const orders_details_actions_reject = 'orders.details.actions.reject';
-  static const orders_details_actions_advance_confirm =
-      'orders.details.actions.advance.confirm';
-  static const orders_details_actions_advance_success =
-      'orders.details.actions.advance.success';
-  static const orders_details_actions_advance =
-      'orders.details.actions.advance';
   static const orders_details_actions = 'orders.details.actions';
   static const orders_details_delivery = 'orders.details.delivery';
   static const orders_details_address = 'orders.details.address';

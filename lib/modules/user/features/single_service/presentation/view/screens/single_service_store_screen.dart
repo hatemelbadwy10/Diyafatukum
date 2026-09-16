@@ -14,7 +14,6 @@ import '../../../../../../../core/widgets/custom_loading.dart';
 import '../../../../../../common/features/auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../../../../../common/features/bag/data/model/bag_model.dart';
 import '../../../../../../common/features/bag/data/repository/bag_repository.dart';
-import '../../../../../../common/features/shared/presentation/view/widgets/login_dialog.dart';
 import '../../../data/model/single_service_store_model.dart';
 import '../../controller/single_service_store_cubit/single_service_store_cubit.dart';
 import '../widgets/single_service_store_bottom_bar.dart';
@@ -176,7 +175,7 @@ class SingleServiceStoreScreen extends StatelessWidget {
   }) async {
     final authCubit = context.maybeRead<AuthCubit>();
     if (!(authCubit?.state.status.isAuthorized ?? false)) {
-      LoginDialog().show(context);
+      await _addItemsToLocalCart(context: context, cubit: cubit, state: state);
       return;
     }
     final selectedItems = state.items
@@ -242,6 +241,67 @@ class SingleServiceStoreScreen extends StatelessWidget {
       selectedItems: selectedItems,
       currentStoreId: currentStoreId,
     );
+  }
+
+  Future<void> _addItemsToLocalCart({
+    required BuildContext context,
+    required SingleServiceStoreCubit cubit,
+    required SingleServiceStoreState state,
+  }) async {
+    final repository = sl<BagRepository>();
+    final localItems = repository.getLocalBagItems();
+    final currentStoreId = arguments.store.id;
+    final hasOtherStoreItems = localItems.any(
+      (item) => item.storeId != null && item.storeId != currentStoreId,
+    );
+
+    Future<void> saveItems({required bool replace}) async {
+      final itemsByProductId = <String, BagItemModel>{
+        if (!replace)
+          for (final item in localItems) item.productId: item,
+      };
+      for (final item in state.items) {
+        final quantity = state.quantityFor(item.id);
+        if (quantity <= 0) {
+          itemsByProductId.remove(item.id);
+          continue;
+        }
+        itemsByProductId[item.id] = BagItemModel(
+          id: item.id,
+          productId: item.id,
+          name: item.name,
+          price: item.price,
+          imagePath: item.imagePath,
+          quantity: quantity,
+          storeId: currentStoreId,
+        );
+      }
+      await repository.saveLocalBagItems(itemsByProductId.values.toList());
+      cubit.clearSelection();
+      Toaster.showToast(
+        LocaleKeys.home_user_store_booking_success.tr(),
+        isError: false,
+      );
+    }
+
+    if (hasOtherStoreItems) {
+      AppDialog(
+        title: LocaleKeys.home_user_store_cart_conflict_title.tr(),
+        subtitle: LocaleKeys.home_user_store_cart_conflict_message.tr(),
+        confirmLabel: LocaleKeys.actions_clear.tr(),
+        cancelLabel: LocaleKeys.actions_cancel.tr(),
+        confirmDestructive: true,
+        onConfirm: () => saveItems(replace: true),
+        icon: Icon(
+          Icons.storefront_rounded,
+          color: context.onPrimary,
+          size: 28,
+        ),
+      ).show(context);
+      return;
+    }
+
+    await saveItems(replace: false);
   }
 
   @override

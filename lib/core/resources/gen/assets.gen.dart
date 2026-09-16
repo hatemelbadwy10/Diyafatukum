@@ -58,7 +58,7 @@ class $AssetsIconsGen {
   SvgGenImage get deleteIcon => const SvgGenImage('assets/icons/delete icon.svg');
 
   /// File path: assets/icons/eye-outlined-1.svg
-  SvgGenImage get eyeOutlined1 => const SvgGenImage('assets/icons/open_eye.svg');
+  SvgGenImage get eyeOutlined1 => const SvgGenImage('assets/icons/eye-outlined-1.svg');
 
   /// File path: assets/icons/eye-outlined-2.svg
   SvgGenImage get eyeOutlined2 => const SvgGenImage('assets/icons/eye-outlined-2.svg');
@@ -155,6 +155,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/mingcute_notification-off-line.svg
   SvgGenImage get mingcuteNotificationOffLine => const SvgGenImage('assets/icons/mingcute_notification-off-line.svg');
+
+  /// File path: assets/icons/open_eye.svg
+  SvgGenImage get openEye => const SvgGenImage('assets/icons/open_eye.svg');
 
   /// File path: assets/icons/solar_cart-check-broken.svg
   SvgGenImage get solarCartCheckBroken => const SvgGenImage('assets/icons/solar_cart-check-broken.svg');
@@ -271,6 +274,7 @@ class $AssetsIconsGen {
     mdiPhoneOutline,
     mingcuteLocationLine,
     mingcuteNotificationOffLine,
+    openEye,
     solarCartCheckBroken,
     solarChairLinear,
     solarHome2Broken,

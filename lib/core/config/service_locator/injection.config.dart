@@ -66,6 +66,8 @@ import '../../../modules/common/features/orders/data/datasource/orders_remote_da
     as _i681;
 import '../../../modules/common/features/orders/data/repository/orders_repository.dart'
     as _i1015;
+import '../../../modules/common/features/orders/presentation/controller/order_details_cubit/order_details_cubit.dart'
+    as _i1041;
 import '../../../modules/common/features/orders/presentation/controller/orders_cubit/orders_cubit.dart'
     as _i775;
 import '../../../modules/common/features/profile/data/datasource/profile_remote_datasource.dart'
@@ -166,9 +168,18 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.lazySingleton<_i895.Connectivity>(() => registerModule.connectivity);
   gh.lazySingleton<_i891.LoggerInterceptor>(() => _i891.LoggerInterceptor());
-  gh.lazySingleton<_i494.LocationService>(() => _i494.LocationServiceImpl());
   gh.lazySingleton<_i856.SharedRepository>(
     () => const _i856.SharedRepositoryImpl(),
+  );
+  gh.lazySingleton<_i494.LocationService>(() => _i494.LocationServiceImpl());
+  gh.lazySingleton<_i493.AuthLocalDataSource>(
+    () => _i493.AuthLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
+  );
+  gh.lazySingleton<_i370.BagLocalDataSource>(
+    () => _i370.BagLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
+  );
+  gh.lazySingleton<_i78.SplashLocalDatasource>(
+    () => _i78.SplashLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
   );
   gh.lazySingleton<_i897.ApiClient>(
     () => _i897.ApiClient(
@@ -176,46 +187,151 @@ Future<_i174.GetIt> $initGetIt(
       loggingInterceptor: gh<_i891.LoggerInterceptor>(),
     ),
   );
-  gh.lazySingleton<_i1013.ForgetPasswordRemoteDataSource>(
-    () => _i1013.ForgetPasswordRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  gh.lazySingleton<_i751.ProviderOnboardingRemoteDataSource>(
+    () => _i751.ProviderOnboardingRemoteDataSourceImpl(gh<_i897.ApiClient>()),
   );
-  gh.lazySingleton<_i248.VerificationRemoteDataSource>(
-    () => _i248.VerificationRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i514.AddressesRemoteDataSource>(
-    () => _i514.AddressesRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i903.SettingsRemoteDataSource>(
-    () => _i903.AccountRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i235.SharedRemoteDatasource>(
-    () => _i235.SharedRemoteDatasourceImpl(gh<_i897.ApiClient>()),
+  gh.lazySingleton<_i933.SplashRemoteDataSource>(
+    () => _i933.SplashRemoteDataSourceImpl(gh<_i897.ApiClient>()),
   );
   gh.lazySingleton<_i422.BagRemoteDataSource>(
     () => _i422.BagRemoteDataSourceImpl(gh<_i897.ApiClient>()),
   );
+  gh.lazySingleton<_i248.VerificationRemoteDataSource>(
+    () => _i248.VerificationRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i540.ProviderHomeRemoteDataSource>(
+    () => _i540.ProviderHomeRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i581.ProviderOnboardingRepository>(
+    () => _i581.ProviderOnboardingRepositoryImpl(
+      gh<_i751.ProviderOnboardingRemoteDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i523.UserHomeRemoteDataSource>(
+    () => _i523.UserHomeRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i903.SettingsRemoteDataSource>(
+    () => _i903.AccountRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i514.AddressesRemoteDataSource>(
+    () => _i514.AddressesRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i299.AuthRemoteDataSource>(
+    () => _i299.AuthRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i1013.ForgetPasswordRemoteDataSource>(
+    () => _i1013.ForgetPasswordRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i505.SplashRepository>(
+    () => _i505.SplashRepositoryImpl(
+      gh<_i933.SplashRemoteDataSource>(),
+      gh<_i78.SplashLocalDatasource>(),
+    ),
+  );
+  gh.lazySingleton<_i340.SingleServiceRemoteDataSource>(
+    () => _i340.SingleServiceRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
   gh.lazySingleton<_i601.AddressesRepository>(
     () => _i601.AddressesRepositoryImpl(gh<_i514.AddressesRemoteDataSource>()),
   );
-  gh.lazySingleton<_i78.SplashLocalDatasource>(
-    () => _i78.SplashLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
+  gh.lazySingleton<_i656.NotificationsRemoteDataSource>(
+    () => _i656.NotificationsRemoteDataSourceImpl(gh<_i897.ApiClient>()),
   );
-  gh.lazySingleton<_i370.BagLocalDataSource>(
-    () => _i370.BagLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
+  gh.lazySingleton<_i235.SharedRemoteDatasource>(
+    () => _i235.SharedRemoteDatasourceImpl(gh<_i897.ApiClient>()),
   );
-  gh.lazySingleton<_i493.AuthLocalDataSource>(
-    () => _i493.AuthLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
+  gh.lazySingleton<_i1021.ProviderStoreRemoteDataSource>(
+    () => _i1021.ProviderStoreRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i681.OrdersRemoteDataSource>(
+    () => _i681.OrdersRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i858.ProfileRemoteDataSource>(
+    () => _i858.ProfileRemoteDataSourceImpl(gh<_i897.ApiClient>()),
+  );
+  gh.lazySingleton<_i827.NotificationsRepository>(
+    () => _i827.NotificationsRepositoryImpl(
+      gh<_i656.NotificationsRemoteDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i731.ProviderStoreRepository>(
+    () => _i731.ProviderStoreRepositoryImpl(
+      gh<_i1021.ProviderStoreRemoteDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i633.SettingsRepository>(
+    () => _i633.SettingsRepositoryImpl(gh<_i903.SettingsRemoteDataSource>()),
+  );
+  gh.factory<_i412.ProviderRegisterCubit>(
+    () => _i412.ProviderRegisterCubit(gh<_i581.ProviderOnboardingRepository>()),
+  );
+  gh.lazySingleton<_i1015.OrdersRepository>(
+    () => _i1015.OrdersRepositoryImpl(gh<_i681.OrdersRemoteDataSource>()),
+  );
+  gh.lazySingleton<_i30.ForgetPasswordRepository>(
+    () => _i30.ForgetPasswordRepositoryImpl(
+      gh<_i1013.ForgetPasswordRemoteDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i502.SplashCubit>(
+    () => _i502.SplashCubit(gh<_i505.SplashRepository>()),
+  );
+  gh.lazySingleton<_i245.UserHomeRepository>(
+    () => _i245.UserHomeRepositoryImpl(gh<_i523.UserHomeRemoteDataSource>()),
+  );
+  gh.lazySingleton<_i821.ProfileRepository>(
+    () => _i821.ProfileRepositoryImpl(gh<_i858.ProfileRemoteDataSource>()),
+  );
+  gh.lazySingleton<_i665.SingleServiceRepository>(
+    () => _i665.SingleServiceRepositoryImpl(
+      gh<_i340.SingleServiceRemoteDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i217.BagRepository>(
+    () => _i217.BagRepositoryImpl(
+      gh<_i422.BagRemoteDataSource>(),
+      gh<_i370.BagLocalDataSource>(),
+    ),
   );
   gh.lazySingleton<_i66.VerificationRepository>(
     () => _i66.VerificationRepositoryImpl(
       gh<_i248.VerificationRemoteDataSource>(),
     ),
   );
-  gh.factory<_i269.VerificationCubit>(
-    () => _i269.VerificationCubit(gh<_i66.VerificationRepository>()),
+  gh.lazySingleton<_i634.ProviderHomeRepository>(
+    () => _i634.ProviderHomeRepositoryImpl(
+      gh<_i540.ProviderHomeRemoteDataSource>(),
+    ),
   );
-  gh.lazySingleton<_i633.SettingsRepository>(
-    () => _i633.SettingsRepositoryImpl(gh<_i903.SettingsRemoteDataSource>()),
+  gh.factory<_i965.SingleServiceStoreCubit>(
+    () => _i965.SingleServiceStoreCubit(gh<_i665.SingleServiceRepository>()),
+  );
+  gh.factory<_i340.SingleServiceCubit>(
+    () => _i340.SingleServiceCubit(gh<_i665.SingleServiceRepository>()),
+  );
+  gh.factory<_i1041.OrderDetailsCubit>(
+    () => _i1041.OrderDetailsCubit(gh<_i1015.OrdersRepository>()),
+  );
+  gh.factory<_i775.OrdersCubit>(
+    () => _i775.OrdersCubit(gh<_i1015.OrdersRepository>()),
+  );
+  gh.lazySingleton<_i1056.AuthRepository>(
+    () => _i1056.AuthRepositoryImpl(
+      gh<_i299.AuthRemoteDataSource>(),
+      gh<_i493.AuthLocalDataSource>(),
+    ),
+  );
+  gh.factory<_i216.ContactUsCubit>(
+    () => _i216.ContactUsCubit(gh<_i633.SettingsRepository>()),
+  );
+  gh.factory<_i458.StaticPageCubit>(
+    () => _i458.StaticPageCubit(gh<_i633.SettingsRepository>()),
+  );
+  gh.factory<_i477.ContactsCubit>(
+    () => _i477.ContactsCubit(gh<_i633.SettingsRepository>()),
+  );
+  gh.factory<_i32.ProviderStoreCubit>(
+    () => _i32.ProviderStoreCubit(gh<_i731.ProviderStoreRepository>()),
   );
   gh.factory<_i686.AddressCubit>(
     () => _i686.AddressCubit(gh<_i601.AddressesRepository>()),
@@ -232,108 +348,8 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i312.DeleteAddressCubit>(
     () => _i312.DeleteAddressCubit(gh<_i601.AddressesRepository>()),
   );
-  gh.lazySingleton<_i681.OrdersRemoteDataSource>(
-    () => _i681.OrdersRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i30.ForgetPasswordRepository>(
-    () => _i30.ForgetPasswordRepositoryImpl(
-      gh<_i1013.ForgetPasswordRemoteDataSource>(),
-    ),
-  );
-  gh.lazySingleton<_i523.UserHomeRemoteDataSource>(
-    () => _i523.UserHomeRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i340.SingleServiceRemoteDataSource>(
-    () => _i340.SingleServiceRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i751.ProviderOnboardingRemoteDataSource>(
-    () => _i751.ProviderOnboardingRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i217.BagRepository>(
-    () => _i217.BagRepositoryImpl(gh<_i422.BagRemoteDataSource>()),
-  );
-  gh.factory<_i216.ContactUsCubit>(
-    () => _i216.ContactUsCubit(gh<_i633.SettingsRepository>()),
-  );
-  gh.factory<_i458.StaticPageCubit>(
-    () => _i458.StaticPageCubit(gh<_i633.SettingsRepository>()),
-  );
-  gh.factory<_i477.ContactsCubit>(
-    () => _i477.ContactsCubit(gh<_i633.SettingsRepository>()),
-  );
-  gh.lazySingleton<_i540.ProviderHomeRemoteDataSource>(
-    () => _i540.ProviderHomeRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i933.SplashRemoteDataSource>(
-    () => _i933.SplashRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i858.ProfileRemoteDataSource>(
-    () => _i858.ProfileRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i299.AuthRemoteDataSource>(
-    () => _i299.AuthRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i656.NotificationsRemoteDataSource>(
-    () => _i656.NotificationsRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i1021.ProviderStoreRemoteDataSource>(
-    () => _i1021.ProviderStoreRemoteDataSourceImpl(gh<_i897.ApiClient>()),
-  );
-  gh.lazySingleton<_i505.SplashRepository>(
-    () => _i505.SplashRepositoryImpl(
-      gh<_i933.SplashRemoteDataSource>(),
-      gh<_i78.SplashLocalDatasource>(),
-    ),
-  );
-  gh.factory<_i410.ForgetPasswordCubit>(
-    () => _i410.ForgetPasswordCubit(gh<_i30.ForgetPasswordRepository>()),
-  );
-  gh.factory<_i1028.ResetPasswordCubit>(
-    () => _i1028.ResetPasswordCubit(gh<_i30.ForgetPasswordRepository>()),
-  );
-  gh.lazySingleton<_i634.ProviderHomeRepository>(
-    () => _i634.ProviderHomeRepositoryImpl(
-      gh<_i540.ProviderHomeRemoteDataSource>(),
-    ),
-  );
-  gh.lazySingleton<_i245.UserHomeRepository>(
-    () => _i245.UserHomeRepositoryImpl(gh<_i523.UserHomeRemoteDataSource>()),
-  );
-  gh.lazySingleton<_i502.SplashCubit>(
-    () => _i502.SplashCubit(gh<_i505.SplashRepository>()),
-  );
-  gh.lazySingleton<_i1015.OrdersRepository>(
-    () => _i1015.OrdersRepositoryImpl(gh<_i681.OrdersRemoteDataSource>()),
-  );
-  gh.factory<_i395.BagCubit>(() => _i395.BagCubit(gh<_i217.BagRepository>()));
-  gh.lazySingleton<_i827.NotificationsRepository>(
-    () => _i827.NotificationsRepositoryImpl(
-      gh<_i656.NotificationsRemoteDataSource>(),
-    ),
-  );
-  gh.lazySingleton<_i731.ProviderStoreRepository>(
-    () => _i731.ProviderStoreRepositoryImpl(
-      gh<_i1021.ProviderStoreRemoteDataSource>(),
-    ),
-  );
-  gh.lazySingleton<_i581.ProviderOnboardingRepository>(
-    () => _i581.ProviderOnboardingRepositoryImpl(
-      gh<_i751.ProviderOnboardingRemoteDataSource>(),
-    ),
-  );
-  gh.lazySingleton<_i1056.AuthRepository>(
-    () => _i1056.AuthRepositoryImpl(
-      gh<_i299.AuthRemoteDataSource>(),
-      gh<_i493.AuthLocalDataSource>(),
-    ),
-  );
-  gh.factory<_i775.OrdersCubit>(
-    () => _i775.OrdersCubit(gh<_i1015.OrdersRepository>()),
-  );
-  gh.lazySingleton<_i665.SingleServiceRepository>(
-    () => _i665.SingleServiceRepositoryImpl(
-      gh<_i340.SingleServiceRemoteDataSource>(),
-    ),
+  gh.factory<_i805.ProviderHomeCubit>(
+    () => _i805.ProviderHomeCubit(gh<_i634.ProviderHomeRepository>()),
   );
   gh.factory<_i621.LoginCubit>(
     () => _i621.LoginCubit(gh<_i1056.AuthRepository>()),
@@ -341,32 +357,11 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i685.RegisterCubit>(
     () => _i685.RegisterCubit(gh<_i1056.AuthRepository>()),
   );
-  gh.lazySingleton<_i821.ProfileRepository>(
-    () => _i821.ProfileRepositoryImpl(gh<_i858.ProfileRemoteDataSource>()),
+  gh.factory<_i410.ForgetPasswordCubit>(
+    () => _i410.ForgetPasswordCubit(gh<_i30.ForgetPasswordRepository>()),
   );
-  gh.factory<_i805.ProviderHomeCubit>(
-    () => _i805.ProviderHomeCubit(gh<_i634.ProviderHomeRepository>()),
-  );
-  gh.factory<_i32.ProviderStoreCubit>(
-    () => _i32.ProviderStoreCubit(gh<_i731.ProviderStoreRepository>()),
-  );
-  gh.factory<_i965.SingleServiceStoreCubit>(
-    () => _i965.SingleServiceStoreCubit(gh<_i665.SingleServiceRepository>()),
-  );
-  gh.factory<_i340.SingleServiceCubit>(
-    () => _i340.SingleServiceCubit(gh<_i665.SingleServiceRepository>()),
-  );
-  gh.factory<_i412.ProviderRegisterCubit>(
-    () => _i412.ProviderRegisterCubit(gh<_i581.ProviderOnboardingRepository>()),
-  );
-  gh.factory<_i785.UserHomeCubit>(
-    () => _i785.UserHomeCubit(gh<_i245.UserHomeRepository>()),
-  );
-  gh.lazySingleton<_i1067.AuthCubit>(
-    () => _i1067.AuthCubit(
-      gh<_i1056.AuthRepository>(),
-      gh<_i821.ProfileRepository>(),
-    ),
+  gh.factory<_i1028.ResetPasswordCubit>(
+    () => _i1028.ResetPasswordCubit(gh<_i30.ForgetPasswordRepository>()),
   );
   gh.factory<_i327.DeleteAccountCubit>(
     () => _i327.DeleteAccountCubit(gh<_i821.ProfileRepository>()),
@@ -379,6 +374,23 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.factory<_i191.PasswordCubit>(
     () => _i191.PasswordCubit(gh<_i821.ProfileRepository>()),
+  );
+  gh.factory<_i395.BagCubit>(
+    () =>
+        _i395.BagCubit(gh<_i217.BagRepository>(), gh<_i1056.AuthRepository>()),
+  );
+  gh.lazySingleton<_i1067.AuthCubit>(
+    () => _i1067.AuthCubit(
+      gh<_i1056.AuthRepository>(),
+      gh<_i821.ProfileRepository>(),
+      gh<_i827.NotificationsRepository>(),
+    ),
+  );
+  gh.factory<_i785.UserHomeCubit>(
+    () => _i785.UserHomeCubit(gh<_i245.UserHomeRepository>()),
+  );
+  gh.factory<_i269.VerificationCubit>(
+    () => _i269.VerificationCubit(gh<_i66.VerificationRepository>()),
   );
   return getIt;
 }

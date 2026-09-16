@@ -17,6 +17,18 @@ List<OrderModel> ordersFromJson(dynamic json) {
   );
 }
 
+OrderModel orderFromJson(dynamic json) {
+  if (json is Map<String, dynamic>) {
+    final nestedOrder = json['order'] ?? json['data'];
+    if (nestedOrder is Map<String, dynamic>) {
+      return OrderModel.fromJson(nestedOrder);
+    }
+    return OrderModel.fromJson(json);
+  }
+
+  throw const FormatException('Invalid order response');
+}
+
 enum OrderTabStatus {
   current,
   completed,
@@ -37,6 +49,7 @@ enum OrderTabStatus {
 enum OrderTimelineStatus {
   pending('pending'),
   accepted('accepted'),
+  paymentReceived('payment_received'),
   preparing('preparing'),
   onTheWay('on_the_way'),
   delivered('delivered'),
@@ -53,6 +66,9 @@ enum OrderTimelineStatus {
         .replaceAll('-', '_')
         .replaceAll(' ', '_');
     switch (normalized) {
+      case 'payment_received':
+      case 'paid':
+        return OrderTimelineStatus.paymentReceived;
       case 'accepted':
       case 'received':
         return OrderTimelineStatus.accepted;
@@ -303,6 +319,7 @@ class OrderModel extends Equatable {
   OrderTimelineStatus? get nextProviderStatus {
     switch (activeStatus) {
       case OrderTimelineStatus.accepted:
+      case OrderTimelineStatus.paymentReceived:
         return OrderTimelineStatus.preparing;
       case OrderTimelineStatus.preparing:
         return OrderTimelineStatus.onTheWay;
@@ -408,10 +425,7 @@ class OrderModel extends Equatable {
     return copyWith(
       tabStatus: OrderTabStatus.current,
       activeStatus: OrderTimelineStatus.accepted,
-      timeline: _normalizeTimeline(
-        const [],
-        OrderTimelineStatus.accepted,
-      ),
+      timeline: _normalizeTimeline(const [], OrderTimelineStatus.accepted),
     );
   }
 
@@ -605,6 +619,7 @@ List<OrderTimelineStep> _fallbackTimeline(OrderTimelineStatus activeStatus) {
 const List<OrderTimelineStatus> _progressStatuses = [
   OrderTimelineStatus.pending,
   OrderTimelineStatus.accepted,
+  OrderTimelineStatus.paymentReceived,
   OrderTimelineStatus.preparing,
   OrderTimelineStatus.onTheWay,
   OrderTimelineStatus.delivered,

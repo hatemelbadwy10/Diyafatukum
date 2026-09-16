@@ -46,6 +46,8 @@ class RemoteUrls {
   static String markNotificationRead(String id) =>
       'user/notifications/$id/read';
   static String notificationSettings = 'user/notifications/settings';
+  static String get deviceToken =>
+      FlavorConfig.isParent ? 'user/device-token' : '$flavor/device-token';
 
   /// Orders
   static String get orders =>
@@ -96,7 +98,8 @@ class RemoteUrls {
   static const String faq = 'faqs';
 
   /// Addresses
-  static String addresses = '$flavor/addresses';
-  static String address(String id) => '$flavor/addresses/$id';
+  static String get addresses =>
+      FlavorConfig.isParent ? 'user/addresses' : '$flavor/addresses';
+  static String address(String id) => '$addresses/$id';
   static String setDefaultAddress(String id) => 'addresses/$id/default';
 }

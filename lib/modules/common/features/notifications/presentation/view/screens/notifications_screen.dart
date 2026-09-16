@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
+import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
 import '../../../../../../../core/widgets/custom_fallback_view.dart';
@@ -83,12 +84,25 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               return _NotificationSection(
                 title: section.title,
                 notifications: section.notifications,
-                onNotificationTap: cubit.markNotificationAsRead,
+                onNotificationTap: (notification) =>
+                    _handleNotificationTap(cubit, notification),
               );
             },
           );
         },
       ),
+    );
+  }
+
+  Future<void> _handleNotificationTap(
+    NotificationsCubit cubit,
+    NotificationModel notification,
+  ) async {
+    await cubit.markNotificationAsRead(notification);
+    if (!mounted || !notification.targetsOrder) return;
+
+    await AppRoutes.orderDetails.push(
+      extra: {'orderId': notification.targetId!},
     );
   }
 
@@ -150,7 +164,7 @@ class _NotificationSection extends StatelessWidget {
 
   final String title;
   final List<NotificationModel> notifications;
-  final ValueChanged<NotificationModel> onNotificationTap;
+  final Future<void> Function(NotificationModel notification) onNotificationTap;
 
   @override
   Widget build(BuildContext context) {

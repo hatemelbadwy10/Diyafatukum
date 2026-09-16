@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1038065577213",
+    "project_id": "dyifitkym-43ebd",
+    "storage_bucket": "dyifitkym-43ebd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038065577213:android:463730d91395cb4937a294",
+        "android_client_info": {
+          "package_name": "com.daem.diyafatukum"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4rodTM8qBFWiI8lSNCub2HbLRs7xM37w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038065577213:android:ac4cb450a7afc83d37a294",
+        "android_client_info": {
+          "package_name": "com.daem.diyafatukum.provider"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4rodTM8qBFWiI8lSNCub2HbLRs7xM37w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

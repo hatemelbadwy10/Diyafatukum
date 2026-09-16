@@ -4,7 +4,9 @@ import '../../../../../../core/data/error/error_handler.dart';
 import '../../../../../../core/data/models/base_response.dart';
 import '../../../../../../../core/resources/type_defs.dart';
 import '../datasource/bag_remote_datasource.dart';
+import '../datasource/bag_local_datasource.dart';
 import '../model/bag_model.dart';
+import '../model/checkout_request_model.dart';
 
 abstract class BagRepository {
   Result<BagModel> getBag();
@@ -12,14 +14,19 @@ abstract class BagRepository {
   Result<BagModel> updateItemQuantity(String itemId, int quantity);
   Result clearCart();
   Result removeItem(String itemId);
-  Result checkout(BodyMap body);
+  Result checkout(CheckoutRequestModel request);
+  List<BagItemModel> getLocalBagItems();
+  Future<void> saveLocalBagItems(List<BagItemModel> items);
+  Future<void> clearLocalBag();
+  Result<BagModel> syncLocalBag();
 }
 
 @LazySingleton(as: BagRepository)
 class BagRepositoryImpl implements BagRepository {
-  const BagRepositoryImpl(this.remoteDataSource);
+  const BagRepositoryImpl(this.remoteDataSource, this.localDataSource);
 
   final BagRemoteDataSource remoteDataSource;
+  final BagLocalDataSource localDataSource;
 
   @override
   Result<BagModel> getBag() {
@@ -51,7 +58,30 @@ class BagRepositoryImpl implements BagRepository {
   }
 
   @override
-  Result checkout(BodyMap body) {
-    return remoteDataSource.checkout(body).toResult(noDataFromJson);
+  Result checkout(CheckoutRequestModel request) {
+    return remoteDataSource.checkout(request).toResult(noDataFromJson);
+  }
+
+  @override
+  List<BagItemModel> getLocalBagItems() => localDataSource.getBagItems();
+
+  @override
+  Future<void> saveLocalBagItems(List<BagItemModel> items) {
+    return localDataSource.saveBagItems(items);
+  }
+
+  @override
+  Future<void> clearLocalBag() => localDataSource.clearBag();
+
+  @override
+  Result<BagModel> syncLocalBag() async {
+    final items = localDataSource.getBagItems();
+    if (items.isEmpty) {
+      return getBag();
+    }
+
+    final result = await addItems(items);
+    await result.fold((_) async {}, (_) => localDataSource.clearBag());
+    return result;
   }
 }

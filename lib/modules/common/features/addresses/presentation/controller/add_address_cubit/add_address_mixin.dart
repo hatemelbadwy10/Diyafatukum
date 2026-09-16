@@ -11,22 +11,29 @@ import '../../../data/model/address_type_enum.dart';
 mixin AddAddressMixin {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final TextEditingController buildingNumberController = TextEditingController();
-  final TextEditingController apartmentNumberController = TextEditingController();
+  final TextEditingController buildingNumberController =
+      TextEditingController();
+  final TextEditingController apartmentNumberController =
+      TextEditingController();
   final TextEditingController floorNumberController = TextEditingController();
   final TextEditingController streetNameController = TextEditingController();
   final TextEditingController landmarkController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
   final ValueNotifier<String> areaController = ValueNotifier<String>('');
-  final ValueNotifier<AddressType> addressType = ValueNotifier<AddressType>(AddressType.home);
-  final ValueNotifier<LatLng> latLngNotifier = ValueNotifier<LatLng>(LatLng(0, 0));
+  final ValueNotifier<AddressType> addressType = ValueNotifier<AddressType>(
+    AddressType.home,
+  );
+  final ValueNotifier<LatLng> latLngNotifier = ValueNotifier<LatLng>(
+    LatLng(0, 0),
+  );
 
   bool isFormValid() => formKey.currentState?.validate() ?? false;
 
   void setAddressType(AddressType type) => addressType.value = type;
 
-  void setLatLng(LatLng? location) => latLngNotifier.value = location ?? LatLng(0, 0);
+  void setLatLng(LatLng? location) =>
+      latLngNotifier.value = location ?? LatLng(0, 0);
 
   BodyMap get body {
     return {
@@ -41,6 +48,21 @@ mixin AddAddressMixin {
       'landmark': landmarkController.text,
       'address': addressController.text,
     };
+  }
+
+  AddressModel get addressModel {
+    return AddressModel.fromForm(
+      buildingNumber: buildingNumberController.text.trim(),
+      apartmentNumber: apartmentNumberController.text.trim(),
+      floorNumber: floorNumberController.text.trim(),
+      streetName: streetNameController.text.trim(),
+      landmark: landmarkController.text.trim(),
+      area: areaController.value.trim(),
+      lat: latLngNotifier.value.latitude,
+      lng: latLngNotifier.value.longitude,
+      type: addressType.value,
+      label: addressController.text.trim(),
+    );
   }
 
   void initControllers(AddressModel? address) {

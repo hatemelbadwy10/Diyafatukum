@@ -66,13 +66,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ? () => AppRoutes.profile.push()
                         : showGuestDialog,
                   ),
-                  // _SettingsActionTile(
-                  //   title: LocaleKeys.addresses_title.tr(),
-                  //   icon: Assets.icons.ionLocationSharp.path,
-                  //   onTap: isAuthorized
-                  //       ? () => AppRoutes.addresses.push()
-                  //       : showGuestDialog,
-                  // ),
+                  _SettingsActionTile(
+                    title: LocaleKeys.addresses_title.tr(),
+                    icon: Assets.icons.ionLocationSharp.path,
+                    onTap: isAuthorized
+                        ? () => AppRoutes.addresses.push()
+                        : showGuestDialog,
+                  ),
                   24.gap,
                   _SettingsToggleTile(
                     title: LocaleKeys.notifications_title.tr(),

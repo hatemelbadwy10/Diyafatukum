@@ -8,6 +8,7 @@ import 'core/config/flavor/flavor_config.dart';
 import 'core/config/flavor/flavor_type_enum.dart';
 import 'core/config/router/route_manager.dart';
 import 'core/config/service_locator/injection.dart';
+import 'core/utils/notifications.dart';
 import 'core/utils/platform_channels_utils.dart';
 import 'core/widgets/easy_localization_app.dart';
 import 'modules/common/features/app/app.dart';
@@ -17,6 +18,7 @@ void main() async {
 
   // Initialize Parent flavor
   FlavorConfig.initialize(FlavorType.user);
+  await FlavorConfig.initializeFirebase();
 
   await dotenv.load(fileName: ".env");
 
@@ -26,11 +28,9 @@ void main() async {
   Bloc.observer = AppBlocObserver();
 
   RouteManager.configureRoutes();
-  Future.wait([EasyLocalization.ensureInitialized(), configureInjection()]).then(
-    (value) => runApp(
-      const EasyLocalizationApp(
-        child: MyApp(),
-      ),
-    ),
-  );
+  Future.wait([
+    EasyLocalization.ensureInitialized(),
+    configureInjection(),
+    RemoteNotificationServices.initialize(),
+  ]).then((value) => runApp(const EasyLocalizationApp(child: MyApp())));
 }

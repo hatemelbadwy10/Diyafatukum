@@ -245,6 +245,7 @@
         "status": {
           "pending": "Pending",
           "accepted": "Accepted",
+          "payment_received": "Payment received",
           "rejected": "Rejected"
         }
       },
@@ -681,6 +682,10 @@
           "title": "Accepted",
           "subtitle": "The store accepted your order and will start preparing it"
         },
+        "payment_received": {
+          "title": "Payment Received",
+          "subtitle": "The order payment has been received successfully"
+        },
         "processing": {
           "title": "Processing",
           "subtitle": "Your order is being prepared/"
@@ -947,6 +952,11 @@
         "title": "Delivery Address",
         "select": "Select Address",
         "change": "Choose another address",
+        "use_new": "Use a new address",
+        "label": {
+          "title": "Address Label",
+          "hint": "For example: Home or Work"
+        },
         "required": {
           "title": "Address Required",
           "message": "Please add or select a delivery address to continue"

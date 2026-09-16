@@ -8,6 +8,7 @@ class NotificationModel extends Equatable {
     required this.createdAt,
     required this.type,
     required this.isRead,
+    required this.targetId,
     this.readAt,
   });
 
@@ -17,6 +18,7 @@ class NotificationModel extends Equatable {
   final DateTime createdAt;
   final String type;
   final bool isRead;
+  final String? targetId;
   final DateTime? readAt;
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -49,6 +51,14 @@ class NotificationModel extends Equatable {
           json['is_read'] == true ||
           json['read'] == true ||
           json['read_at'] != null,
+      targetId:
+          (data?['id'] ??
+                  data?['target_id'] ??
+                  data?['order_id'] ??
+                  json['target_id'] ??
+                  json['order_id'] ??
+                  '')
+              .toString(),
       readAt: json['read_at'] == null ? null : _parseDateTime(json['read_at']),
     );
   }
@@ -60,6 +70,7 @@ class NotificationModel extends Equatable {
     DateTime? createdAt,
     String? type,
     bool? isRead,
+    String? targetId,
     DateTime? readAt,
   }) {
     return NotificationModel(
@@ -69,8 +80,16 @@ class NotificationModel extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       type: type ?? this.type,
       isRead: isRead ?? this.isRead,
+      targetId: targetId ?? this.targetId,
       readAt: readAt ?? this.readAt,
     );
+  }
+
+  bool get targetsOrder {
+    final normalizedType = type.trim().toLowerCase();
+    return (targetId?.isNotEmpty ?? false) &&
+        (normalizedType == 'new_order' ||
+            normalizedType == 'order_status_updated');
   }
 
   bool get isOffer {
@@ -97,6 +116,7 @@ class NotificationModel extends Equatable {
     createdAt,
     type,
     isRead,
+    targetId,
     readAt,
   ];
 }

@@ -9,7 +9,6 @@ import '../../../../../../../core/config/router/app_route.dart';
 import '../../../../../../../core/config/router/route_manager.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/resources.dart';
-import '../../../../../../../core/utils/geocoding_utils.dart';
 import '../../../../../../../core/utils/toaster_utils.dart';
 import '../../../../../../../core/widgets/buttons/custom_button.dart';
 import '../../../../../../../core/widgets/close_icon_button.dart';
@@ -17,8 +16,12 @@ import '../../../../../../../core/widgets/custom_bottom_sheet.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../../../core/widgets/date_picker_field.dart';
 import '../../../../addresses/presentation/view/screens/map_screen.dart';
+import '../../../../addresses/data/model/address_model.dart';
+import '../../../../addresses/presentation/view/screens/address_details_screen.dart';
+import '../../../../addresses/presentation/view/widgets/addresses_bottom_sheet.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
 import '../../controller/bag_cubit/bag_cubit.dart';
+import '../../../data/model/checkout_request_model.dart';
 import '../../../data/repository/bag_repository.dart';
 
 class BagCheckoutBottomSheet extends StatefulWidget {
@@ -41,13 +44,15 @@ class _BagCheckoutBottomSheetState extends State<BagCheckoutBottomSheet> {
   final TextEditingController _notesController = TextEditingController();
 
   DateTime? _selectedDate;
+  AddressModel? _selectedAddress;
+  AddressModel? _newAddress;
   LatLng? _selectedLatLng;
-  Placemark? _selectedPlacemark;
 
   @override
   void initState() {
     super.initState();
     final address = widget.authCubit?.state.address;
+    _selectedAddress = address;
     _selectedLatLng = address?.latLng;
     _addressController.text = address?.fullAddress ?? '';
   }
@@ -64,66 +69,69 @@ class _BagCheckoutBottomSheetState extends State<BagCheckoutBottomSheet> {
     final content = CustomBottomSheet(
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: context.greySwatch.shade50,
-                    shape: BoxShape.circle,
-                  ),
-                  child: CloseIconButton(onPressed: BaseRouter.pop),
-                ),
-                Text(
-                  LocaleKeys.bag_checkout_title.tr(),
-                  style: context.titleLarge.bold.s24,
-                  textAlign: TextAlign.center,
-                ).expand(),
-                32.gap,
-              ],
-            ),
-            12.gap,
-            Text(
-              LocaleKeys.bag_checkout_subtitle.tr(),
-              style: context.bodyMedium.regular.setColor(
-                context.greySwatch.shade600,
-              ),
-            ),
-            24.gap,
-            DatePickerField(
-              title: LocaleKeys.details_date_time_date.tr(),
-              minDate: DateTime.now(),
-              initialValue: _selectedDate,
-              onChanged: (value) => _selectedDate = value,
-            ),
-            20.gap,
-            CustomTextField(
-              controller: _addressController,
-              title: LocaleKeys.bag_checkout_address_title.tr(),
-              hint: LocaleKeys.bag_checkout_address_select.tr(),
-              readOnly: true,
-              prefixIcon: Assets.icons.ionLocationSharp.path,
-              onTap: _openLocationPicker,
-            ),
-            20.gap,
-            CustomTextField(
-              controller: _notesController,
-              title: LocaleKeys.bag_checkout_notes_title.tr(),
-              hint: LocaleKeys.bag_checkout_notes_hint.tr(),
-              prefixIcon: Assets.icons.editSquare.path,
-              isRequired: false,
-            ),
-            24.gap,
-            CustomButton(
-              label: LocaleKeys.actions_confirm.tr(),
-              onPressed: _submit,
-            ),
-          ],
-        ).paddingHorizontal(AppSize.screenPadding),
+        child:
+            Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: context.greySwatch.shade50,
+                            shape: BoxShape.circle,
+                          ),
+                          child: CloseIconButton(onPressed: BaseRouter.pop),
+                        ),
+                        Text(
+                          LocaleKeys.bag_checkout_title.tr(),
+                          style: context.titleLarge.bold.s24,
+                          textAlign: TextAlign.center,
+                        ).expand(),
+                        32.gap,
+                      ],
+                    ),
+                    12.gap,
+                    Text(
+                      LocaleKeys.bag_checkout_subtitle.tr(),
+                      style: context.bodyMedium.regular.setColor(
+                        context.greySwatch.shade600,
+                      ),
+                    ),
+                    24.gap,
+                    DatePickerField(
+                      title: LocaleKeys.details_date_time_date.tr(),
+                      minDate: DateTime.now(),
+                      initialValue: _selectedDate,
+                      onChanged: (value) => _selectedDate = value,
+                    ),
+                    20.gap,
+                    CustomTextField(
+                      controller: _addressController,
+                      title: LocaleKeys.bag_checkout_address_title.tr(),
+                      hint: LocaleKeys.bag_checkout_address_select.tr(),
+                      readOnly: true,
+                      prefixIcon: Assets.icons.ionLocationSharp.path,
+                      onTap: _openAddressPicker,
+                    ),
+                    20.gap,
+                    CustomTextField(
+                      controller: _notesController,
+                      title: LocaleKeys.bag_checkout_notes_title.tr(),
+                      hint: LocaleKeys.bag_checkout_notes_hint.tr(),
+                      prefixIcon: Assets.icons.editSquare.path,
+                      isRequired: false,
+                    ),
+                    24.gap,
+                    CustomButton(
+                      label: LocaleKeys.actions_confirm.tr(),
+                      onPressed: _submit,
+                    ),
+                  ],
+                )
+                .paddingHorizontal(AppSize.screenPadding)
+                .scrollable(padding: EdgeInsets.zero),
       ).paddingBottom(context.keyboardPadding),
     );
 
@@ -134,29 +142,65 @@ class _BagCheckoutBottomSheetState extends State<BagCheckoutBottomSheet> {
     return BlocListener<AuthCubit, AuthState>(
       bloc: widget.authCubit,
       listener: (_, state) {
-        if (_selectedPlacemark != null) return;
-        _selectedLatLng = state.address?.latLng;
-        _addressController.text = state.address?.fullAddress ?? '';
+        if (_newAddress != null) return;
+        _selectSavedAddress(state.address);
       },
       child: content,
     );
   }
 
-  Future<void> _openLocationPicker() async {
+  void _openAddressPicker() {
+    final authCubit = widget.authCubit;
+    if (authCubit == null) {
+      _openNewLocationPicker();
+      return;
+    }
+
+    context.showBottomSheet(
+      BlocProvider.value(
+        value: authCubit,
+        child: AddressesBottomSheet(
+          selectedAddressId: _selectedAddress?.id,
+          onAddressSelected: _selectSavedAddress,
+          onNewAddressSelected: _openNewLocationPicker,
+        ),
+      ),
+    );
+  }
+
+  void _selectSavedAddress(AddressModel? address) {
+    if (address == null) return;
+    _selectedAddress = address;
+    _newAddress = null;
+    _selectedLatLng = address.latLng;
+    _addressController.text = address.fullAddress;
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _openNewLocationPicker() async {
     await AppRoutes.map.push(
       extra: MapScreenArguments(
         initialPosition: _selectedLatLng,
         onLocationSelected: (LatLng position, Placemark placemark) {
-          _selectedLatLng = position;
-          _selectedPlacemark = placemark;
-          _addressController.text = placemark.toAddressString();
-          BaseRouter.pop();
-          if (mounted) {
-            setState(() {});
-          }
+          AppRoutes.addressDetails.pushReplacement(
+            extra: AddressDetailsScreenArguments(
+              initialPosition: position,
+              placemark: placemark,
+              onAddressCompleted: _selectNewAddress,
+              requireAddressLabel: true,
+            ),
+          );
         },
       ),
     );
+  }
+
+  void _selectNewAddress(AddressModel address) {
+    _selectedAddress = null;
+    _newAddress = address;
+    _selectedLatLng = address.latLng;
+    _addressController.text = address.detailedAddress;
+    if (mounted) setState(() {});
   }
 
   Future<void> _submit() async {
@@ -164,22 +208,33 @@ class _BagCheckoutBottomSheetState extends State<BagCheckoutBottomSheet> {
 
     final selectedDate = _selectedDate;
     if (selectedDate == null) return;
-    if (_selectedLatLng == null ||
-        _addressController.text.trim().isEmpty) {
+    if (_selectedLatLng == null || _addressController.text.trim().isEmpty) {
       Toaster.showToast(LocaleKeys.validator_location.tr());
       return;
     }
 
-    final result = await sl<BagRepository>().checkout({
-      'delivery_address': _addressController.text.trim(),
-      'delivery_latitude': _selectedLatLng!.latitude,
-      'delivery_longitude': _selectedLatLng!.longitude,
-      'occasion_date': selectedDate.format(
-        format: 'yyyy-MM-dd HH:mm:ss',
-        enableLocalization: false,
+    final selectedAddress = _selectedAddress;
+    final newAddress = _newAddress;
+    if (selectedAddress == null && newAddress == null) return;
+
+    final result = await sl<BagRepository>().checkout(
+      CheckoutRequestModel(
+        addressId: selectedAddress?.id,
+        newAddress: newAddress != null
+            ? NewCheckoutAddressModel(
+                label: newAddress.label,
+                address: newAddress.detailedAddress,
+                latitude: newAddress.lat,
+                longitude: newAddress.lng,
+              )
+            : null,
+        occasionDate: selectedDate.format(
+          format: 'yyyy-MM-dd HH:mm:ss',
+          enableLocalization: false,
+        ),
+        notes: _notesController.text.trim(),
       ),
-      'notes': _notesController.text.trim(),
-    });
+    );
 
     if (!mounted) return;
 

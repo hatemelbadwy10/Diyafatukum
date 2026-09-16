@@ -93,6 +93,7 @@ class BagItemModel extends Equatable {
     required this.price,
     required this.imagePath,
     required this.quantity,
+    this.storeId,
   });
 
   final String id;
@@ -101,6 +102,7 @@ class BagItemModel extends Equatable {
   final double price;
   final String imagePath;
   final int quantity;
+  final String? storeId;
 
   double get totalPrice => price * quantity;
 
@@ -131,6 +133,7 @@ class BagItemModel extends Equatable {
                   '')
               .toString(),
       quantity: _parseInt(json['quantity']),
+      storeId: json['store_id']?.toString(),
     );
   }
 
@@ -142,6 +145,7 @@ class BagItemModel extends Equatable {
       'price': price,
       'image_path': imagePath,
       'quantity': quantity,
+      'store_id': storeId,
     };
   }
 
@@ -156,6 +160,7 @@ class BagItemModel extends Equatable {
     double? price,
     String? imagePath,
     int? quantity,
+    String? storeId,
   }) {
     return BagItemModel(
       id: id ?? this.id,
@@ -164,11 +169,20 @@ class BagItemModel extends Equatable {
       price: price ?? this.price,
       imagePath: imagePath ?? this.imagePath,
       quantity: quantity ?? this.quantity,
+      storeId: storeId ?? this.storeId,
     );
   }
 
   @override
-  List<Object?> get props => [id, productId, name, price, imagePath, quantity];
+  List<Object?> get props => [
+    id,
+    productId,
+    name,
+    price,
+    imagePath,
+    quantity,
+    storeId,
+  ];
 }
 
 double? _parseDouble(dynamic value) {

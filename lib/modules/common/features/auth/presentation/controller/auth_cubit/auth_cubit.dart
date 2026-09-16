@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -8,8 +11,11 @@ import '../../../../../../../core/resources/resources.dart';
 import '../../../../addresses/data/model/address_model.dart';
 import '../../../../profile/data/model/user_model.dart';
 import '../../../../profile/data/repository/profile_repository.dart';
+import '../../../../notifications/data/model/device_token_request.dart';
+import '../../../../notifications/data/repository/notifications_repository.dart';
 import '../../../data/model/auth_model.dart';
 import '../../../data/repository/auth_repository.dart';
+import '../../../../../../../core/utils/notifications.dart';
 
 part 'auth_state.dart';
 
@@ -17,9 +23,14 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _repository;
   final ProfileRepository _accountRepository;
+  final NotificationsRepository _notificationsRepository;
+  StreamSubscription<String>? _tokenRefreshSubscription;
 
-  AuthCubit(this._repository, this._accountRepository)
-    : super(
+  AuthCubit(
+    this._repository,
+    this._accountRepository,
+    this._notificationsRepository,
+  ) : super(
         (() {
           final authModel = _repository.getAuthData();
           if (authModel == null) {
@@ -33,7 +44,13 @@ class AuthCubit extends Cubit<AuthState> {
           }
           return AuthState(auth: authModel, status: AuthStatus.authorized);
         })(),
-      );
+      ) {
+    _tokenRefreshSubscription = RemoteNotificationServices.onTokenRefresh
+        .listen((token) => unawaited(_syncDeviceToken(token)));
+    if (state.status == AuthStatus.authorized) {
+      unawaited(_syncDeviceToken());
+    }
+  }
 
   Future<void> checkAuthStatus() async {
     await Future.delayed(const Duration(milliseconds: 1000));
@@ -69,6 +86,26 @@ class AuthCubit extends Cubit<AuthState> {
         ? AuthStatus.guest
         : AuthStatus.authorized;
     emit(state.copyWith(auth: authModel, status: status));
+    if (status == AuthStatus.authorized) {
+      unawaited(_syncDeviceToken());
+    }
+  }
+
+  Future<void> _syncDeviceToken([String? refreshedToken]) async {
+    if (state.status != AuthStatus.authorized) return;
+
+    final token =
+        refreshedToken ?? await RemoteNotificationServices.getFcmToken();
+    if (token == null || token.trim().isEmpty) return;
+
+    final result = await _notificationsRepository.updateDeviceToken(
+      DeviceTokenRequest(deviceToken: token),
+    );
+    result.fold(
+      (failure) =>
+          log('Failed to update device token: ${failure.message}', name: 'FCM'),
+      (_) => log('Device token updated successfully.', name: 'FCM'),
+    );
   }
 
   void updateUserData(UserModel user) {
@@ -100,5 +137,11 @@ class AuthCubit extends Cubit<AuthState> {
   void clearAuthData() {
     _repository.clearUserData();
     emit(const AuthState());
+  }
+
+  @override
+  Future<void> close() async {
+    await _tokenRefreshSubscription?.cancel();
+    return super.close();
   }
 }

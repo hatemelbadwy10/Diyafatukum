@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
@@ -5,6 +7,8 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../../../../core/data/error/failure.dart';
 import '../../../../../../../core/resources/resources.dart';
+import '../../../../../../../core/utils/notifications.dart';
+import '../../../../notifications/data/model/push_notification_model.dart';
 import '../../../data/model/order_model.dart';
 import '../../../data/repository/orders_repository.dart';
 
@@ -12,9 +16,15 @@ part 'orders_state.dart';
 
 @injectable
 class OrdersCubit extends Cubit<OrdersState> {
-  OrdersCubit(this._repository) : super(OrdersState.initial());
+  OrdersCubit(this._repository) : super(OrdersState.initial()) {
+    _notificationSubscription = RemoteNotificationServices.orderNotifications
+        .where((notification) => notification.targetsOrder)
+        .listen(_handleOrderNotification);
+  }
 
   final OrdersRepository _repository;
+  late final StreamSubscription<PushNotificationModel>
+  _notificationSubscription;
 
   void _emitIfOpen(OrdersState newState) {
     if (isClosed) return;
@@ -54,6 +64,41 @@ class OrdersCubit extends Cubit<OrdersState> {
         );
       },
     );
+  }
+
+  Future<void> _handleOrderNotification(
+    PushNotificationModel notification,
+  ) async {
+    switch (notification.type) {
+      case PushNotificationType.newOrder:
+        await loadOrders(OrderTabStatus.current);
+      case PushNotificationType.orderStatusUpdated:
+        await refreshOrder(notification.orderId);
+      case PushNotificationType.unknown:
+        return;
+    }
+  }
+
+  Future<void> refreshOrder(String id) async {
+    final result = await _repository.getOrderDetails(id);
+    if (isClosed) return;
+
+    result.fold((_) {}, (response) {
+      final updatedOrder = response.data;
+      if (updatedOrder != null) {
+        updateOrder(updatedOrder);
+      }
+    });
+  }
+
+  void updateOrder(OrderModel updatedOrder) {
+    final orders = [
+      ...state.orders.where(
+        (order) => order.backendId != updatedOrder.backendId,
+      ),
+      updatedOrder,
+    ];
+    _emitIfOpen(state.copyWith(orders: orders));
   }
 
   Future<void> cancelOrder({required String id, required String reason}) async {
@@ -147,5 +192,11 @@ class OrdersCubit extends Cubit<OrdersState> {
     }).toList();
 
     _emitIfOpen(state.copyWith(orders: orders));
+  }
+
+  @override
+  Future<void> close() async {
+    await _notificationSubscription.cancel();
+    return super.close();
   }
 }

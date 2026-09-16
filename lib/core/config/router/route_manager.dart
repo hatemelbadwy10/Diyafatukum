@@ -19,42 +19,53 @@ class RouteManager {
     } else {
       UserRoutes().registerRoutes();
     }
+    BaseRouter.configureRouter();
   }
 }
 
 abstract class BaseRouter {
-  static final routerConfig = GoRouter(
-    routes: routes,
-    debugLogDiagnostics: true,
-    navigatorKey: rootNavigatorKey,
-    observers: [BotToastNavigatorObserver()],
-    initialLocation: AppRoutes.splash.path,
-  );
+  static final List<RouteBase> routes = [];
+  static late GoRouter routerConfig;
+
+  static void configureRouter() {
+    routerConfig = GoRouter(
+      routes: List<RouteBase>.unmodifiable(routes),
+      debugLogDiagnostics: true,
+      navigatorKey: rootNavigatorKey,
+      observers: [BotToastNavigatorObserver()],
+      initialLocation: AppRoutes.splash.path,
+    );
+  }
 
   void registerRoutes();
-  static final List<RouteBase> routes = [];
 
   static bool contains(String path) {
-    return routerConfig.routerDelegate.currentConfiguration.matches.any((element) {
+    return routerConfig.routerDelegate.currentConfiguration.matches.any((
+      element,
+    ) {
       return element.matchedLocation.contains(path);
     });
   }
 
-  static String get currentRoute => routerConfig.routerDelegate.currentConfiguration.fullPath;
+  static String get currentRoute =>
+      routerConfig.routerDelegate.currentConfiguration.fullPath;
 
   static String namedLocation(String name) => routerConfig.namedLocation(name);
 
-  static Map<String, String> get queryParams => routerConfig.routerDelegate.currentConfiguration.uri.queryParameters;
+  static Map<String, String> get queryParams =>
+      routerConfig.routerDelegate.currentConfiguration.uri.queryParameters;
 
   static String get currentRouteName {
     try {
-      return routerConfig.routerDelegate.currentConfiguration.last.route.name ?? '';
+      return routerConfig.routerDelegate.currentConfiguration.last.route.name ??
+          '';
     } catch (e) {
       return '';
     }
   }
 
-  static String get matchedLocation => routerConfig.routerDelegate.state.matchedLocation;
+  static String get matchedLocation =>
+      routerConfig.routerDelegate.state.matchedLocation;
 
   static void pop<T extends Object?>([T? result]) {
     if (rootNavigatorKey.currentState?.canPop() ?? false) {
@@ -65,7 +76,13 @@ abstract class BaseRouter {
   }
 
   static void popUntilPath(String ancestorPath) {
-    while (routerConfig.routerDelegate.currentConfiguration.matches.last.matchedLocation != ancestorPath) {
+    while (routerConfig
+            .routerDelegate
+            .currentConfiguration
+            .matches
+            .last
+            .matchedLocation !=
+        ancestorPath) {
       if (!routerConfig.canPop()) {
         return;
       }
@@ -86,7 +103,12 @@ class BaseRoute {
     Map<String, String> params = const <String, String>{},
     Map<String, dynamic> queries = const <String, dynamic>{},
   }) {
-    return BaseRouter.routerConfig.pushNamed(name, extra: extra, queryParameters: queries, pathParameters: params);
+    return BaseRouter.routerConfig.pushNamed(
+      name,
+      extra: extra,
+      queryParameters: queries,
+      pathParameters: params,
+    );
   }
 
   /// Pushes a new route onto the navigator, and replaces the current route with the new route.
@@ -95,7 +117,12 @@ class BaseRoute {
     Map<String, String> params = const <String, String>{},
     Map<String, dynamic> queries = const <String, dynamic>{},
   }) {
-    BaseRouter.routerConfig.pushReplacementNamed(name, extra: extra, queryParameters: queries, pathParameters: params);
+    BaseRouter.routerConfig.pushReplacementNamed(
+      name,
+      extra: extra,
+      queryParameters: queries,
+      pathParameters: params,
+    );
   }
 
   /// Navigates to the specified route.
@@ -104,7 +131,12 @@ class BaseRoute {
     Map<String, String> params = const <String, String>{},
     Map<String, dynamic> queries = const <String, dynamic>{},
   }) {
-    return BaseRouter.routerConfig.goNamed(name, extra: extra, queryParameters: queries, pathParameters: params);
+    return BaseRouter.routerConfig.goNamed(
+      name,
+      extra: extra,
+      queryParameters: queries,
+      pathParameters: params,
+    );
   }
 
   bool get isCurrentRoute => BaseRouter.currentRouteName == name;

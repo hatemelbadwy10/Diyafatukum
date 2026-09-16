@@ -118,13 +118,18 @@ class UserRoutes extends BaseRouter {
             : extra is Map
             ? Map<String, dynamic>.from(extra)
             : null;
-        final order = extraMap?['order'] as OrderModel? ?? extra as OrderModel?;
+        final order =
+            extraMap?['order'] as OrderModel? ??
+            (extra is OrderModel ? extra : null);
         final ordersCubit = extraMap?['ordersCubit'] as OrdersCubit?;
-        if (order == null) {
+        final orderId =
+            extraMap?['orderId']?.toString() ?? order?.backendId ?? '';
+        if (orderId.isEmpty) {
           return const Scaffold().buildPage();
         }
         return SingleOrderScreen(
-          order: order,
+          orderId: orderId,
+          initialOrder: order,
           ordersCubit: ordersCubit,
         ).buildPage(transition: PageTransitions.cupertino);
       },

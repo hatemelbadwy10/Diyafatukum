@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> with LoginMixin {
                     isLogin: true,
                     onTap: () => FlavorConfig.isProvider
                         ? AppRoutes.providerHome.push()
-                        : AppRoutes.register.push(),
+                        : AppRoutes.register.push(extra: widget.onLoginSuccess),
                   ),
                   8.gap,
                   if (!FlavorConfig.isProvider)

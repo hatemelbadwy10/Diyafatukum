@@ -1,3 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
+
+import '../../../firebase_options_provider.dart';
+import '../../../firebase_options_user.dart';
 import 'flavor_type_enum.dart';
 
 class FlavorConfig {
@@ -6,12 +10,19 @@ class FlavorConfig {
   static FlavorType get currentFlavor => _currentFlavor!;
 
   static bool get isParent => _currentFlavor == FlavorType.user;
-  static bool get isProvider   => _currentFlavor == FlavorType.provider;
+  static bool get isProvider => _currentFlavor == FlavorType.provider;
   static String get displayName => currentFlavor.displayName;
 
   static void initialize(FlavorType flavor) {
     _currentFlavor = flavor;
   }
 
-  static Future<void> initializeFirebase() async {}
+  static Future<void> initializeFirebase() async {
+    await Firebase.initializeApp(
+      options: currentFlavor.variant(
+        parent: UserFirebaseOptions.currentPlatform,
+        driver: ProviderFirebaseOptions.currentPlatform,
+      ),
+    );
+  }
 }

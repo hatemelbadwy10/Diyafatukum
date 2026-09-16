@@ -37,8 +37,7 @@ class _ScaffoldWithNavBarScreenState extends State<ScaffoldWithNavBarScreen> {
     final isGuest = context.read<AuthCubit>().state.status.isGuest;
     final isProtectedItem = FlavorConfig.isProvider
         ? false
-        : item == NavigationBarItems.stores ||
-              item == NavigationBarItems.auctions;
+        : item == NavigationBarItems.auctions;
     if (isGuest && isProtectedItem) {
       LoginDialog().show(context);
       return;

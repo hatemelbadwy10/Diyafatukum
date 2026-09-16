@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../../../core/data/client/api_client.dart';
 import '../../../../../../core/resources/constants/remote_urls.dart';
-import '../../../../../../core/resources/type_defs.dart';
+import '../model/checkout_request_model.dart';
 
 abstract class BagRemoteDataSource {
   Future<Response> getBag();
@@ -11,7 +11,7 @@ abstract class BagRemoteDataSource {
   Future<Response> updateItemQuantity(String itemId, int quantity);
   Future<Response> clearCart();
   Future<Response> removeItem(String itemId);
-  Future<Response> checkout(BodyMap body);
+  Future<Response> checkout(CheckoutRequestModel request);
 }
 
 @LazySingleton(as: BagRemoteDataSource)
@@ -44,6 +44,6 @@ class BagRemoteDataSourceImpl implements BagRemoteDataSource {
       client.delete(RemoteUrls.cartItem(itemId));
 
   @override
-  Future<Response> checkout(BodyMap body) =>
-      client.post(RemoteUrls.checkout, data: body);
+  Future<Response> checkout(CheckoutRequestModel request) =>
+      client.post(RemoteUrls.checkout, data: request.toJson());
 }

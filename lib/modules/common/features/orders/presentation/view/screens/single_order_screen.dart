@@ -9,6 +9,9 @@ import '../../../../../../../core/utils/toaster_utils.dart';
 import '../../../../../../../core/utils/overlay_utils.dart';
 import '../../../../../../../core/widgets/buttons/custom_button.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
+import '../../../../../../../core/widgets/custom_fallback_view.dart';
+import '../../../../../../../core/widgets/custom_loading.dart';
+import '../../controller/order_details_cubit/order_details_cubit.dart';
 import '../../controller/orders_cubit/orders_cubit.dart';
 import '../../../data/model/order_model.dart';
 import '../widgets/order_cancel_bottom_sheet.dart';
@@ -21,22 +24,68 @@ import '../widgets/single_order_section_card.dart';
 class SingleOrderScreen extends StatelessWidget {
   const SingleOrderScreen({
     super.key,
-    required this.order,
+    required this.orderId,
+    this.initialOrder,
     this.isProviderView = false,
     this.ordersCubit,
   });
 
-  final OrderModel order;
+  final String orderId;
+  final OrderModel? initialOrder;
   final bool isProviderView;
   final OrdersCubit? ordersCubit;
 
   @override
   Widget build(BuildContext context) {
-    final child = _SingleOrderView(order: order, isProviderView: isProviderView);
+    final child = BlocProvider(
+      create: (_) =>
+          sl<OrderDetailsCubit>()
+            ..initialize(orderId: orderId, initialOrder: initialOrder),
+      child: _OrderDetailsView(isProviderView: isProviderView),
+    );
     if (ordersCubit != null) {
       return BlocProvider.value(value: ordersCubit!, child: child);
     }
     return BlocProvider(create: (_) => sl<OrdersCubit>(), child: child);
+  }
+}
+
+class _OrderDetailsView extends StatelessWidget {
+  const _OrderDetailsView({required this.isProviderView});
+
+  final bool isProviderView;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
+      listener: (context, state) {
+        final order = state.status.data;
+        if (state.status.isSuccess && order != null) {
+          context.read<OrdersCubit>().updateOrder(order);
+        }
+      },
+      builder: (context, state) {
+        final order = state.status.data;
+        if (order != null) {
+          return _SingleOrderView(order: order, isProviderView: isProviderView);
+        }
+
+        if (state.status.isFailed) {
+          return Scaffold(
+            body: CustomFallbackView(
+              title: LocaleKeys.error_ops.tr(),
+              subtitle: state.status.message,
+              buttonLabel: LocaleKeys.actions_retry.tr(),
+              onButtonPressed: context
+                  .read<OrderDetailsCubit>()
+                  .getOrderDetails,
+            ),
+          );
+        }
+
+        return const Scaffold(body: CustomLoading());
+      },
+    );
   }
 }
 
@@ -63,6 +112,14 @@ class _SingleOrderViewState extends State<_SingleOrderView> {
   }
 
   @override
+  void didUpdateWidget(covariant _SingleOrderView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.order != widget.order) {
+      _currentOrder = widget.order;
+    }
+  }
+
+  @override
   void dispose() {
     _isActionLoadingNotifier.dispose();
     super.dispose();
@@ -84,8 +141,8 @@ class _SingleOrderViewState extends State<_SingleOrderView> {
 
     if (!mounted || reason == null || reason.trim().isEmpty) return;
 
-    setState(() {
-      _currentOrder = _currentOrder.copyWith(
+    _updateCurrentOrder(
+      _currentOrder.copyWith(
         tabStatus: OrderTabStatus.cancelled,
         activeStatus: OrderTimelineStatus.cancelled,
         cancellationReason: reason,
@@ -97,8 +154,8 @@ class _SingleOrderViewState extends State<_SingleOrderView> {
             current: true,
           ),
         ],
-      );
-    });
+      ),
+    );
   }
 
   Future<void> _acceptProviderOrder() async {
@@ -114,9 +171,7 @@ class _SingleOrderViewState extends State<_SingleOrderView> {
       return;
     }
 
-    setState(() {
-      _currentOrder = _currentOrder.markProviderAccepted();
-    });
+    _updateCurrentOrder(_currentOrder.markProviderAccepted());
     Toaster.showToast(
       LocaleKeys.orders_details_actions_accept_success.tr(),
       isError: false,
@@ -134,9 +189,7 @@ class _SingleOrderViewState extends State<_SingleOrderView> {
 
     if (!mounted || reason == null || reason.trim().isEmpty) return;
 
-    setState(() {
-      _currentOrder = _currentOrder.markProviderRejected(reason);
-    });
+    _updateCurrentOrder(_currentOrder.markProviderRejected(reason));
   }
 
   Future<void> _advanceProviderOrderStatus() async {
@@ -144,10 +197,12 @@ class _SingleOrderViewState extends State<_SingleOrderView> {
     if (nextStatus == null) return;
 
     _isActionLoadingNotifier.value = true;
-    final failure = await context.read<OrdersCubit>().advanceProviderOrderStatus(
-      id: _currentOrder.backendId,
-      status: nextStatus,
-    );
+    final failure = await context
+        .read<OrdersCubit>()
+        .advanceProviderOrderStatus(
+          id: _currentOrder.backendId,
+          status: nextStatus,
+        );
     if (!mounted) return;
     _isActionLoadingNotifier.value = false;
 
@@ -156,13 +211,17 @@ class _SingleOrderViewState extends State<_SingleOrderView> {
       return;
     }
 
-    setState(() {
-      _currentOrder = _currentOrder.markProviderAdvanced(nextStatus);
-    });
+    _updateCurrentOrder(_currentOrder.markProviderAdvanced(nextStatus));
     Toaster.showToast(
       LocaleKeys.orders_details_actions_advance_success.tr(),
       isError: false,
     );
+  }
+
+  void _updateCurrentOrder(OrderModel order) {
+    setState(() => _currentOrder = order);
+    context.read<OrderDetailsCubit>().updateOrder(order);
+    context.read<OrdersCubit>().updateOrder(order);
   }
 
   @override

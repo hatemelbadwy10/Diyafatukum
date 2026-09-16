@@ -30,8 +30,8 @@ class AddAddressButton extends StatelessWidget {
                 initialPosition: position,
                 placemark: placemark,
                 onAddressUpdated: (AddressModel address) {
-                  onAddressUpdated?.call();
                   context.read<AddressesCubit>().addAddress(address);
+                  onAddressUpdated?.call();
                 },
               ),
             );

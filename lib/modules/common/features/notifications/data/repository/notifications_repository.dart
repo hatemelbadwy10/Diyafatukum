@@ -4,12 +4,14 @@ import '../../../../../../../core/data/error/error_handler.dart';
 import '../../../../../../../core/data/models/base_response.dart';
 import '../../../../../../../core/resources/type_defs.dart';
 import '../datasource/notifications_remote_datasource.dart';
+import '../model/device_token_request.dart';
 import '../model/notification_model.dart';
 
 abstract class NotificationsRepository {
   Result<List<NotificationModel>> getNotifications();
   Result markAsRead(String id);
   Result updateSettings(bool enabled);
+  Result updateDeviceToken(DeviceTokenRequest request);
 }
 
 @LazySingleton(as: NotificationsRepository)
@@ -31,6 +33,13 @@ class NotificationsRepositoryImpl implements NotificationsRepository {
   Result updateSettings(bool enabled) async {
     return remoteDataSource
         .updateSettings({'enabled': enabled})
+        .toResult(noDataFromJson);
+  }
+
+  @override
+  Result updateDeviceToken(DeviceTokenRequest request) {
+    return remoteDataSource
+        .updateDeviceToken(request.toJson())
         .toResult(noDataFromJson);
   }
 }

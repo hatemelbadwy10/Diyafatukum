@@ -9,6 +9,7 @@ import '../model/order_model.dart';
 
 abstract class OrdersRepository {
   Result<List<OrderModel>> getOrders(OrderTabStatus status);
+  Result<OrderModel> getOrderDetails(String id);
   Result<Unit> cancelOrder(String id, String reason);
   Result<Unit> acceptProviderOrder(String id);
   Result<Unit> rejectProviderOrder(String id, String reason);
@@ -24,6 +25,11 @@ class OrdersRepositoryImpl implements OrdersRepository {
   @override
   Result<List<OrderModel>> getOrders(OrderTabStatus status) async {
     return remoteDataSource.getOrders(status).toResult(ordersFromJson);
+  }
+
+  @override
+  Result<OrderModel> getOrderDetails(String id) {
+    return remoteDataSource.getOrderDetails(id).toResult(orderFromJson);
   }
 
   @override

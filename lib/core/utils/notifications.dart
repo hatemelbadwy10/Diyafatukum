@@ -2,24 +2,38 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../modules/common/features/notifications/data/model/push_notification_model.dart';
+import '../config/router/app_route.dart';
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
   log('Background Notification: ${message.toMap()}');
-  handleNotification(message);
 }
 
 void handleNotification(RemoteMessage? message) {
   log('Notification: ${message?.toMap()}', name: 'FCM');
+  if (message == null) return;
+
+  final notification = PushNotificationModel.fromJson(message.data);
+  if (!notification.targetsOrder) return;
+
+  AppRoutes.orderDetails.push(extra: {'orderId': notification.orderId});
 }
 
 class RemoteNotificationServices {
   static FirebaseMessaging get messaging => FirebaseMessaging.instance;
-  static bool get _isFirebaseMessagingEnabled => false;
+  static bool get _isFirebaseMessagingEnabled => true;
+  static bool _isInitialized = false;
 
   static Future<void> initialize() async {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
     if (!_isFirebaseMessagingEnabled) {
       log('Firebase Messaging is disabled.', name: 'FCM');
       await LocalNotificationServices.init();
@@ -33,7 +47,11 @@ class RemoteNotificationServices {
 
   static Future<void> initPushNotification() async {
     if (!_isFirebaseMessagingEnabled) return;
-    await messaging.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+    await messaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
     FirebaseMessaging.onMessageOpenedApp.listen(handleNotification);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessage.listen((message) async {
@@ -42,16 +60,20 @@ class RemoteNotificationServices {
     });
   }
 
-  static Stream<RemoteMessage> get onMessage =>
-      _isFirebaseMessagingEnabled ? FirebaseMessaging.onMessage : const Stream.empty();
+  static Stream<RemoteMessage> get onMessage => _isFirebaseMessagingEnabled
+      ? FirebaseMessaging.onMessage
+      : const Stream.empty();
 
-  /// Handles the initial notification.
-  ///
-  /// This method is responsible for handling the initial notification when the app is launched from terminated.
-  /// It can be used to perform any necessary actions based on the notification data.
-  static void handleInitialNotification() {
+  static Stream<PushNotificationModel> get orderNotifications =>
+      onMessage.map((message) => PushNotificationModel.fromJson(message.data));
+
+  static Stream<String> get onTokenRefresh => _isFirebaseMessagingEnabled
+      ? messaging.onTokenRefresh
+      : const Stream.empty();
+
+  static Future<void> handleInitialNotification() async {
     if (!_isFirebaseMessagingEnabled) return;
-    messaging.getInitialMessage().then(handleNotification);
+    handleNotification(await messaging.getInitialMessage());
   }
 
   static Future<void> requestPermission() async {
@@ -86,11 +108,14 @@ class RemoteNotificationServices {
 }
 
 class LocalNotificationServices {
-  static final FlutterLocalNotificationsPlugin _notification = FlutterLocalNotificationsPlugin();
+  static final FlutterLocalNotificationsPlugin _notification =
+      FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
     _notification
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.requestNotificationsPermission();
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const ios = DarwinInitializationSettings();
@@ -100,7 +125,9 @@ class LocalNotificationServices {
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
       onDidReceiveNotificationResponse: (notificationResponse) async {
         if (notificationResponse.payload != null) {
-          final remoteMessage = RemoteMessage.fromMap(jsonDecode(notificationResponse.payload!));
+          final remoteMessage = RemoteMessage.fromMap(
+            jsonDecode(notificationResponse.payload!),
+          );
           handleNotification(remoteMessage);
         }
       },
@@ -120,7 +147,10 @@ class LocalNotificationServices {
       presentSound: true,
       interruptionLevel: InterruptionLevel.critical,
     );
-    return const NotificationDetails(android: androidPlatformChannel, iOS: iOSPlatformChannel);
+    return const NotificationDetails(
+      android: androidPlatformChannel,
+      iOS: iOSPlatformChannel,
+    );
   }
 
   static Future<void> showNotification(RemoteMessage notification) async {
@@ -137,6 +167,8 @@ class LocalNotificationServices {
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
-  final remoteMessage = RemoteMessage.fromMap(jsonDecode(notificationResponse.payload!));
+  final remoteMessage = RemoteMessage.fromMap(
+    jsonDecode(notificationResponse.payload!),
+  );
   handleNotification(remoteMessage);
 }

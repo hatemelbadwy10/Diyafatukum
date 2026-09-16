@@ -7,6 +7,7 @@ import '../model/order_model.dart';
 
 abstract class OrdersRemoteDataSource {
   Future<Response> getOrders(OrderTabStatus status);
+  Future<Response> getOrderDetails(String id);
   Future<Response> cancelOrder(String id, String reason);
   Future<Response> acceptProviderOrder(String id);
   Future<Response> rejectProviderOrder(String id, String reason);
@@ -36,6 +37,10 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
   }
 
   @override
+  Future<Response> getOrderDetails(String id) =>
+      client.get(RemoteUrls.orderDetails(id));
+
+  @override
   Future<Response> cancelOrder(String id, String reason) async {
     return client.put(RemoteUrls.cancelOrder(id), data: {'reason': reason});
   }
@@ -47,16 +52,18 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
 
   @override
   Future<Response> rejectProviderOrder(String id, String reason) async {
-    return client.put(RemoteUrls.providerRejectOrder(id), data: {
-      'reason': reason,
-    });
+    return client.put(
+      RemoteUrls.providerRejectOrder(id),
+      data: {'reason': reason},
+    );
   }
 
   @override
   Future<Response> advanceProviderOrderStatus(String id, String status) async {
-    return client.put(RemoteUrls.providerAdvanceOrderStatus(id), data: {
-      'status': status,
-    });
+    return client.put(
+      RemoteUrls.providerAdvanceOrderStatus(id),
+      data: {'status': status},
+    );
   }
 }
 

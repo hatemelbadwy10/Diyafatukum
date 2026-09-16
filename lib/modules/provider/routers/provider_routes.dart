@@ -31,148 +31,150 @@ class ProviderRoutes extends BaseRouter {
   void registerRoutes() => BaseRouter.routes.addAll(routes);
 
   static List<RouteBase> get routes => [
-        StatefulShellRoute.indexedStack(
-          parentNavigatorKey: rootNavigatorKey,
-          pageBuilder: (context, state, shell) =>
-              ScaffoldWithNavBarScreen(shell: shell).buildPage(),
-          branches: [
-            StatefulShellBranch(routes: _homeRoutes),
-            StatefulShellBranch(routes: _ordersRoutes),
-            StatefulShellBranch(routes: _storeRoutes),
-            StatefulShellBranch(routes: _settingsRoutes),
-          ],
-        ),
-        GoRoute(
-          path: AppRoutes.providerHome.path,
-          name: AppRoutes.providerHome.name,
-          pageBuilder: (context, state) =>
-              const ProviderRegisterScreen().buildPage(),
-        ),
-        GoRoute(
-          parentNavigatorKey: rootNavigatorKey,
-          path: AppRoutes.providerRegisterLocation.path,
-          name: AppRoutes.providerRegisterLocation.name,
-          pageBuilder: (context, state) {
-            final arguments = state.extra as ProviderRegisterLocationArguments?;
-            if (arguments == null) {
-              return const Scaffold().buildPage();
-            }
-            return ProviderRegisterLocationScreen(arguments: arguments)
-                .buildPage(transition: PageTransitions.cupertino);
-          },
-        ),
-        GoRoute(
-          parentNavigatorKey: rootNavigatorKey,
-          path: AppRoutes.orderDetails.path,
-          name: AppRoutes.orderDetails.name,
-          pageBuilder: (context, state) {
-            final extra = state.extra;
-            final extraMap = extra is Map<String, dynamic>
-                ? extra
-                : extra is Map
-                ? Map<String, dynamic>.from(extra)
-                : null;
-            final order = extraMap?['order'] as OrderModel? ?? extra as OrderModel?;
-            final ordersCubit = extraMap?['ordersCubit'] as OrdersCubit?;
-            if (order == null) {
-              return const Scaffold().buildPage();
-            }
-            return SingleOrderScreen(
-              order: order,
-              isProviderView: true,
-              ordersCubit: ordersCubit,
-            ).buildPage(
-              transition: PageTransitions.cupertino,
-            );
-          },
-        ),
-        GoRoute(
-          parentNavigatorKey: rootNavigatorKey,
-          path: AppRoutes.addresses.path,
-          name: AppRoutes.addresses.name,
-          pageBuilder: (context, state) => const AddressesScreen().buildPage(
-            transition: PageTransitions.cupertino,
-          ),
-        ),
-        GoRoute(
-          parentNavigatorKey: rootNavigatorKey,
-          path: AppRoutes.profile.path,
-          name: AppRoutes.profile.name,
-          pageBuilder: (context, state) => const ProfileScreen().buildPage(
-            transition: PageTransitions.cupertino,
-          ),
-        ),
-        GoRoute(
-          parentNavigatorKey: rootNavigatorKey,
-          path: AppRoutes.contact.path,
-          name: AppRoutes.contact.name,
-          pageBuilder: (context, state) => const ContactUsScreen().buildPage(
-            transition: PageTransitions.cupertino,
-          ),
-        ),
-        GoRoute(
-          parentNavigatorKey: rootNavigatorKey,
-          path: AppRoutes.phone.path,
-          name: AppRoutes.phone.name,
-          pageBuilder: (context, state) =>
-              const PhoneScreen().buildPage(
-                transition: PageTransitions.cupertino,
-              ),
-        ),
-        GoRoute(
-          parentNavigatorKey: rootNavigatorKey,
-          path: AppRoutes.staticPage.path,
-          name: AppRoutes.staticPage.name,
-          pageBuilder: (context, state) {
-            final type = state.extra as StaticPage?;
-            if (type == null) {
-              return const Scaffold().buildPage();
-            }
-            return StaticPageScreen(
-              type: type,
-            ).buildPage(transition: PageTransitions.cupertino);
-          },
-        ),
-      ];
+    StatefulShellRoute.indexedStack(
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state, shell) =>
+          ScaffoldWithNavBarScreen(shell: shell).buildPage(),
+      branches: [
+        StatefulShellBranch(routes: _homeRoutes),
+        StatefulShellBranch(routes: _ordersRoutes),
+        StatefulShellBranch(routes: _storeRoutes),
+        StatefulShellBranch(routes: _settingsRoutes),
+      ],
+    ),
+    GoRoute(
+      path: AppRoutes.providerHome.path,
+      name: AppRoutes.providerHome.name,
+      pageBuilder: (context, state) =>
+          const ProviderRegisterScreen().buildPage(),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.providerRegisterLocation.path,
+      name: AppRoutes.providerRegisterLocation.name,
+      pageBuilder: (context, state) {
+        final arguments = state.extra as ProviderRegisterLocationArguments?;
+        if (arguments == null) {
+          return const Scaffold().buildPage();
+        }
+        return ProviderRegisterLocationScreen(
+          arguments: arguments,
+        ).buildPage(transition: PageTransitions.cupertino);
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.orderDetails.path,
+      name: AppRoutes.orderDetails.name,
+      pageBuilder: (context, state) {
+        final extra = state.extra;
+        final extraMap = extra is Map<String, dynamic>
+            ? extra
+            : extra is Map
+            ? Map<String, dynamic>.from(extra)
+            : null;
+        final order =
+            extraMap?['order'] as OrderModel? ??
+            (extra is OrderModel ? extra : null);
+        final ordersCubit = extraMap?['ordersCubit'] as OrdersCubit?;
+        final orderId =
+            extraMap?['orderId']?.toString() ?? order?.backendId ?? '';
+        if (orderId.isEmpty) {
+          return const Scaffold().buildPage();
+        }
+        return SingleOrderScreen(
+          orderId: orderId,
+          initialOrder: order,
+          isProviderView: true,
+          ordersCubit: ordersCubit,
+        ).buildPage(transition: PageTransitions.cupertino);
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.addresses.path,
+      name: AppRoutes.addresses.name,
+      pageBuilder: (context, state) => const AddressesScreen().buildPage(
+        transition: PageTransitions.cupertino,
+      ),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.profile.path,
+      name: AppRoutes.profile.name,
+      pageBuilder: (context, state) => const ProfileScreen().buildPage(
+        transition: PageTransitions.cupertino,
+      ),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.contact.path,
+      name: AppRoutes.contact.name,
+      pageBuilder: (context, state) => const ContactUsScreen().buildPage(
+        transition: PageTransitions.cupertino,
+      ),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.phone.path,
+      name: AppRoutes.phone.name,
+      pageBuilder: (context, state) =>
+          const PhoneScreen().buildPage(transition: PageTransitions.cupertino),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: AppRoutes.staticPage.path,
+      name: AppRoutes.staticPage.name,
+      pageBuilder: (context, state) {
+        final type = state.extra as StaticPage?;
+        if (type == null) {
+          return const Scaffold().buildPage();
+        }
+        return StaticPageScreen(
+          type: type,
+        ).buildPage(transition: PageTransitions.cupertino);
+      },
+    ),
+  ];
 
   static List<RouteBase> get _homeRoutes => [
-        GoRoute(
-          path: AppRoutes.home.path,
-          name: AppRoutes.home.name,
-          pageBuilder: (context, state) => BlocProvider(
-            create: (_) => sl<ProviderHomeCubit>()..loadHome(),
-            child: const ProviderHomeScreen(),
-          ).buildPage(),
-        ),
-      ];
+    GoRoute(
+      path: AppRoutes.home.path,
+      name: AppRoutes.home.name,
+      pageBuilder: (context, state) => BlocProvider(
+        create: (_) => sl<ProviderHomeCubit>()..loadHome(),
+        child: const ProviderHomeScreen(),
+      ).buildPage(),
+    ),
+  ];
 
   static List<RouteBase> get _ordersRoutes => [
-        GoRoute(
-          path: AppRoutes.orders.path,
-          name: AppRoutes.orders.name,
-          pageBuilder: (context, state) => BlocProvider(
-            create: (_) => sl<OrdersCubit>()..loadOrders(),
-            child: const OrdersScreen(),
-          ).buildPage(),
-        ),
-      ];
+    GoRoute(
+      path: AppRoutes.orders.path,
+      name: AppRoutes.orders.name,
+      pageBuilder: (context, state) => BlocProvider(
+        create: (_) => sl<OrdersCubit>()..loadOrders(),
+        child: const OrdersScreen(),
+      ).buildPage(),
+    ),
+  ];
 
   static List<RouteBase> get _storeRoutes => [
-        GoRoute(
-          path: AppRoutes.store.path,
-          name: AppRoutes.store.name,
-          pageBuilder: (context, state) => BlocProvider(
-            create: (_) => sl<ProviderStoreCubit>()..loadStore(),
-            child: const ProviderStoreScreen(),
-          ).buildPage(),
-        ),
-      ];
+    GoRoute(
+      path: AppRoutes.store.path,
+      name: AppRoutes.store.name,
+      pageBuilder: (context, state) => BlocProvider(
+        create: (_) => sl<ProviderStoreCubit>()..loadStore(),
+        child: const ProviderStoreScreen(),
+      ).buildPage(),
+    ),
+  ];
 
   static List<RouteBase> get _settingsRoutes => [
-        GoRoute(
-          path: AppRoutes.settings.path,
-          name: AppRoutes.settings.name,
-          pageBuilder: (context, state) => const SettingsScreen().buildPage(),
-        ),
-      ];
+    GoRoute(
+      path: AppRoutes.settings.path,
+      name: AppRoutes.settings.name,
+      pageBuilder: (context, state) => const SettingsScreen().buildPage(),
+    ),
+  ];
 }

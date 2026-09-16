@@ -11,6 +11,8 @@ extension OrderTimelineStatusStyle on OrderTimelineStatus {
         return LocaleKeys.orders_details_status_pending_title;
       case OrderTimelineStatus.accepted:
         return LocaleKeys.orders_details_status_accepted_title;
+      case OrderTimelineStatus.paymentReceived:
+        return LocaleKeys.orders_details_status_payment_received_title;
       case OrderTimelineStatus.preparing:
         return LocaleKeys.orders_details_status_preparing_title;
       case OrderTimelineStatus.onTheWay:
@@ -30,6 +32,8 @@ extension OrderTimelineStatusStyle on OrderTimelineStatus {
         return LocaleKeys.orders_details_status_pending_subtitle;
       case OrderTimelineStatus.accepted:
         return LocaleKeys.orders_details_status_accepted_subtitle;
+      case OrderTimelineStatus.paymentReceived:
+        return LocaleKeys.orders_details_status_payment_received_subtitle;
       case OrderTimelineStatus.preparing:
         return LocaleKeys.orders_details_status_preparing_subtitle;
       case OrderTimelineStatus.onTheWay:
@@ -49,6 +53,8 @@ extension OrderTimelineStatusStyle on OrderTimelineStatus {
         return Icons.schedule_rounded;
       case OrderTimelineStatus.accepted:
         return Icons.task_alt_rounded;
+      case OrderTimelineStatus.paymentReceived:
+        return Icons.payments_outlined;
       case OrderTimelineStatus.preparing:
         return Icons.inventory_2_outlined;
       case OrderTimelineStatus.onTheWay:
@@ -68,6 +74,8 @@ extension OrderTimelineStatusStyle on OrderTimelineStatus {
         return const Color(0xFFA5A5A5);
       case OrderTimelineStatus.accepted:
         return const Color(0xFFCF9D29);
+      case OrderTimelineStatus.paymentReceived:
+        return context.successColor;
       case OrderTimelineStatus.preparing:
         return const Color(0xFFFFAF44);
       case OrderTimelineStatus.onTheWay:

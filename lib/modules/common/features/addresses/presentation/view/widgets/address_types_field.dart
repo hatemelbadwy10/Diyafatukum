@@ -26,6 +26,21 @@ class _AddressTypesFieldState extends State<AddressTypesField> {
   }
 
   @override
+  void didUpdateWidget(covariant AddressTypesField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != null &&
+        widget.initialValue != oldWidget.initialValue) {
+      typeNotifier.value = widget.initialValue!;
+    }
+  }
+
+  @override
+  void dispose() {
+    typeNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: typeNotifier,
@@ -35,22 +50,37 @@ class _AddressTypesFieldState extends State<AddressTypesField> {
           children: AddressType.values.map((type) {
             final isSelected = type == value;
             return Row(
-              spacing: 4,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                type.icon.svg(
-                  width: 16,
-                  colorFilter: (isSelected ? context.onPrimary : context.bodySmall.color!).colorFilter,
-                ),
-                Text(type.title, style: (isSelected ? context.labelSmall : context.bodySmall).regular.s12),
-              ],
-            )
+                  spacing: 4,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    type.icon.svg(
+                      width: 16,
+                      colorFilter:
+                          (isSelected
+                                  ? context.onPrimary
+                                  : context.bodySmall.color!)
+                              .colorFilter,
+                    ),
+                    Text(
+                      type.title,
+                      style:
+                          (isSelected ? context.labelSmall : context.bodySmall)
+                              .regular
+                              .s12,
+                    ),
+                  ],
+                )
                 .setInkContainerToView(
                   padding: 8,
                   radius: AppSize.mainRadius,
-                  color: isSelected ? context.primarySwatch[600]! : context.primaryCardColor,
+                  color: isSelected
+                      ? context.primarySwatch[600]!
+                      : context.primaryCardColor,
                 )
-                .onTap(() => typeNotifier.value = type, borderRadius: AppSize.mainRadius.borderRadius);
+                .onTap(
+                  () => typeNotifier.value = type,
+                  borderRadius: AppSize.mainRadius.borderRadius,
+                );
           }).toList(),
         );
       },

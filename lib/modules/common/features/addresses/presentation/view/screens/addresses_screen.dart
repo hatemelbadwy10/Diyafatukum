@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
+import '../../../../../../../core/config/router/route_manager.dart';
 import '../../../../../../../core/config/service_locator/injection.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
@@ -28,17 +29,27 @@ class AddressesScreen extends StatelessWidget {
       child: BlocBuilder<AddressesCubit, AddressesState>(
         builder: (context, state) {
           return Scaffold(
-            appBar: CustomAppBar.build(titleText: LocaleKeys.addresses_title.tr()),
-            bottomNavigationBar: state.status.isSuccess && state.addresses.isNotEmpty
-                ? AddAddressButton(onAddressUpdated: () => AppRoutes.addresses.go()).toBottomNavBar()
+            appBar: CustomAppBar.build(
+              titleText: LocaleKeys.addresses_title.tr(),
+            ),
+            bottomNavigationBar:
+                state.status.isSuccess && state.addresses.isNotEmpty
+                ? AddAddressButton(
+                    onAddressUpdated: BaseRouter.pop,
+                  ).toBottomNavBar()
                 : null,
             body: state.status.build(
               onSuccess: (addresses) {
                 return VerticalListView(
-                  onRefresh: () async => context.read<AddressesCubit>().refresh(),
+                  onRefresh: () async =>
+                      context.read<AddressesCubit>().refresh(),
                   itemCount: addresses.length,
-                  padding: EdgeInsets.symmetric(horizontal: AppSize.screenPadding, vertical: 12),
-                  itemBuilder: (_, index) => AddressTile(address: addresses[index]),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.screenPadding,
+                    vertical: 12,
+                  ),
+                  itemBuilder: (_, index) =>
+                      AddressTile(address: addresses[index]),
                 ).visible(
                   state.addresses.isNotEmpty,
                   fallback: CustomFallbackView(
@@ -48,18 +59,21 @@ class AddressesScreen extends StatelessWidget {
                     buttonLabel: LocaleKeys.addresses_add.tr(),
                     onButtonPressed: () => AppRoutes.map.push(
                       extra: MapScreenArguments(
-                        onLocationSelected: (LatLng position, Placemark placemark) {
-                          AppRoutes.addressDetails.pushReplacement(
-                            extra: AddressDetailsScreenArguments(
-                              initialPosition: position,
-                              placemark: placemark,
-                              onAddressUpdated: (AddressModel address) {
-                                AppRoutes.addresses.go();
-                                context.read<AddressesCubit>().addAddress(address);
-                              },
-                            ),
-                          );
-                        },
+                        onLocationSelected:
+                            (LatLng position, Placemark placemark) {
+                              AppRoutes.addressDetails.pushReplacement(
+                                extra: AddressDetailsScreenArguments(
+                                  initialPosition: position,
+                                  placemark: placemark,
+                                  onAddressUpdated: (AddressModel address) {
+                                    context.read<AddressesCubit>().addAddress(
+                                      address,
+                                    );
+                                    BaseRouter.pop();
+                                  },
+                                ),
+                              );
+                            },
                       ),
                     ),
                   ).paddingBottom(context.height * 0.2),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/config/extensions/all_extensions.dart';
 import '../../../../../../../core/config/router/app_route.dart';
+import '../../../../../../../core/config/router/route_manager.dart';
 import '../../../../../../../core/resources/resources.dart';
 import '../../../../../../../core/widgets/app_dialog.dart';
 import '../../../../../../../core/widgets/custom_app_bar.dart';
@@ -11,6 +12,10 @@ import '../../../../../../../core/widgets/custom_fallback_view.dart';
 import '../../../../../../../core/widgets/custom_loading.dart';
 import '../../../../../../../core/widgets/vertical_list_view.dart';
 import '../../../../auth/presentation/controller/auth_cubit/auth_cubit.dart';
+import '../../../../shared/presentation/view/widgets/login_dialog.dart';
+import '../../../../../../../core/config/service_locator/injection.dart';
+import '../../../../../../../core/utils/toaster_utils.dart';
+import '../../../data/repository/bag_repository.dart';
 import '../../../../shared/data/model/navigation_bar_items.dart';
 import '../../controller/bag_cubit/bag_cubit.dart';
 import '../widgets/bag_item_card.dart';
@@ -47,6 +52,50 @@ class _BagScreenState extends State<BagScreen> {
       return;
     }
     context.read<BagCubit>().loadBag();
+  }
+
+  Future<void> _handleCheckout(BagCubit bagCubit) async {
+    final authCubit = context.read<AuthCubit>();
+    if (authCubit.state.status.isAuthorized) {
+      if (sl<BagRepository>().getLocalBagItems().isNotEmpty) {
+        await _syncGuestBag(bagCubit, authCubit);
+        return;
+      }
+      _showCheckout(bagCubit, authCubit);
+      return;
+    }
+
+    LoginDialog(
+      message: LocaleKeys.bag_checkout_guest_subtitle.tr(),
+      onSuccess: () => _syncGuestBag(bagCubit, authCubit),
+    ).show(context);
+  }
+
+  Future<void> _syncGuestBag(BagCubit bagCubit, AuthCubit authCubit) async {
+    final localItems = sl<BagRepository>().getLocalBagItems();
+    final localStoreId = localItems.isEmpty
+        ? null
+        : int.tryParse(localItems.first.storeId ?? '');
+    final result = await sl<BagRepository>().syncLocalBag();
+    if (!mounted) return;
+
+    result.fold((failure) => Toaster.showToast(failure.message), (_) async {
+      authCubit.updateUserCartStoreId(localStoreId);
+      await bagCubit.loadBag();
+      if (!mounted) return;
+      BaseRouter.popUntilPath(AppRoutes.bag.path);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _showCheckout(bagCubit, authCubit);
+        }
+      });
+    });
+  }
+
+  void _showCheckout(BagCubit bagCubit, AuthCubit authCubit) {
+    context.showBottomSheet(
+      BagCheckoutBottomSheet(authCubit: authCubit, bagCubit: bagCubit),
+    );
   }
 
   @override
@@ -119,7 +168,8 @@ class _BagScreenState extends State<BagScreen> {
                         direction: DismissDirection.endToStart,
                         confirmDismiss: (_) async {
                           final shouldDelete = await AppDialog(
-                            title: LocaleKeys.bag_actions_remove_item_title.tr(),
+                            title: LocaleKeys.bag_actions_remove_item_title
+                                .tr(),
                             subtitle: LocaleKeys.bag_actions_remove_item_message
                                 .tr(),
                             confirmLabel: LocaleKeys.actions_delete.tr(),
@@ -153,8 +203,10 @@ class _BagScreenState extends State<BagScreen> {
                         onDismissed: (_) => cubit.removeItem(item.id),
                         child: BagItemCard(
                           item: item,
-                          onIncrement: () => cubit.incrementItemQuantity(item.id),
-                          onDecrement: () => cubit.decrementItemQuantity(item.id),
+                          onIncrement: () =>
+                              cubit.incrementItemQuantity(item.id),
+                          onDecrement: () =>
+                              cubit.decrementItemQuantity(item.id),
                         ),
                       );
                     },
@@ -162,12 +214,7 @@ class _BagScreenState extends State<BagScreen> {
                   if (!state.isEmpty)
                     BagSummarySection(
                       bag: state.bag,
-                      onCheckout: () => context.showBottomSheet(
-                        BagCheckoutBottomSheet(
-                          authCubit: context.maybeRead<AuthCubit>(),
-                          bagCubit: cubit,
-                        ),
-                      ),
+                      onCheckout: () => _handleCheckout(cubit),
                     ).bottomSafeArea(),
                 ],
               ),

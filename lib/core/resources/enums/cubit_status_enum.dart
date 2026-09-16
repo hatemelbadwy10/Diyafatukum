@@ -10,24 +10,45 @@ import '../../widgets/custom_fallback_view.dart';
 import '../resources.dart';
 
 class CubitStatus<T> {
-  CubitStatus._({this.data, this.message = '', this.error, required _State state}) : _state = state;
+  CubitStatus._({
+    this.data,
+    this.message = '',
+    this.error,
+    required _State state,
+  }) : _state = state;
 
   final T? data;
   final Failure? error;
   final String message;
   final _State _state;
 
-  factory CubitStatus.loading({T? data}) => CubitStatus._(state: _State.loading, data: data);
+  factory CubitStatus.loading({T? data}) =>
+      CubitStatus._(state: _State.loading, data: data);
 
   factory CubitStatus.success({dynamic data, String? message}) {
     if (data is BaseResponse) {
-      return CubitStatus._(data: data.data, message: message ?? data.message ?? '', state: _State.success, error: null);
+      return CubitStatus._(
+        data: data.data,
+        message: message ?? data.message ?? '',
+        state: _State.success,
+        error: null,
+      );
     }
-    return CubitStatus._(data: data, state: _State.success, message: message ?? '', error: null);
+    return CubitStatus._(
+      data: data,
+      state: _State.success,
+      message: message ?? '',
+      error: null,
+    );
   }
 
   factory CubitStatus.failed({T? data, String message = '', Failure? error}) {
-    return CubitStatus._(message: message, state: _State.failed, error: error);
+    return CubitStatus._(
+      data: data,
+      message: message,
+      state: _State.failed,
+      error: error,
+    );
   }
 
   factory CubitStatus.initial({T? data, String message = ''}) {
@@ -51,7 +72,9 @@ class CubitStatus<T> {
       case _State.init:
         return onInit?.call() ?? const SizedBox.shrink();
       case _State.loading:
-        return enableLoading ? onLoading?.call() ?? const CupertinoActivityIndicator().center() : onSuccess(data as T);
+        return enableLoading
+            ? onLoading?.call() ?? const CupertinoActivityIndicator().center()
+            : onSuccess(data as T);
       case _State.success:
         return onSuccess(data as T);
       case _State.failed:
@@ -60,7 +83,9 @@ class CubitStatus<T> {
               icon: Icon(Icons.error, color: LightThemeColors.error, size: 52),
               title: LocaleKeys.error_ops.tr(),
               subtitle: message,
-              buttonLabel: onRetry != null ? LocaleKeys.actions_retry.tr() : null,
+              buttonLabel: onRetry != null
+                  ? LocaleKeys.actions_retry.tr()
+                  : null,
               onButtonPressed: onRetry != null ? () => onRetry.call() : null,
             );
     }
